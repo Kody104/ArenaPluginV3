@@ -3,8 +3,8 @@ package com.gmail.jpk.stu.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.jpk.stu.Entities.ArenaPlayer;
-import com.gmail.jpk.stu.Entities.PlayerRole;
+import com.gmail.jpk.stu.entities.ArenaPlayer;
+import com.gmail.jpk.stu.entities.PlayerRole;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
 import com.gmail.jpk.stu.arena.GlobalW;
 import com.gmail.jpk.stu.arena.GlobalW.ErrorMsgs;

@@ -1,4 +1,4 @@
-package com.gmail.jpk.stu.Entities;
+package com.gmail.jpk.stu.entities;
 
 import org.bukkit.entity.Player;
 

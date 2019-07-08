@@ -143,4 +143,24 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 		}
 	}
+
+	public Player getmPlayer() {
+		return mPlayer;
+	}
+
+	public PlayerRole getClassRole() {
+		return classRole;
+	}
+
+	public void setClassRole(PlayerRole classRole) {
+		this.classRole = classRole;
+	}
+
+	public int getLevel() {
+		return Level;
+	}
+
+	public void setLevel(int level) {
+		Level = level;
+	}
 }

@@ -2,3 +2,15 @@ name: Arena
 main: com.gmail.jpk.stu.arena.ArenaPlugin
 version: 0.0.1
 author: Kody104
+
+commands:
+   join:
+      description: Enters player into the arena.
+      usage: /join
+      permission: Arena.join
+      permission-message: You don't have permission.
+   leave:
+      description: Remove player from the arena.
+      usage: /leave
+      permission: Arena.leave
+      permission-message: You don't have permission.

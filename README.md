@@ -19,6 +19,8 @@
 2. ~Create Exit Command~
 3. Create Role Command
 4. Create Ready Command
+5. Create GCI(GiveCustomItem) Command
+6. Create Set <lvl/statname> [number] Command
 
 **In-Game**
 1. Build Arena 1 (Forest)

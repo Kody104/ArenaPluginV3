@@ -59,7 +59,8 @@ public class GlobalW {
 	}
 	
 	public static enum ErrorMsgs { 
-		NOT_PLAYER("[Error] You must be a player!"), NOT_ARENA_PLAYER("[Error] You are not an arena player!");
+		NOT_PLAYER("[Error] You must be a player!"), 
+		NOT_ARENA_PLAYER("[Error] You are not an arena player!");
 		
 		private String message;
 		

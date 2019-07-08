@@ -1,4 +1,4 @@
-package com.gmail.jpk.stu.entities;
+package com.gmail.jpk.stu.Entities;
 
 public abstract class ArenaEntity {
 	

@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.gmail.jpk.stu.Entities.ArenaPlayer;
+import com.gmail.jpk.stu.entities.ArenaPlayer;
 
 public class GlobalW {
 	

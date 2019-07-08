@@ -3,27 +3,29 @@
 ## TO-DO
 
 **Engine**
-~Create Arena Entity~
-~Create Arena Player~
-Create Arena Monster
-Create StatItem
-Create LoreItem
-Create Gold Prices
-Create DamageListener
-Create AllListener
-Create Abilities
-Create Timers
+1. ~Create Arena Entity~
+2. ~Create Arena Player~
+3. Create Arena Monster
+4. Create StatItem
+5. Create LoreItem
+6. Create Gold Prices
+7. Create DamageListener
+8. Create AllListener
+9. Create Abilities
+10. Create Timers
 
 **Commands**
-~Create Join Command~
-~Create Exit Command~
-Create Role Command
-Create Ready Command
+1. ~Create Join Command~
+2. ~Create Exit Command~
+3. Create Role Command
+4. Create Ready Command
 
 **In-Game**
-Build Arena 1 (Forest)
-Build Arena 2 (Cave)
-Build Arena 3 (Small Collesium)
-Build Arena 4 (Huge Collesium)
-Build Arena 5 (The End)
+1. Build Arena 1 (Forest)
+2. Build Arena 2 (Cave)
+3. Build Arena 3 (Small Collesium)
+4. Build Arena 4 (Huge Collesium)
+5. Build Arena 5 (The End)
 
+## Known Bugs & Issues
+1. None so far

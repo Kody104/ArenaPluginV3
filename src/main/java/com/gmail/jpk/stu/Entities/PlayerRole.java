@@ -61,6 +61,8 @@ public enum PlayerRole {
 	 * @param role the role the CommandSender requested
 	 * @param sender the CommandSender
 	 */
+	
+	// Why do we do this here instead of in the RoleCommand class? - Jerome
 	public static void showRoleDescription(String role, CommandSender sender) {
 		//Convert the role input to all uppercase
 		String role_upper = role.toUpperCase();

@@ -38,7 +38,20 @@ public class RoleCommand extends BasicCommand {
 		//Returns information about various roles to the player
 		if (length == 3 && args[1].equalsIgnoreCase("help")) {
 			String role = args[2];
-			PlayerRole.showRoleDescription(role, sender);
+			PlayerRole.showRoleDescription(role, sender); // I want to avoid static calls as much as possible - Jerome
+			// Suggested solution
+			/**
+			 * PlayerRole pr;
+			 * switch(role.toLowerCase()) {
+			 *  // switch(role.toUpperCase()) {
+			 *   // Etc...
+			 *   pr = w/e role
+			 * }
+			 * for(String s : pr.getDescription()) {
+			 *   sender.sendMessage(s);
+			 * }
+			 */
+			// End
 			return true;
 		}
 		

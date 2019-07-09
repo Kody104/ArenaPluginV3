@@ -32,9 +32,10 @@
 1. /role -> should show a player's current role
 2. /role [ROLE] -> should ALLOW a player to choose a role
 3. /role [ROLE] -> should PREVENT a player from switching roles
-4. /role help [ROLE] -> should return a player information about that role
-5. /quit -> should QUIT a player's current
-6. /quit -> should PREVENT a player from quitting a role if they don't have one.
+4. /role help [ROLE] -> should SHOW a player information about that role
+5. /role all -> should SHOW all the available roles
+6. /quit -> should QUIT a player's current
+7. /quit -> should PREVENT a player from quitting a role if they don't have one.
 
 ## Known Bugs & Issues
 1. None so far

@@ -1,7 +1,5 @@
 package com.gmail.jpk.stu.Entities;
 
-import org.bukkit.command.CommandSender;
-
 public enum PlayerRole {	
 	
 	BRUTE_JUGGERNAUT("An angry brute who can take a lot of punishment."), 
@@ -10,7 +8,7 @@ public enum PlayerRole {
 	BLIGHT_ARCHER("A crafty bow-man who likes to spread the plague."), 
 	CLERIC("A righteous holy man who wants to spread the word of his Lord."), 
 	UTILITY_MAGE("A mage who can manipulate the word and those around him."),
-	SPECTATOR("A fan who doesn't get to compete in the Arena.");
+	SPECTATOR("He dreams of one day fighting in the arena.");
 	
 	//Descriptions for this role
 	private String[] description;
@@ -51,29 +49,11 @@ public enum PlayerRole {
 					case "MAGE":
 						return UTILITY_MAGE;
 					
-					default:
+					case "SPECTATOR":
 						return SPECTATOR;
-				}
-	}
-	
-	/**
-	 * <b>Sends the CommandSender the full description of a role.</b>
-	 * @param role the role the CommandSender requested
-	 * @param sender the CommandSender
-	 */
-	
-	// Why do we do this here instead of in the RoleCommand class? - Jerome
-	public static void showRoleDescription(String role, CommandSender sender) {
-		//Convert the role input to all uppercase
-		String role_upper = role.toUpperCase();
-		String[] description = new String[] {};
-		
-		//Grab the description for the role
-		description = getRoleByString(role_upper).description;
-		
-		//Send the description to the CommandSender
-		for (String string : description) {
-			sender.sendMessage(string);
+						
+					default:
+						return null;
 		}
 	}
 }

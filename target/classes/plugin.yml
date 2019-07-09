@@ -14,3 +14,11 @@ commands:
       usage: /leave
       permission: Arena.leave
       permission-message: You don't have permission.
+    role:
+      description: Allows a player to view their current role, or see infor about other roles.
+      permission: Arena.role
+      permission-message: You don't have permission.
+    quit:
+      description: Quits a player's role (if any).
+      permission: Arena.quit
+      permission-message: You don't have permission.

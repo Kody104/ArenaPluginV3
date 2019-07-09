@@ -1,19 +1,17 @@
 package com.gmail.jpk.stu.commands;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.Entities.PlayerRole;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
-import com.gmail.jpk.stu.arena.GlobalW;
-import com.gmail.jpk.stu.arena.GlobalW.ErrorMsgs;
 
 /**
  * <b>Allows a player to view their current role, or let's them see info about other roles.</b><br/>
  * <ul>
  * <li> /role: show the player their current role (if any); </li>
  * <li> /role [ROLE]: assigns a player to that role; </li>
+ * <li> /role all: shows the player all the available roles; </li>
  * <li> /role help [ROLE]: gives the player information about that role. </li>
  * </ul>
  * @author ASquanchyPenguin
@@ -26,55 +24,54 @@ public class RoleCommand extends BasicCommand {
 
 	@Override
 	public boolean performCommand(CommandSender sender, String[] args) {
-		//Validate the CommandSender is a player
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(ErrorMsgs.NOT_PLAYER.getMessage());
+		//Get the CommandSender as an ArenaPlayer
+		ArenaPlayer arena_player = getArenaPlayer(sender);
+		
+		//Validate the CommandSender is an ArenaPlayer
+		if (arena_player == null) {
+			//If they aren't, exit.
 			return true;
 		}
 		
-		//Process the command
+		//Argument Length
 		int length = args.length;
 		
+		//Grab the player's role
+		PlayerRole player_role = arena_player.getClassRole();
+		
 		//Returns information about various roles to the player
-		if (length == 3 && args[1].equalsIgnoreCase("help")) {
-			String role = args[2];
-			PlayerRole.showRoleDescription(role, sender); // I want to avoid static calls as much as possible - Jerome
-			// Suggested solution
-			/**
-			 * PlayerRole pr;
-			 * switch(role.toLowerCase()) {
-			 *  // switch(role.toUpperCase()) {
-			 *   // Etc...
-			 *   pr = w/e role
-			 * }
-			 * for(String s : pr.getDescription()) {
-			 *   sender.sendMessage(s);
-			 * }
-			 */
-			// End
-			return true;
-		}
-		
-		//Validate the player is in the Arena
-		Player player = (Player) sender;
-		
-		if (GlobalW.getArenaPlayer(player) == null) {
-			player.sendMessage(ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
-			return true;
-		}
-		
-		//Grab the player in the arena
-		ArenaPlayer arena_player = GlobalW.getArenaPlayer(player);
-		PlayerRole player_role   = arena_player.getClassRole();
-		
-		//Shows the player their current role
-		if (length == 0) {
-			sender.sendMessage("You're current role is " + player_role + ".");
+		if (length == 2 && args[0].equalsIgnoreCase("HELP")) {
+			String[] description = arena_player.getClassRoleDescription(args[1]);
+			
+			for (String string : description) {
+				sender.sendMessage(string);
+			}
+			
 			return true;
 		}
 		
 		//Let's the player choose their role.
-		if (length == 2) {
+		if (length == 1) {
+			//Show the player all of the roles for /role all
+			if (args[0].equalsIgnoreCase("ALL")) {
+				//Create a string with all roles
+				String roles = "";
+				
+				//Get all the roles
+				for (PlayerRole pr : PlayerRole.values()) {
+					roles = roles.concat(pr + ", ");
+				}
+				
+				//Remove the trailing comma
+				roles = roles.substring(0, roles.length() - 2) + ".";
+
+				//Send the message
+				sender.sendMessage("Here are the current available roles: " + roles);
+				sender.sendMessage("Type /role help [ROLE] for more information about a role.");
+				
+				return true;
+			}
+			
 			//Check the player already has a role.
 			if (player_role != PlayerRole.SPECTATOR) {
 				sender.sendMessage("You already have a role. Please quit your current role to join a new one.");
@@ -82,10 +79,17 @@ public class RoleCommand extends BasicCommand {
 			}
 			
 			//Assign the player that role
-			arena_player.setClassRole(PlayerRole.getRoleByString(args[1].toUpperCase()));
+			arena_player.setClassRole(PlayerRole.getRoleByString(args[0].toUpperCase()));
 			
 			return true;
 		}
+				
+		//Shows the player their current role
+		if (length == 1) {
+			sender.sendMessage("You're current role is " + player_role + ".");
+			return true;
+		}
+		
 		return false;
 	}
 }

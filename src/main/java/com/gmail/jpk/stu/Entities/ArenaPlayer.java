@@ -97,6 +97,20 @@ public class ArenaPlayer extends ArenaEntity {
 				setTenacity(0);
 				break;
 			}
+			case SPECTATOR:
+			{
+				setMaxHp(100.0d);
+				setCurHp(getMaxHp());
+				setAtk(0.0d);
+				setMag(0.0d);
+				setDef(0.0d);
+				setRes(0.0d);
+				setCritHitChance(0.0d);
+				setCritHitMultiplier(1.0d);
+				setCdr(0);
+				setTenacity(0);
+				break;
+			}
 		}
 	}
 	
@@ -140,6 +154,11 @@ public class ArenaPlayer extends ArenaEntity {
 					setAtk(getAtk() + 2.8d);
 					break;
 				}
+				case SPECTATOR:
+				{
+					//Spectators stats shouldn't change.
+					break;
+				}
 			}
 		}
 	}
@@ -150,6 +169,31 @@ public class ArenaPlayer extends ArenaEntity {
 
 	public PlayerRole getClassRole() {
 		return classRole;
+	}
+	
+	/**
+	 * <b>Gets the description for this ArenaPlayer's Role
+	 * @return the description
+	 */
+	public String[] getClassRoleDescription() {
+		return classRole.getDescription();
+	}
+	
+	/**
+	 * <b>Gets a specific description for a role.
+	 * @param role the requested role
+	 * @return the description for the role
+	 */
+	public String[] getClassRoleDescription(String role) {
+		String role_upper = role.toUpperCase();
+		PlayerRole player_role = PlayerRole.getRoleByString(role_upper);
+		
+		if (player_role != null) {
+			return player_role.getDescription();
+		} else {
+			return new String[] { String.format("Couldn't find the \"%s\" role", role) };
+		}
+		
 	}
 
 	public void setClassRole(PlayerRole classRole) {

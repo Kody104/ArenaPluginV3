@@ -3,6 +3,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.jpk.stu.commands.JoinCommand;
 import com.gmail.jpk.stu.commands.LeaveCommand;
+import com.gmail.jpk.stu.commands.QuitCommand;
+import com.gmail.jpk.stu.commands.RoleCommand;
 
 public class ArenaPlugin extends JavaPlugin {
 	
@@ -11,8 +13,14 @@ public class ArenaPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		logMessage("Enabling [Arena Ver " + ver + "]!");
+		
+		logMessage("Attempting to load all program commands.");
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
+		this.getCommand("role").setExecutor(new RoleCommand(this));
+		this.getCommand("quit").setExecutor(new QuitCommand(this));
+		
+		logMessage("Set-up complete.");
 	}
 	
 	@Override

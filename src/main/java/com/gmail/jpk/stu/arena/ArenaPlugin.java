@@ -5,6 +5,7 @@ import com.gmail.jpk.stu.commands.JoinCommand;
 import com.gmail.jpk.stu.commands.LeaveCommand;
 import com.gmail.jpk.stu.commands.QuitCommand;
 import com.gmail.jpk.stu.commands.RoleCommand;
+import com.gmail.jpk.stu.listeners.UndroppableSpecialItemListener;
 
 public class ArenaPlugin extends JavaPlugin {
 	
@@ -19,6 +20,9 @@ public class ArenaPlugin extends JavaPlugin {
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
 		this.getCommand("role").setExecutor(new RoleCommand(this));
 		this.getCommand("quit").setExecutor(new QuitCommand(this));
+		
+		logMessage("Attemping to load all program Listeners.");
+		new UndroppableSpecialItemListener(this);
 		
 		logMessage("Set-up complete.");
 	}

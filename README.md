@@ -5,7 +5,7 @@
 **Engine**
 1. ~Create Arena Entity~
 2. ~Create Arena Player~
-3. Create Arena Monster
+3. ~Create Arena Monster~
 4. ~Create StatItem~(Made SpecialItem Base-Class)
 5. ~Create LoreItem~ (^)
 6. Create Gold Prices

@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 public class Ability {
 	
 	public enum AbilityType {
-		NORMAL, ULTIMATE;
+		SELF, ALLY, ENEMY;
 	}
 	
 	private String name;
@@ -18,8 +18,14 @@ public class Ability {
 	private long cooldown; // The duration of cooldown for this ability
 	private ChatColor color; // May or may not be implemented. Thinking about it
 	private List<StatusEffect> allStatusEffects; // All the status effects this ability does.
+	private double baseDmg; // The base damage the ability will do.
+	private double atkScale; // If this ability scales with atk, use this.
+	private double magScale; // If this ability scales with mag, use this.
+	private double amrScale; // If this ability scales with amr, use this.
+	private double resScale; // If this ability scales with res, use this.
+	private double hpScale; // If this ability scales with hp, use this.
 	
-	public Ability(String name, AbilityType type, long cooldown, ChatColor color, StatusEffect... effects) {
+	public Ability(String name, AbilityType type, long cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
 		this.name = name;
 		this.type = type;
 		this.lvl = 0;
@@ -30,6 +36,12 @@ public class Ability {
 		for(StatusEffect e : effects) {
 			allStatusEffects.add(e);
 		}
+		this.baseDmg = baseDmg;
+		this.atkScale = atkScale;
+		this.magScale = magScale;
+		this.amrScale = amrScale;
+		this.resScale = resScale;
+		this.hpScale = hpScale;
 	}
 
 	public String getName() {
@@ -86,5 +98,53 @@ public class Ability {
 
 	public void setAllStatusEffects(List<StatusEffect> allStatusEffects) {
 		this.allStatusEffects = allStatusEffects;
+	}
+
+	public double getBaseDmg() {
+		return baseDmg;
+	}
+
+	public void setBaseDmg(double baseDmg) {
+		this.baseDmg = baseDmg;
+	}
+
+	public double getAtkScale() {
+		return atkScale;
+	}
+
+	public void setAtkScale(double atkScale) {
+		this.atkScale = atkScale;
+	}
+
+	public double getMagScale() {
+		return magScale;
+	}
+
+	public void setMagScale(double magScale) {
+		this.magScale = magScale;
+	}
+
+	public double getAmrScale() {
+		return amrScale;
+	}
+
+	public void setAmrScale(double amrScale) {
+		this.amrScale = amrScale;
+	}
+
+	public double getResScale() {
+		return resScale;
+	}
+
+	public void setResScale(double resScale) {
+		this.resScale = resScale;
+	}
+
+	public double getHpScale() {
+		return hpScale;
+	}
+
+	public void setHpScale(double hpScale) {
+		this.hpScale = hpScale;
 	}
 }

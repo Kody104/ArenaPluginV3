@@ -1,6 +1,7 @@
 package com.gmail.jpk.stu.abilities;
 
 public enum PassiveAbility {
+	POISON_BITE("Poison Bite", "Victims take (10 * Lvl) + (35% mag) poison damage per second over 4 seconds."),
 	SPECTATION("Spectation", "Your spectator blood gives you invulnerability."),
 	BRAWN("Brawn", "Physical damage that exceeds 15% of your max hp is reduced by 35%."),
 	RESISTANT("Resistant", "Reduces debuffs' effectiveness by 15% on you."),

@@ -15,6 +15,9 @@ public class ArenaPlugin extends JavaPlugin {
 	public void onEnable() {
 		logMessage("Enabling [Arena Ver " + ver + "]!");
 		
+		logMessage("Attempting initalization of GlobalW class.");
+		GlobalW.initialize(this);
+		
 		logMessage("Attempting to load all program commands.");
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));

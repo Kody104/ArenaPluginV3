@@ -1,5 +1,10 @@
 package com.gmail.jpk.stu.Entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.gmail.jpk.stu.abilities.StatusEffect;
+
 public abstract class ArenaEntity {
 	
 	private double maxHp;
@@ -12,9 +17,10 @@ public abstract class ArenaEntity {
 	private double critHitMultiplier;
 	private int cdr;
 	private int tenacity;
+	private List<StatusEffect> allStatusEffects;
 	
 	public ArenaEntity() {
-		
+		allStatusEffects = new ArrayList<StatusEffect>();
 	}
 	
 	public ArenaEntity(double Hp, double atk, double mag, double def, double res, double critchance, double critmulti, int cdr, int tenacity) {
@@ -28,6 +34,7 @@ public abstract class ArenaEntity {
 		this.critHitMultiplier = critmulti;
 		this.cdr = cdr;
 		this.tenacity = tenacity;
+		allStatusEffects = new ArrayList<StatusEffect>();
 	}
 
 	public double getMaxHp() {
@@ -108,5 +115,13 @@ public abstract class ArenaEntity {
 
 	public void setTenacity(int tenacity) {
 		this.tenacity = tenacity;
+	}
+
+	public List<StatusEffect> getAllStatusEffects() {
+		return allStatusEffects;
+	}
+
+	public void setAllStatusEffects(List<StatusEffect> allStatusEffects) {
+		this.allStatusEffects = allStatusEffects;
 	}
 }

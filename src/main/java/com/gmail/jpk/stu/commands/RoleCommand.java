@@ -37,7 +37,7 @@ public class RoleCommand extends BasicCommand {
 		int length = args.length;
 		
 		//Grab the player's role
-		PlayerRole player_role = arena_player.getClassRole();
+		PlayerRole player_role = arena_player.getClassRole(); // This is gonna throw a null pointer if they haven't chosen a role before now - Jerome
 		
 		//Returns information about various roles to the player
 		if (length == 2 && args[0].equalsIgnoreCase("HELP")) {

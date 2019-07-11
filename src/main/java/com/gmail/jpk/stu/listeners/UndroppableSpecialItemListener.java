@@ -28,7 +28,15 @@ public class UndroppableSpecialItemListener extends BasicListener {
 		ItemStack stack = drop.getItemStack();
 		
 		//TODO: I don't think this will work, but we'll try it.
-		if (stack instanceof UndroppableSpecialItem) {
+		if (stack instanceof UndroppableSpecialItem) { // This won't work - Jerome
+			/*
+			 * Try this instead
+			 * if(stack.hasItemMeta()) {
+			 *   if(stack.getItemMeta().getLore().get(0).equalsIgnoreCase("special item")) {
+			 *     e.setCancelled(true);
+			 *   }
+			 * }
+			 */
 			Player player = (e.getPlayer());
 			player.sendMessage("This item can't be dropped!");
 			e.setCancelled(true);

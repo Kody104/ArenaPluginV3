@@ -1,20 +1,30 @@
 package com.gmail.jpk.stu.Entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
+
+import com.gmail.jpk.stu.abilities.Ability;
+import com.gmail.jpk.stu.abilities.PassiveAbility;
 
 public class ArenaPlayer extends ArenaEntity {
 
 	private Player mPlayer;
 	private PlayerRole classRole;
 	private int Level;
+	private PassiveAbility passive;
+	private List<Ability> allAbilties;
 	
 	public ArenaPlayer(Player mPlayer, PlayerRole role) {
 		this.mPlayer = mPlayer;
 		this.classRole = role;
 		this.Level = 1;
+		this.allAbilties = new ArrayList<Ability>();
 		switch(role) {
 			case BLIGHT_ARCHER:
 			{
+				passive = PassiveAbility.SCAVENGE;
 				setMaxHp(458.0d);
 				setCurHp(getMaxHp());
 				setAtk(35.0d);
@@ -29,6 +39,7 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 			case BRUTE_JUGGERNAUT:
 			{
+				passive = PassiveAbility.BRAWN;
 				setMaxHp(632.0d);
 				setCurHp(getMaxHp());
 				setAtk(35.0d);
@@ -43,6 +54,7 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 			case CLERIC:
 			{
+				passive = PassiveAbility.HOLY_TOUCH;
 				setMaxHp(440.0d);
 				setCurHp(getMaxHp());
 				setAtk(30.0d);
@@ -57,6 +69,7 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 			case FIGHTER:
 			{
+				passive = PassiveAbility.HONED_SKILLS;
 				setMaxHp(502.0d);
 				setCurHp(getMaxHp());
 				setAtk(55.0d);
@@ -71,6 +84,7 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 			case HOLY_KNIGHT:
 			{
+				passive =  PassiveAbility.RESISTANT;
 				setMaxHp(566.0d);
 				setCurHp(getMaxHp());
 				setAtk(55.0d);
@@ -85,6 +99,7 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 			case UTILITY_MAGE:
 			{
+				passive = PassiveAbility.ANTI_MAGIC;
 				setMaxHp(420.0d);
 				setCurHp(getMaxHp());
 				setAtk(35.0d);
@@ -99,6 +114,7 @@ public class ArenaPlayer extends ArenaEntity {
 			}
 			case SPECTATOR:
 			{
+				passive = PassiveAbility.SPECTATION;
 				setMaxHp(100.0d);
 				setCurHp(getMaxHp());
 				setAtk(0.0d);
@@ -206,5 +222,13 @@ public class ArenaPlayer extends ArenaEntity {
 
 	public void setLevel(int level) {
 		Level = level;
+	}
+
+	public PassiveAbility getPassive() {
+		return passive;
+	}
+	
+	public List<Ability> getAllAbilties() {
+		return allAbilties;
 	}
 }

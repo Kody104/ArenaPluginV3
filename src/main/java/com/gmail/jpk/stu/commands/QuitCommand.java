@@ -31,7 +31,7 @@ public class QuitCommand extends BasicCommand {
 		}
 		
 		//Get the player's current role
-		PlayerRole player_role = player.getClassRole();
+		PlayerRole player_role = player.getClassRole(); // This will throw a null pointer if they haven't got a role before now - Jerome
 		
 		//Verify they have a role and change their role to spectator if so.
 		if (player_role == PlayerRole.SPECTATOR) {

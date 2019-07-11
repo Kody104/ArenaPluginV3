@@ -11,7 +11,7 @@
 6. Create Gold Prices
 7. Create DamageListener
 8. Create AllListener
-9. Create Abilities
+9. ~Create Abilities~
 10. Create Timers
 
 **Commands**

@@ -32,7 +32,7 @@ public class JoinCommand extends BasicCommand{
 				p.setFoodLevel(10); // Too much food meter = healing. NO FREE HEALING!
 				p.sendMessage("You have joined the arena!");
 				GlobalW.toArenaPlayers(p.getName() + " has joined the arena!");
-				GlobalW.getPlayersInArena().add(new ArenaPlayer(p, PlayerRole.FIGHTER));
+				GlobalW.getPlayersInArena().add(new ArenaPlayer(p, PlayerRole.SPECTATOR));
 			}
 			else { // Arena has started
 				p.sendMessage("The arena is currently in progress!");

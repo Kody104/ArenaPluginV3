@@ -38,6 +38,7 @@ public class RoleCommand extends BasicCommand {
 		
 		//Grab the player's role
 		PlayerRole player_role = arena_player.getClassRole(); // This is gonna throw a null pointer if they haven't chosen a role before now - Jerome
+		String player_role_name = arena_player.getClassRole().getPreferredName();
 		
 		//Returns information about various roles to the player
 		if (length == 2 && args[0].equalsIgnoreCase("HELP")) {
@@ -59,34 +60,36 @@ public class RoleCommand extends BasicCommand {
 				
 				//Get all the roles
 				for (PlayerRole pr : PlayerRole.values()) {
-					roles = roles.concat(pr + ", ");
+					roles = roles.concat(pr.getPreferredName() + ", ");
 				}
 				
 				//Remove the trailing comma
 				roles = roles.substring(0, roles.length() - 2) + ".";
 
 				//Send the message
+				sender.sendMessage("");
 				sender.sendMessage("Here are the current available roles: " + roles);
+				sender.sendMessage("");
 				sender.sendMessage("Type /role help [ROLE] for more information about a role.");
 				
 				return true;
 			}
-			
+						
 			//Check the player already has a role.
 			if (player_role != PlayerRole.SPECTATOR) {
-				sender.sendMessage("You already have a role. Please quit your current role to join a new one.");
+				sender.sendMessage("You already a" + player_role_name + " Please quit your current role to join a new one.");
 				return true;
 			}
 			
 			//Assign the player that role
 			arena_player.setClassRole(PlayerRole.getRoleByString(args[0].toUpperCase()));
-			
+			sender.sendMessage("You are now a " + player_role_name);
 			return true;
 		}
 				
 		//Shows the player their current role
-		if (length == 1) {
-			sender.sendMessage("You're current role is " + player_role + ".");
+		if (length == 0) {
+			sender.sendMessage("Your current role is " + player_role_name + ".");
 			return true;
 		}
 		

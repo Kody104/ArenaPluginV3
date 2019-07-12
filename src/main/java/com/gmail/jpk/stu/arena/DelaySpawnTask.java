@@ -25,6 +25,11 @@ public class DelaySpawnTask extends BukkitRunnable {
 		LivingEntity le = (LivingEntity) GlobalW.getInWorld().spawnEntity(spawnPoint, entityType); // Spawns the livingentity in the world.
 		PassiveAbility a = null;
 		switch(entityType) {
+			case CREEPER:
+			{
+				a = PassiveAbility.EXPLODE; // Gives creeper his passive
+				break;
+			}
 			case SPIDER:
 			{
 				a = PassiveAbility.POISON_BITE; // Gives spider his passive

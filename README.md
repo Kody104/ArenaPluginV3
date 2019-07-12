@@ -23,7 +23,7 @@
 6. Create Set <lvl/statname> [number] Command
 
 **In-Game**
-1. Build Arena 1 (Forest)
+1. ~Build Arena 1 (Forest)~
 2. Build Arena 2 (Cave)
 3. Build Arena 3 (Small Collesium)
 4. Build Arena 4 (Huge Collesium)

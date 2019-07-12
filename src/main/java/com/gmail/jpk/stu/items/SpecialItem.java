@@ -66,6 +66,11 @@ public abstract class SpecialItem extends ItemStack {
 	public static SpecialItem getSpecialItemByUID(int uid) {
 		switch(uid) {
 		//TODO: Add in uids as items are created.
+		case 100:
+		{
+			return new TestDummyStick();
+		}
+		
 		default:
 			return null;
 		}

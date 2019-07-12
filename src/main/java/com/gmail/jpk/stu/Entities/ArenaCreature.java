@@ -13,7 +13,7 @@ public class ArenaCreature extends ArenaEntity {
 	public ArenaCreature(LivingEntity entityType, int lvl, PassiveAbility passive) {
 		this.entityType = entityType;
 		this.lvl = lvl;
-		this.passive = passive;		
+		this.passive = passive;
 	}
 
 	public LivingEntity getEntityType() {

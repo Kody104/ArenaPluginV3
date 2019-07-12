@@ -47,7 +47,10 @@ public class CountdownTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		if (--seconds > 0) {
-			GlobalW.toArenaPlayers(String.format("%s%d", alert_message, seconds));
+			if (alert_players) {
+				GlobalW.toArenaPlayers(String.format("%s%d", alert_message, seconds));
+			}
+			
 			this.runTaskLater(GlobalW.getPlugin(), 1000);
 		} 
 	}

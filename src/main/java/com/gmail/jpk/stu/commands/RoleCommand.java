@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.Entities.PlayerRole;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
+import com.gmail.jpk.stu.arena.GlobalW;
 
 /**
  * <b>Allows a player to view their current role, or let's them see info about other roles.</b><br/>
@@ -30,7 +31,7 @@ public class RoleCommand extends BasicCommand {
 		
 		//Validate the CommandSender is an ArenaPlayer
 		if (arena_player == null) {
-			//If they aren't, exit.
+			sender.sendMessage(GlobalW.ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
 			return true;
 		}
 		

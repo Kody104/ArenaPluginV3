@@ -1,6 +1,7 @@
 package com.gmail.jpk.stu.arena;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.jpk.stu.commands.GiveCustomItemCommand;
 import com.gmail.jpk.stu.commands.JoinCommand;
 import com.gmail.jpk.stu.commands.LeaveCommand;
 import com.gmail.jpk.stu.commands.QuitCommand;
@@ -20,6 +21,7 @@ public class ArenaPlugin extends JavaPlugin {
 		GlobalW.initialize(this);
 		
 		logMessage("Attempting to load all program commands.");
+		this.getCommand("gci").setExecutor(new GiveCustomItemCommand(this));
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
 		this.getCommand("ready").setExecutor(new ReadyCommand(this));

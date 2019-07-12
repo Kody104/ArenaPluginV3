@@ -48,6 +48,22 @@ public abstract class BasicCommand implements CommandExecutor {
 		return GlobalW.getArenaPlayer(player);
 	}
 	
+	/**
+	 * Checks if the given string input is a valid integer.
+	 * @param string the input to validate
+	 * @return the valid int or -1 if invalid
+	 */
+	protected int getValidInteger(String string) {
+		int i = 0;
+		
+		try {
+			i = Integer.parseInt(string);
+			return i;
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+	
 	public ArenaPlugin getPlugin() {
 		return plugin;
 	}

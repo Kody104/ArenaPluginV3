@@ -28,7 +28,7 @@ public class ReadyCommand extends BasicCommand {
 		
 		//Validate the CommandSender is an ArenaPlayer
 		if (arena_player == null) {
-			//If they aren't, exit.
+			sender.sendMessage(GlobalW.ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
 			return true;
 		}
 		

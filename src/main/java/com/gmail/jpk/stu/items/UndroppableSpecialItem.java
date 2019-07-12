@@ -14,7 +14,7 @@ public abstract class UndroppableSpecialItem extends SpecialItem {
 	 * @param display_name the name of the UndroppableSpecialItem
 	 * @param lore the lore of the UndroppableSpecialItem
 	 */
-	public UndroppableSpecialItem(Material material, String display_name, String[] lore) {
-		super(material, display_name, lore);
+	public UndroppableSpecialItem(Material material, int UID, String display_name, String[] lore) {
+		super(material, UID, display_name, lore);
 	}
 }

@@ -4,6 +4,11 @@ version: 0.0.1
 author: Kody104
 
 commands:
+    gci:
+      description: Gives an ArenaPlayer a SpecialItem
+      usage: /gci [item] [target-player] (quantity)
+      permission: Arena.mod.gci
+      permission-message: You don't have permission.
     join:
       description: Enters player into the arena.
       usage: /join

@@ -22,6 +22,7 @@
 3. ~Create Role Command~
 4. ~Create Ready Command~
 5. ~Create Quit Command~
+6. ~Create GiveCustomItem Command~
 
 **In-Game**
 1. ~Build Arena 1 (Forest)~

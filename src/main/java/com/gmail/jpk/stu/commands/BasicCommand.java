@@ -12,7 +12,7 @@ import com.gmail.jpk.stu.arena.GlobalW.ErrorMsgs;
 
 public abstract class BasicCommand implements CommandExecutor {
 
-	private ArenaPlugin plugin;
+	protected ArenaPlugin plugin;
 	
 	public BasicCommand(ArenaPlugin plugin) {
 		this.plugin = plugin;

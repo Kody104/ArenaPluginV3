@@ -1,4 +1,4 @@
-package com.gmail.jpk.stu.arena;
+package com.gmail.jpk.stu.tasks;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.abilities.PassiveAbility;
+import com.gmail.jpk.stu.arena.GlobalW;
 
 public class DelaySpawnTask extends BukkitRunnable {
 

@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
+import com.gmail.jpk.stu.tasks.DelaySpawnTask;
 
 public class GlobalW {
 	

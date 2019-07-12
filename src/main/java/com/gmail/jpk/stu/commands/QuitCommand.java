@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
@@ -31,17 +32,17 @@ public class QuitCommand extends BasicCommand {
 		}
 		
 		//Get the player's current role
-		PlayerRole player_role = player.getClassRole(); // This will throw a null pointer if they haven't got a role before now - Jerome
+		PlayerRole player_role = player.getClassRole();
+		String player_role_name = player_role.getPreferredName();
 		
 		//Verify they have a role and change their role to spectator if so.
 		if (player_role == PlayerRole.SPECTATOR) {
-			sender.sendMessage("You haven't chosen a role yet! Try \"/role all\" to view all available roles.");
+			sender.sendMessage("You haven't chosen a role yet! Try " + ChatColor.GOLD +" \"/role all\" " + ChatColor.WHITE +"to view all available roles.");
 			return true;
 		} else {
 			player.setClassRole(PlayerRole.SPECTATOR);
-			sender.sendMessage("You have quit the " + player_role + " role. You are now a spectator.");
+			sender.sendMessage("You have quit the " + player_role_name + " role. You are now a spectator.");
 			return true;
 		}		
 	}
-
 }

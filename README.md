@@ -29,13 +29,7 @@
 5. Build Arena 5 (The End)
 
 ## Features to be Tested
-1. /role -> should show a player's current role 
-2. /role [ROLE] -> should ALLOW a player to choose a role (ADD CONFIRMATION)
-3. /role [ROLE] -> should PREVENT a player from switching roles (TESTS OKAY)
-4. /role help [ROLE] -> should SHOW a player information about that role (TESTS OKAY)
-5. /role all -> should SHOW all the available roles (DIFFICULT TO READ)
-6. /quit -> should QUIT a player's current 
-7. /quit -> should PREVENT a player from quitting a role if they don't have one.
+1. Up to date! No new features to test yet.
 
 ## Known Bugs & Issues
 1. None so far

@@ -3,6 +3,7 @@ package com.gmail.jpk.stu.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.abilities.Ability;
@@ -207,7 +208,7 @@ public class ArenaPlayer extends ArenaEntity {
 		if (player_role != null) {
 			return player_role.getDescription();
 		} else {
-			return new String[] { String.format("Couldn't find the \"%s\" role", role) };
+			return new String[] { String.format("Couldn't find the \"%s\" role. Try " + ChatColor.GOLD + " \"role all\" " + ChatColor.WHITE + "for a list of all the roles.", role) };
 		}
 		
 	}

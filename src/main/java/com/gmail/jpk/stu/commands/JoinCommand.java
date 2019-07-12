@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,7 +31,7 @@ public class JoinCommand extends BasicCommand{
 				}
 				p.getInventory().clear(); // No outside items allowed!
 				p.setFoodLevel(10); // Too much food meter = healing. NO FREE HEALING!
-				p.sendMessage("You have joined the arena!");
+				p.sendMessage("You have joined the arena as a spectator! Type" + ChatColor.GOLD +" \"role all\" " + ChatColor.WHITE + "to see a list of current roles.");
 				GlobalW.toArenaPlayers(p.getName() + " has joined the arena!");
 				GlobalW.getPlayersInArena().add(new ArenaPlayer(p, PlayerRole.SPECTATOR));
 			}

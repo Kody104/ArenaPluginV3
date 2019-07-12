@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
@@ -37,7 +38,7 @@ public class RoleCommand extends BasicCommand {
 		int length = args.length;
 		
 		//Grab the player's role
-		PlayerRole player_role = arena_player.getClassRole(); // This is gonna throw a null pointer if they haven't chosen a role before now - Jerome
+		PlayerRole player_role = arena_player.getClassRole(); 
 		String player_role_name = arena_player.getClassRole().getPreferredName();
 		
 		//Returns information about various roles to the player
@@ -67,23 +68,34 @@ public class RoleCommand extends BasicCommand {
 				roles = roles.substring(0, roles.length() - 2) + ".";
 
 				//Send the message
+				sender.sendMessage("Here are the current available roles:");
 				sender.sendMessage("");
-				sender.sendMessage("Here are the current available roles: " + roles);
+				sender.sendMessage("> " + roles);
 				sender.sendMessage("");
-				sender.sendMessage("Type /role help [ROLE] for more information about a role.");
+				sender.sendMessage("Type" + ChatColor.GOLD +" \"/role help [ROLE]\"" + ChatColor.WHITE + " for more information about a role.");
 				
 				return true;
 			}
-						
-			//Check the player already has a role.
-			if (player_role != PlayerRole.SPECTATOR) {
-				sender.sendMessage("You already a" + player_role_name + " Please quit your current role to join a new one.");
+			
+			//Get the requested PlayerRole. 
+			PlayerRole requested_role = PlayerRole.getRoleByString(args[0].toUpperCase());
+			
+			//Verify the role isn't null.
+			if (requested_role == null) {
+				sender.sendMessage("Couldn't find the \"" + args[0] + "\" role. Try " + ChatColor.GOLD + "\"role all\" " + ChatColor.WHITE + "to see a list of available roles.");
 				return true;
 			}
 			
+			//Check the player already has a role.
+			if (player_role != PlayerRole.SPECTATOR) {
+				sender.sendMessage("You already a " + player_role_name + ". Please quit your current role to join a new one.");
+				return true;
+			}
+
 			//Assign the player that role
-			arena_player.setClassRole(PlayerRole.getRoleByString(args[0].toUpperCase()));
-			sender.sendMessage("You are now a " + player_role_name);
+			arena_player.setClassRole(requested_role);
+			player_role_name = arena_player.getClassRole().getPreferredName();
+			sender.sendMessage("You are now a " + player_role_name + ".");
 			return true;
 		}
 				

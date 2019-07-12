@@ -21,11 +21,13 @@ public class GlobalW {
 	private static World inWorld;
 	private static List<ArenaPlayer> playersInArena = new ArrayList<ArenaPlayer>();
 	private static List<ArenaCreature> creaturesInArena = new ArrayList<ArenaCreature>();
+	private static List<Location> playerSpawnLocations = new ArrayList<Location>();
 	
 	//TODO: This needs to init all the important things
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
+		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}
 	
 	/**

@@ -18,7 +18,7 @@
 1. ~Create Join Command~
 2. ~Create Exit Command~
 3. ~Create Role Command~
-4. Create Ready Command
+4. ~Create Ready Command~
 5. ~Create Quit Command~
 
 **In-Game**
@@ -29,7 +29,9 @@
 5. Build Arena 5 (The End)
 
 ## Features to be Tested
-1. Up to date! No new features to test yet.
+1. /ready -> should READY a player and alert the arena.
+2. /ready -> should PREVENT a readied-player from using this command.
+3. /quit -> should PREVENT a player from quitting their role if they have readied-up.
 
 ## Known Bugs & Issues
 1. None so far

@@ -14,6 +14,11 @@ commands:
       usage: /leave
       permission: Arena.leave
       permission-message: You don't have permission.
+    ready:
+      description: Allows the player to ready themselves for battle.
+      usage: /ready
+      permission: Arena.ready
+      permission-message: You don't have permission.
     role:
       description: Allows a player to view their current role, see all roles, or get info about a specific roles.
       usage: /role [role|help|all] <role>

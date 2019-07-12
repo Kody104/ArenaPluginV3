@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.gmail.jpk.stu.commands.JoinCommand;
 import com.gmail.jpk.stu.commands.LeaveCommand;
 import com.gmail.jpk.stu.commands.QuitCommand;
+import com.gmail.jpk.stu.commands.ReadyCommand;
 import com.gmail.jpk.stu.commands.RoleCommand;
 import com.gmail.jpk.stu.listeners.UndroppableSpecialItemListener;
 
@@ -21,6 +22,7 @@ public class ArenaPlugin extends JavaPlugin {
 		logMessage("Attempting to load all program commands.");
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
+		this.getCommand("ready").setExecutor(new ReadyCommand(this));
 		this.getCommand("role").setExecutor(new RoleCommand(this));
 		this.getCommand("quit").setExecutor(new QuitCommand(this));
 		

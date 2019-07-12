@@ -16,12 +16,14 @@ public class ArenaPlayer extends ArenaEntity {
 	private int Level;
 	private PassiveAbility passive;
 	private List<Ability> allAbilties;
+	private boolean is_ready;
 	
 	public ArenaPlayer(Player mPlayer, PlayerRole role) {
 		this.mPlayer = mPlayer;
 		this.classRole = role;
 		this.Level = 1;
 		this.allAbilties = new ArrayList<Ability>();
+		this.is_ready = false;
 		switch(role) {
 			case BLIGHT_ARCHER:
 			{
@@ -212,7 +214,15 @@ public class ArenaPlayer extends ArenaEntity {
 		}
 		
 	}
-
+	
+	/**
+	 * <b>Determines if this ArenaPlayer is ready to fight.</b>
+	 * @return their readiness state
+	 */
+	public boolean isReady() {
+		return is_ready;
+	}
+	
 	public void setClassRole(PlayerRole classRole) {
 		this.classRole = classRole;
 	}
@@ -227,6 +237,10 @@ public class ArenaPlayer extends ArenaEntity {
 
 	public PassiveAbility getPassive() {
 		return passive;
+	}
+	
+	public void setReady(boolean is_ready) {
+		this.is_ready = is_ready;
 	}
 	
 	public List<Ability> getAllAbilties() {

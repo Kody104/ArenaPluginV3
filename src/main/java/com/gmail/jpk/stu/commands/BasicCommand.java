@@ -28,6 +28,7 @@ public abstract class BasicCommand implements CommandExecutor {
 	/**
 	 * <b>Returns a valid CommandSender back as an ArenaPlayer.</b><br/>
 	 * If the CommandSender isn't an ArenaPlayer, then it returns null.
+	 * This function will alert the sender if they are not an ArenaPlayer.
 	 * @param sender the CommandSender
 	 * @return The CommandSender as an ArenaPlayer. 
 	 */
@@ -39,13 +40,13 @@ public abstract class BasicCommand implements CommandExecutor {
 		}
 		
 		Player player = (Player) sender;
+		ArenaPlayer arena_player = GlobalW.getArenaPlayer(player);
 		
-		if (GlobalW.getArenaPlayer(player) == null) {
-			player.sendMessage(ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
-			return null;
+		if (arena_player == null) {
+			GlobalW.toPlayerError(player, ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
 		}
 		
-		return GlobalW.getArenaPlayer(player);
+		return arena_player;
 	}
 	
 	/**

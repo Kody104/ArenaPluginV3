@@ -2,6 +2,7 @@ package com.gmail.jpk.stu.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.Entities.PlayerRole;
@@ -31,7 +32,7 @@ public class RoleCommand extends BasicCommand {
 		
 		//Validate the CommandSender is an ArenaPlayer
 		if (arena_player == null) {
-			sender.sendMessage(GlobalW.ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
+			//If not, return.
 			return true;
 		}
 		
@@ -39,17 +40,29 @@ public class RoleCommand extends BasicCommand {
 		int length = args.length;
 		
 		//Grab the player's role
+		Player player = (Player) sender;
 		PlayerRole player_role = arena_player.getClassRole(); 
 		String player_role_name = arena_player.getClassRole().getPreferredName();
 		
 		//Returns information about various roles to the player
 		if (length == 2 && args[0].equalsIgnoreCase("HELP")) {
-			String[] description = arena_player.getClassRoleDescription(args[1]);
+			//In case of null, the function sends an error message as a description.
+			String[] lore = arena_player.getClassRoleDescription(args[1]);
 			
-			for (String string : description) {
-				sender.sendMessage(string);
+			//Check null case
+			if (lore.length == 1) {
+				GlobalW.toPlayerError(player, lore[0]);
+				return true;
 			}
 			
+			//Build the description - lore[0] is the name
+			String description = ChatColor.BOLD + lore[0] + ":" + ChatColor.RESET;
+			for (int i = 1; i < lore.length; i++) {
+				description = (description + " " + lore[i]);
+			}
+			
+			//Send the message
+			GlobalW.toPlayer(player, description);
 			return true;
 		}
 		
@@ -69,12 +82,7 @@ public class RoleCommand extends BasicCommand {
 				roles = roles.substring(0, roles.length() - 2) + ".";
 
 				//Send the message
-				sender.sendMessage("Here are the current available roles:");
-				sender.sendMessage("");
-				sender.sendMessage("> " + roles);
-				sender.sendMessage("");
-				sender.sendMessage("Type" + ChatColor.GOLD +" \"/role help [ROLE]\"" + ChatColor.WHITE + " for more information about a role.");
-				
+				GlobalW.toPlayer(player, "A list of available roles: " + roles);
 				return true;
 			}
 			
@@ -83,26 +91,26 @@ public class RoleCommand extends BasicCommand {
 			
 			//Verify the role isn't null.
 			if (requested_role == null) {
-				sender.sendMessage("Couldn't find the \"" + args[0] + "\" role. Try " + ChatColor.GOLD + "\"role all\" " + ChatColor.WHITE + "to see a list of available roles.");
+				GlobalW.toPlayerError(player, "Couldn't find the " + args[0] + " role. Try " + ChatColor.GOLD + "/role all " + ChatColor.RED + "to see a list of available roles.");
 				return true;
 			}
 			
 			//Check the player already has a role.
 			if (player_role != PlayerRole.SPECTATOR) {
-				sender.sendMessage("You already a " + player_role_name + ". Please quit your current role to join a new one.");
+				GlobalW.toPlayerError(player, "You already a " + player_role_name + ". Please quit your current role to join a new one.");
 				return true;
 			}
 
 			//Assign the player that role
 			arena_player.setClassRole(requested_role);
 			player_role_name = arena_player.getClassRole().getPreferredName();
-			sender.sendMessage("You are now a " + player_role_name + ".");
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + String.format("%s is now a %s!", player.getName(), player_role_name));
 			return true;
 		}
 				
 		//Shows the player their current role
 		if (length == 0) {
-			sender.sendMessage("Your current role is " + player_role_name + ".");
+			GlobalW.toPlayer(player, "Your current role is " + player_role_name + ".");
 			return true;
 		}
 		

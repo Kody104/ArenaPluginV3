@@ -210,9 +210,8 @@ public class ArenaPlayer extends ArenaEntity {
 		if (player_role != null) {
 			return player_role.getDescription();
 		} else {
-			return new String[] { String.format("Couldn't find the \"%s\" role. Try " + ChatColor.GOLD + " \"role all\" " + ChatColor.WHITE + "for a list of all the roles.", role) };
+			return new String[] { String.format("There is no %s role. Try " + ChatColor.GOLD + "/role all " + ChatColor.RED + "for help.", role) };
 		}
-		
 	}
 	
 	/**

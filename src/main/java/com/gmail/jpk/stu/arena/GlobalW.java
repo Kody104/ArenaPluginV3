@@ -3,6 +3,7 @@ package com.gmail.jpk.stu.arena;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -28,6 +29,24 @@ public class GlobalW {
 		setPlugin(plugin);
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
 		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
+	}
+	
+	/**
+	 * Sends a message to the Player with the ChatTag
+	 * @param player the player to whom will receive the message
+	 * @param message what the message should be
+	 */
+	public static void toPlayer(Player player, String message) {
+		player.sendMessage(String.format("%s %s", getChatTag(), message));
+	}
+	
+	/**
+	 * Sends a message to the Player with the ChatTag
+	 * @param player the player to whom will receive the message
+	 * @param message what the message should be
+	 */
+	public static void toPlayerError(Player player, String message) {
+		player.sendMessage(String.format("%s %s", getChatErrorTag(), message));
 	}
 	
 	/**
@@ -74,6 +93,14 @@ public class GlobalW {
 	
 	public static void setPlugin(ArenaPlugin aplug) {
 		plugin = aplug;
+	}
+	
+	public static String getChatTag() {
+		return ("<Arena-Plugin> ");
+	}
+	
+	public static String getChatErrorTag() {
+		return ("<Arena-Error> " + ChatColor.RED);
 	}
 	
 	public static ArenaPlugin getPlugin() {
@@ -125,8 +152,8 @@ public class GlobalW {
 
 
 	public static enum ErrorMsgs { 
-		NOT_PLAYER("[Error] You must be a player!"), 
-		NOT_ARENA_PLAYER("[Error] You are not an arena player!");
+		NOT_PLAYER("You must be a player!"), 
+		NOT_ARENA_PLAYER("You are not an arena player!");
 		
 		private String message;
 		

@@ -28,9 +28,13 @@ public class ReadyCommand extends BasicCommand {
 		
 		//Validate the CommandSender is an ArenaPlayer
 		if (arena_player == null) {
-			sender.sendMessage(GlobalW.ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
+			//If not, then exit.
 			return true;
 		}
+		
+		//Grab player info
+		Player player = (Player) sender;
+		String display_name = player.getName();
 		
 		//Grab the player's role and preferred name.
 		PlayerRole player_role  = arena_player.getClassRole();
@@ -38,22 +42,18 @@ public class ReadyCommand extends BasicCommand {
 		
 		//If the player is a spectator, they shouldn't be able to join.
 		if (player_role == PlayerRole.SPECTATOR) {
-			sender.sendMessage("You must choose a role before entering the arena!");
+			GlobalW.toPlayer(player, "You must choose a role before entering the arena!");
 			return true;
 		} 
-		
-		//Grab player info
-		Player player = (Player) sender;
-		String display_name = player.getName();
 		
 		//If the player has already readied-up, un-ready them.
 		if (arena_player.isReady()) {
 			arena_player.setReady(false);
-			GlobalW.toArenaPlayers(ChatColor.GOLD + String.format("%s the %s is no longer ready!", display_name, player_role_name));
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is no longer ready!", display_name, player_role_name));
 		} else {
 			//Ready the player and alert other ArenaPlayers.
 			arena_player.setReady(true);
-			GlobalW.toArenaPlayers(ChatColor.GOLD + String.format("%s the %s is ready to fight!", display_name, player_role_name));
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is ready to fight!", display_name, player_role_name));
 		}
 		
 		
@@ -68,14 +68,14 @@ public class ReadyCommand extends BasicCommand {
 		}
 		
 		//Show ArenaPlayers the ready count.
-		GlobalW.toArenaPlayers(String.format("There are (%d/%d) players ready!", ready, total));
+		GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("There are (%d/%d) players ready!", ready, total));
 		
 		//TODO: Auto-start round if all players are ready.
 		if (ready == total && !all_ready) {
 			setAllReady(true);
-			GlobalW.toArenaPlayers(ChatColor.RED + "All players are ready! The arena will begin shortly!");
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
 			//GlobalW.teleArenaPlayers(null); --> implement when we have actual locations
-			new CountdownTask("Arena Begins in ", true, 5);
+			new CountdownTask("Arena Begins in ", true, 5).runTaskLater(plugin, 15000);
 			new StartArenaTask().runTaskLater(plugin, 15000);
 		}		
 		

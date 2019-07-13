@@ -26,8 +26,9 @@ public class GiveCustomItemCommand extends BasicCommand {
 		//Minimum necessary check
 		ArenaPlayer arena_player = getArenaPlayer(sender);
 		
+		//Validate
 		if (arena_player == null) {
-			sender.sendMessage(GlobalW.ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
+			//If not, then exit.
 			return true;
 		}
 		
@@ -35,12 +36,13 @@ public class GiveCustomItemCommand extends BasicCommand {
 		Player player = (Player) sender;
 		String name   = player.getName();
 		
-		if (!name.equalsIgnoreCase("Kody104") || !name.equalsIgnoreCase("as331")) {
-			sender.sendMessage("You do not have permission to use this command.");
-			return true;
-		}
+//		if (!name.equalsIgnoreCase("Kody104") || !name.equalsIgnoreCase("as331")) {
+//			GlobalW.toPlayerError(player, "You do not have permission to use this command.");
+//			return true;
+//		}
 		
 		if (args.length < 2) {
+			GlobalW.toPlayerError(player, "Not enough arguments.");
 			return false;
 		}
 		
@@ -60,13 +62,13 @@ public class GiveCustomItemCommand extends BasicCommand {
 			//Verify ItemStack
 			if (stack != null) {
 				target_player.getInventory().addItem(stack);
-				sender.sendMessage(String.format("Gave %s %d %s", args[1], special_item_quantity, args[0]));
-				target_player.sendMessage(String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
+				GlobalW.toPlayer(player, String.format("Gave %s %d %s", args[1], special_item_quantity, args[0]));
+				GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
 				return true;
 			}
 		}
 		
-		sender.sendMessage(String.format("Failed to give %s %d %s", args[1], special_item_quantity, args[0]));
+		GlobalW.toPlayer(player, String.format("Failed to give %s %d %s", args[1], special_item_quantity, args[0]));
 		
 		return false;
 	}

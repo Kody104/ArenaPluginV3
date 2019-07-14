@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,21 +26,22 @@ public class JoinCommand extends BasicCommand{
 		if(GlobalW.getArenaPlayer(p) == null) { // If the player doesn't exist in the arena
 			if(GlobalW.getRound() == 0) { // If the arena hasn't started
 				if(GlobalW.getPlayersInArena().size() + 1 > GlobalW.getMaxSize()) { // If adding this player is over the player limit
-					p.sendMessage("The arena is currently full!");
+					GlobalW.toPlayer(p, "The arena is currently full!");
 					return true;
 				}
 				p.getInventory().clear(); // No outside items allowed!
 				p.setFoodLevel(10); // Too much food meter = healing. NO FREE HEALING!
-				p.sendMessage("You have joined the arena!");
-				GlobalW.toArenaPlayers(p.getName() + " has joined the arena!");
-				GlobalW.getPlayersInArena().add(new ArenaPlayer(p, PlayerRole.FIGHTER));
+				GlobalW.toPlayer(p, "You have joined the arena as a spectator!");
+				GlobalW.toPlayer(p, "Type " + ChatColor.GOLD + "/role all " + ChatColor.WHITE + "to see a list of current roles.");
+				GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + p.getName() + " has joined the arena!");
+				GlobalW.getPlayersInArena().add(new ArenaPlayer(p, PlayerRole.SPECTATOR));
 			}
 			else { // Arena has started
-				p.sendMessage("The arena is currently in progress!");
+				GlobalW.toPlayer(p, "The arena is currently in progress!");
 			}
 		}
 		else { // The player already exists in the arena
-			p.sendMessage("You are already in the arena!");
+			GlobalW.toPlayerError(p, "You are already in the arena!");
 		}
 		return true;
 	}

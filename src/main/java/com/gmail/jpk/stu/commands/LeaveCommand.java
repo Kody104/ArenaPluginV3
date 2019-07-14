@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -22,19 +23,18 @@ public class LeaveCommand extends BasicCommand {
 		Player p = (Player) sender;
 		if(GlobalW.getArenaPlayer(p) != null) { // If the player exists inside the arena
 			if(GlobalW.getRound() != 0) { // If the arena has already started
-				p.sendMessage("No abandoning your team after the arena has started!");
+				GlobalW.toPlayer(p, "No abandoning your team after the arena has started!");
 				return true;
 			}
 			p.setFoodLevel(20); // Max out food level
-			p.sendMessage("You have left the arena!");
+			GlobalW.toPlayer(p, "You have left the arena!");
 			GlobalW.removeArenaPlayer(p);
-			GlobalW.toArenaPlayers(p.getName() + " has left the arena!");
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + p.getName() + " has left the arena!");
 			return true;
 		}
 		else {
-			p.sendMessage(ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
+			GlobalW.toPlayerError(p, ErrorMsgs.NOT_ARENA_PLAYER.getMessage());
 			return true;
 		}
 	}
-
 }

@@ -4,13 +4,33 @@ version: 0.0.1
 author: Kody104
 
 commands:
-   join:
+    gci:
+      description: Gives an ArenaPlayer a SpecialItem
+      usage: /gci [item] [target-player] (quantity)
+      permission: Arena.mod.gci
+      permission-message: You don't have permission.
+    join:
       description: Enters player into the arena.
       usage: /join
       permission: Arena.join
       permission-message: You don't have permission.
-   leave:
+    leave:
       description: Remove player from the arena.
       usage: /leave
       permission: Arena.leave
+      permission-message: You don't have permission.
+    ready:
+      description: Allows the player to ready themselves for battle.
+      usage: /ready
+      permission: Arena.ready
+      permission-message: You don't have permission.
+    role:
+      description: Allows a player to view their current role, see all roles, or get info about a specific roles.
+      usage: /role [role|help|all] <role>
+      permission: Arena.role
+      permission-message: You don't have permission.
+    quit:
+      description: Quits a player's role (if any).
+      usage: /quit
+      permission: Arena.quit
       permission-message: You don't have permission.

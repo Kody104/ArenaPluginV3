@@ -42,24 +42,28 @@ public class RoleCommand extends BasicCommand {
 		//Grab the player's role
 		Player player = (Player) sender;
 		PlayerRole player_role = arena_player.getClassRole(); 
-		String player_role_name = arena_player.getClassRole().getPreferredName();
+		String player_role_name = arena_player.getClassRole().getName();
 		
 		//Returns information about various roles to the player
 		if (length == 2 && args[0].equalsIgnoreCase("HELP")) {
 			//In case of null, the function sends an error message as a description.
-			String[] lore = arena_player.getClassRoleDescription(args[1]);
+			String lore = arena_player.getClassRoleDescription(args[1]);
+			
+			String role = "";
+			
+			if(PlayerRole.getRoleByString(args[1]) != null) {
+				role = PlayerRole.getRoleByString(args[1]).getName();
+			}
 			
 			//Check null case
-			if (lore.length == 1) {
-				GlobalW.toPlayerError(player, lore[0]);
+			if(role.equals("")) {
+				GlobalW.toPlayerError(player, lore);
 				return true;
 			}
 			
-			//Build the description - lore[0] is the name
-			String description = ChatColor.BOLD + lore[0] + ":" + ChatColor.RESET;
-			for (int i = 1; i < lore.length; i++) {
-				description = (description + " " + lore[i]);
-			}
+			//Build the description
+			String description = ChatColor.BOLD + role + ":" + ChatColor.RESET;
+			description += lore;
 			
 			//Send the message
 			GlobalW.toPlayer(player, description);
@@ -75,7 +79,7 @@ public class RoleCommand extends BasicCommand {
 				
 				//Get all the roles
 				for (PlayerRole pr : PlayerRole.values()) {
-					roles = roles.concat(pr.getPreferredName() + ", ");
+					roles = roles.concat(pr.getName() + ", ");
 				}
 				
 				//Remove the trailing comma
@@ -103,7 +107,7 @@ public class RoleCommand extends BasicCommand {
 
 			//Assign the player that role
 			arena_player.setClassRole(requested_role);
-			player_role_name = arena_player.getClassRole().getPreferredName();
+			player_role_name = arena_player.getClassRole().getName();
 			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + String.format("%s is now a %s!", player.getName(), player_role_name));
 			return true;
 		}

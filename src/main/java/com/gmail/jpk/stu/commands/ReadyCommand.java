@@ -38,7 +38,7 @@ public class ReadyCommand extends BasicCommand {
 		
 		//Grab the player's role and preferred name.
 		PlayerRole player_role  = arena_player.getClassRole();
-		String player_role_name = player_role.getPreferredName();
+		String player_role_name = player_role.getName();
 		
 		//If the player is a spectator, they shouldn't be able to join.
 		if (player_role == PlayerRole.SPECTATOR) {

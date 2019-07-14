@@ -7,6 +7,7 @@ commands:
     gci:
       description: Gives an ArenaPlayer a SpecialItem
       usage: /gci [item] [target-player] (quantity)
+      aliases: [givecustomitem]
       permission: Arena.mod.gci
       permission-message: You don't have permission.
     join:

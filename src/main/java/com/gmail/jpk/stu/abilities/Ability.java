@@ -12,6 +12,7 @@ public class Ability {
 	}
 	
 	private String name;
+	private String description; // What this ability does.
 	private AbilityType type; // The type of ability this is.
 	private int lvl; // Level of the ability
 	private boolean onCooldown; // Is this ability castable?
@@ -25,8 +26,24 @@ public class Ability {
 	private double resScale; // If this ability scales with res, use this.
 	private double hpScale; // If this ability scales with hp, use this.
 	
-	public Ability(String name, AbilityType type, long cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
+	/**
+	 * 
+	 * @param name	The ability's name
+	 * @param description The ability's description
+	 * @param type The type of ability this is
+	 * @param cooldown The cooldown in milliseconds
+	 * @param color The color this ability shows in chat
+	 * @param baseDmg The base damage of this ability
+	 * @param atkScale The attack stat scaling
+	 * @param magScale The magic stat scaling
+	 * @param amrScale The armor stat scaling
+	 * @param resScale The resistance stat scaling
+	 * @param hpScale The maxhp stat scaling
+	 * @param effects The status effects that this ability applies
+	 */
+	public Ability(String name, String description, AbilityType type, long cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
 		this.name = name;
+		this.description = description;
 		this.type = type;
 		this.lvl = 0;
 		this.onCooldown = false;
@@ -50,6 +67,14 @@ public class Ability {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public AbilityType getType() {

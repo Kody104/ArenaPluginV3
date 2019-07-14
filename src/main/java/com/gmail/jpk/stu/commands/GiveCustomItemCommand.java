@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
@@ -57,15 +56,12 @@ public class GiveCustomItemCommand extends BasicCommand {
 		//Verify inputs are valid
 		if ( (special_item_id > 0) && (special_item_quantity > 0) && (target_player != null) ) {
 			SpecialItem special_item = SpecialItem.getSpecialItemByUID(special_item_id);
-			ItemStack stack = special_item.getSpecialItemAsItemStack(special_item_quantity);
 			
-			//Verify ItemStack
-			if (stack != null) {
-				target_player.getInventory().addItem(stack);
-				GlobalW.toPlayer(player, String.format("Gave %s %d %s", args[1], special_item_quantity, args[0]));
-				GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
-				return true;
-			}
+			//Add item to inventory
+			target_player.getInventory().addItem(special_item);
+			GlobalW.toPlayer(player, String.format("Gave %s %d %s", args[1], special_item_quantity, args[0]));
+			GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
+			return true;
 		}
 		
 		GlobalW.toPlayer(player, String.format("Failed to give %s %d %s", args[1], special_item_quantity, args[0]));

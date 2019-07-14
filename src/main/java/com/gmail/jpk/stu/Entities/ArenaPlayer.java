@@ -194,7 +194,7 @@ public class ArenaPlayer extends ArenaEntity {
 	 * <b>Gets the description for this ArenaPlayer's Role
 	 * @return the description
 	 */
-	public String[] getClassRoleDescription() {
+	public String getClassRoleDescription() {
 		return classRole.getDescription();
 	}
 	
@@ -203,14 +203,14 @@ public class ArenaPlayer extends ArenaEntity {
 	 * @param role the requested role
 	 * @return the description for the role
 	 */
-	public String[] getClassRoleDescription(String role) {
+	public String getClassRoleDescription(String role) {
 		String role_upper = role.toUpperCase();
 		PlayerRole player_role = PlayerRole.getRoleByString(role_upper);
 		
 		if (player_role != null) {
 			return player_role.getDescription();
 		} else {
-			return new String[] { String.format("There is no %s role. Try " + ChatColor.GOLD + "/role all " + ChatColor.RED + "for help.", role) };
+			return String.format("There is no %s role. Try " + ChatColor.GOLD + "/role all " + ChatColor.RED + "for help.", role);
 		}
 	}
 	

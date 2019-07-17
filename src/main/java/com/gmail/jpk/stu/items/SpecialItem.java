@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class SpecialItem extends ItemStack {
+public class SpecialItem extends ItemStack {
 
 	/**
 	 * The Unique Identification (UID) of a SpecialItem is a unique value assigned to each item.
@@ -19,6 +19,13 @@ public abstract class SpecialItem extends ItemStack {
 	private String display_name;
 	private Material material;
 	
+	/**
+	 * Creates a SpecialItem with a given Material, Unique ID, Display Name, and lore
+	 * @param material the material to represent the SpecialItem
+	 * @param uid its unique identification
+	 * @param display_name its display name
+	 * @param lore any desire lore for the item
+	 */
 	public SpecialItem(Material material, int uid, String display_name, String... lore) {
 		super(material);
 		ItemMeta meta = this.getItemMeta();
@@ -56,23 +63,5 @@ public abstract class SpecialItem extends ItemStack {
 	
 	public void setMaterial(Material material) {
 		this.material = material;
-	}
-	
-	/**
-	 * Gets a SpecialItem by its unique id. Returns NULL if none was found.
-	 * @param uid the uid of the SpecialItem
-	 * @return the SpecialItem or NULL if not found.
-	 */
-	public static SpecialItem getSpecialItemByUID(int uid) {
-		switch(uid) {
-		//TODO: Add in uids as items are created.
-		case 100:
-		{
-			return new TestDummyStick();
-		}
-		
-		default:
-			return null;
-		}
 	}
 }

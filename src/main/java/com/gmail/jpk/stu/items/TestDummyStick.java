@@ -7,6 +7,7 @@ import org.bukkit.Material;
  * The TestDummyStick (UID: 100) is a SpecialItem that can have any ability or effect needed.<br/><br/>
  * It is intended to use for debugging abilities or testing out new features.
  * It is NOT intended to be a general use SpecialItem.
+ * @deprecated This class is no longer in use. Use SpecialItems.TEST_DUMMY_STICK instead.
  */
 public class TestDummyStick extends SpecialItem {
 

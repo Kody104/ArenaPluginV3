@@ -9,6 +9,7 @@ import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
 import com.gmail.jpk.stu.arena.GlobalW;
 import com.gmail.jpk.stu.items.SpecialItem;
+import com.gmail.jpk.stu.items.SpecialItems;
 
 /**
  * Gives the player a CustomItem. 
@@ -55,7 +56,7 @@ public class GiveCustomItemCommand extends BasicCommand {
 		
 		//Verify inputs are valid
 		if ( (special_item_id > 0) && (special_item_quantity > 0) && (target_player != null) ) {
-			SpecialItem special_item = SpecialItem.getSpecialItemByUID(special_item_id);
+			SpecialItem special_item = SpecialItems.getSpecialItemByUID(special_item_id);
 			
 			//Add item to inventory
 			target_player.getInventory().addItem(special_item);

@@ -15,6 +15,15 @@ public class ArenaCreature extends ArenaEntity {
 		this.lvl = lvl;
 		this.passive = passive;
 	}
+	
+	/**
+	 * Returns how much experience an ArenaEntity drops.
+	 * @param bonus any bonus experience dropped from this ArenaEntity
+	 * @return the amount of experience dropped
+	 */
+	public int getExpDrop(int bonus) {
+		return (int) (bonus + (15 + (0.03 * Math.pow(lvl, 2))));
+	}
 
 	public LivingEntity getEntityType() {
 		return entityType;

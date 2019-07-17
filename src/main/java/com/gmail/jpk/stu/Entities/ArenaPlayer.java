@@ -13,6 +13,7 @@ public class ArenaPlayer extends ArenaEntity {
 
 	private Player mPlayer;
 	private PlayerRole classRole;
+	private int exp;
 	private int Level;
 	private PassiveAbility passive;
 	private List<Ability> allAbilties;
@@ -220,6 +221,23 @@ public class ArenaPlayer extends ArenaEntity {
 	 */
 	public boolean isReady() {
 		return is_ready;
+	}
+	
+	/**
+	 * Gets how much Experience a player needs to gain a level.<br/><br/>
+	 * As it stands now, here a few levels and the TOTAL number of monsters a player would need to kill.</br>
+	 * <i>This does NOT include experience gained from completing the five-round sections.</i>
+	 * <ul>
+	 * 	<li>Level 5 requires 82 total monster kills.</li>
+	 * 	<li>Level 10 requires 453 total monster kills.</li>
+	 * 	<li>Level 15 requires 1,685 total monster kills.</li>
+	 * 	<li>Level 18 requires 3,118 total monster kills.</li>
+	 * </ul>
+	 * 
+	 * @return the total experience needed for the next level
+	 */
+	public int getNextExp() {
+		return (int) Math.ceil((2.5 * Math.pow(Level, 3) + 250));
 	}
 	
 	public void setClassRole(PlayerRole classRole) {

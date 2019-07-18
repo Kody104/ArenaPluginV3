@@ -51,21 +51,13 @@ public enum SpecialItems {
 	 */
 	public static SpecialItem getSpecialItemByUID(int uid) {
 		//TODO: Add in SpecialItems as they are created
-		
-		switch (uid) {
-			case 100:
-			{
-				return TEST_DUMMY_STICK.getItem();
-			}
-			case 101:
-			{
-				return GOLDEN_SCRAP.getItem();
-			}
-			default:
-			{
-				return null;
+		for (SpecialItems i : SpecialItems.values()) {
+			if (i.getItem().getUID() == uid) {
+				return i.getItem();
 			}
 		}
+		
+		return null;
 	}
 	
 	public SpecialItem getItem() {

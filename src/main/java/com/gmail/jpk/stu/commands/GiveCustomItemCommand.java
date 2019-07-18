@@ -59,10 +59,14 @@ public class GiveCustomItemCommand extends BasicCommand {
 			SpecialItem special_item = SpecialItems.getSpecialItemByUID(special_item_id);
 			
 			//Add item to inventory
-			target_player.getInventory().addItem(special_item);
-			GlobalW.toPlayer(player, String.format("Gave %s %d %s", args[1], special_item_quantity, args[0]));
-			GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
-			return true;
+			if (special_item != null) {
+				target_player.getInventory().addItem(special_item);
+				GlobalW.toPlayer(player, String.format("Gave %s %d %s", args[1], special_item_quantity, args[0]));
+				GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
+				return true;
+			} else {
+				GlobalW.toPlayer(player, "Item not found.");
+			}
 		}
 		
 		GlobalW.toPlayer(player, String.format("Failed to give %s %d %s", args[1], special_item_quantity, args[0]));

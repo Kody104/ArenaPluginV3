@@ -13,7 +13,7 @@ public class SpecialItem extends ItemStack {
 	 * The Unique Identification (UID) of a SpecialItem is a unique value assigned to each item.
 	 * The UIDs for SpecialItems start with 100. (i.e. 100-199 are valid special items)
 	 */
-	public final int UID;
+	private final int UID;
 	
 	//The display name of this special item
 	private String display_name;
@@ -35,6 +35,7 @@ public class SpecialItem extends ItemStack {
 		}
 		meta.setLore(itemLore);
 		meta.setDisplayName(display_name);
+		setDisplayName(display_name);
 		setMaterial(material);
 		setItemMeta(meta);
 		UID = uid;
@@ -48,6 +49,10 @@ public class SpecialItem extends ItemStack {
 		return material;
 	}
 	
+	public int getUID() {
+		return UID;
+	}
+ 	
 	/**
 	 * Gets the SpecialItem as an ItemStack. Does not validate inputs and may return null.
 	 * @param quantity the quantity of the SpecialItem

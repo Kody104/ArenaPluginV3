@@ -10,6 +10,12 @@ commands:
       aliases: [givecustomitem]
       permission: Arena.mod.gci
       permission-message: You don't have permission.
+    gai:
+      description: Gives an player an AbilityItem
+      usage: /gai [ability] [target-player]
+      aliases: [giveabilityitem]
+      permission: Arena.mod.gai
+      permission-message: You don't have permission.
     join:
       description: Enters player into the arena.
       usage: /join

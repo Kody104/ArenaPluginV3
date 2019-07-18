@@ -7,13 +7,11 @@ import org.bukkit.ChatColor;
 
 public class Ability {
 	
-	public enum AbilityType {
-		SELF, ALLY, ENEMY;
-	}
 	
 	private String name;
 	private String description; // What this ability does.
-	private AbilityType type; // The type of ability this is.
+	private AbilityTarget targetType; // The target and range of this ability.
+	private DamageType damageType; // The type of damage this ability does.
 	private int lvl; // Level of the ability
 	private boolean onCooldown; // Is this ability castable?
 	private long cooldown; // The duration of cooldown for this ability
@@ -41,10 +39,11 @@ public class Ability {
 	 * @param hpScale The maxhp stat scaling
 	 * @param effects The status effects that this ability applies
 	 */
-	public Ability(String name, String description, AbilityType type, long cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
+	public Ability(String name, String description, AbilityTarget target, DamageType damageType, long cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
 		this.name = name;
 		this.description = description;
-		this.type = type;
+		this.targetType = target;
+		this.damageType = damageType;
 		this.lvl = 0;
 		this.onCooldown = false;
 		this.cooldown = cooldown;
@@ -77,12 +76,20 @@ public class Ability {
 		this.description = description;
 	}
 
-	public AbilityType getType() {
-		return type;
+	public AbilityTarget getTargetType() {
+		return targetType;
 	}
 
-	public void setType(AbilityType type) {
-		this.type = type;
+	public void setTargetType(AbilityTarget target) {
+		this.targetType = target;
+	}
+
+	public DamageType getDamageType() {
+		return damageType;
+	}
+
+	public void setDamageType(DamageType damageType) {
+		this.damageType = damageType;
 	}
 
 	public int getLvl() {

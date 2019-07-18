@@ -6,8 +6,11 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.gmail.jpk.stu.abilities.Ability;
+import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.PassiveAbility;
+import com.gmail.jpk.stu.abilities.StatusEffect;
+import com.gmail.jpk.stu.arena.GlobalW;
+import com.gmail.jpk.stu.items.AbilityItem;
 
 public class ArenaPlayer extends ArenaEntity {
 
@@ -16,14 +19,14 @@ public class ArenaPlayer extends ArenaEntity {
 	private int exp;
 	private int Level;
 	private PassiveAbility passive;
-	private List<Ability> allAbilties;
+	private List<AbilityItem> allAbilities;
 	private boolean is_ready;
 	
 	public ArenaPlayer(Player mPlayer, PlayerRole role) {
 		this.mPlayer = mPlayer;
 		this.classRole = role;
 		this.Level = 1;
-		this.allAbilties = new ArrayList<Ability>();
+		this.allAbilities = new ArrayList<AbilityItem>();
 		this.is_ready = false;
 		switch(role) {
 			case BLIGHT_ARCHER:
@@ -132,6 +135,76 @@ public class ArenaPlayer extends ArenaEntity {
 				break;
 			}
 		}
+	}
+	
+	@Override
+	public void addStatusEffect(StatusEffect statusEffect) {
+		super.addStatusEffect(statusEffect);
+		GlobalW.toPlayer(mPlayer, "You have gotten the " + statusEffect.getType() + " status effect!");
+	}
+	
+	@Override
+	public void takeDamage(double damage, DamageType damageType) {
+		// Calculate resistance based on damage type
+		if(damageType == DamageType.PHYSICAL) {
+			double amrMulti = (100.0d / (100.0d + getDef()));
+			double damageAfter = damage * amrMulti;
+			//TODO: Subtract from health
+		}
+		else if(damageType == DamageType.MAGICAL) {
+			double resMulti = (100.0d / (100.0d + getRes()));
+			double damageAfter = damage * resMulti;
+			//TODO: Subtract from health
+		}
+		else if(damageType == DamageType.TRUE) {
+			//TODO: Subtract from health
+		}
+		else {
+			damage = 0.0d;
+			GlobalW.toPlayerError(mPlayer, "What is this damage type? " + damageType);
+		}
+	}
+	
+	public boolean isHoldingAbilityItem() {
+		if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).contains("Ability")) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void castAbility(ArenaEntity... targets) {
+		AbilityItem item = getAbilityItemInHand();
+		
+		if(item != null) {
+			// If there is is only one affected.
+			if(targets.length == 1) {
+				castAbility(this, targets[0]);
+				return;
+			}
+		}
+	}
+	
+	public void castAbility(ArenaEntity target) {
+		AbilityItem item = getAbilityItemInHand();
+		
+		if(item != null) {
+			item.useAbility(this, target);
+		}
+	}
+	
+	public AbilityItem getAbilityItemInHand() {
+		// Safety check
+		if(isHoldingAbilityItem()) {
+			// Get the lore to check
+			String inHandLore = mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0);
+			for(AbilityItem a : allAbilities) {
+				// Check the lore
+				if(a.getItemMeta().getLore().get(0).equals(inHandLore)) {
+					return a;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void LevelUp() {
@@ -260,7 +333,7 @@ public class ArenaPlayer extends ArenaEntity {
 		this.is_ready = is_ready;
 	}
 	
-	public List<Ability> getAllAbilties() {
-		return allAbilties;
+	public List<AbilityItem> getAllAbilties() {
+		return allAbilities;
 	}
 }

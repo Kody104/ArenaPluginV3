@@ -2,15 +2,12 @@ package com.gmail.jpk.stu.Entities;
 
 import com.gmail.jpk.stu.abilities.Ability;
 import com.gmail.jpk.stu.abilities.PassiveAbility;
-
-import org.bukkit.ChatColor;
+import com.gmail.jpk.stu.abilities.Abilities;
 
 public enum PlayerRole {	
 	
 	BRUTE_JUGGERNAUT("Brute Juggernaut", "An angry brute who can take a lot of punishment.", 
-			PassiveAbility.BRAWN, 
-			new Ability("Hookshot", "Throws a hook that drags enemies towards you and slows them for 3 seconds. ", Ability.AbilityType.ENEMY, 20000L, 
-					ChatColor.BLUE, 0, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d)), 
+			PassiveAbility.BRAWN, Abilities.HOOKSHOT.getAbility()), 
 	HOLY_KNIGHT("Holy Knight", "A noble knight whose stories can entertain crowds.", PassiveAbility.RESISTANT), 
 	FIGHTER("Fighter", "A simple man who loves the feel of a sword crushing his victims' skulls.", PassiveAbility.HONED_SKILLS), 
 	BLIGHT_ARCHER("Blight Archer", "A crafty bow-man who spreads the plague.", PassiveAbility.SCAVENGE), 

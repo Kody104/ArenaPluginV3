@@ -1,6 +1,7 @@
 package com.gmail.jpk.stu.arena;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.jpk.stu.commands.GiveAbilityItemCommand;
 import com.gmail.jpk.stu.commands.GiveCustomItemCommand;
 import com.gmail.jpk.stu.commands.JoinCommand;
 import com.gmail.jpk.stu.commands.LeaveCommand;
@@ -27,6 +28,7 @@ public class ArenaPlugin extends JavaPlugin {
 		this.getCommand("ready").setExecutor(new ReadyCommand(this));
 		this.getCommand("role").setExecutor(new RoleCommand(this));
 		this.getCommand("quit").setExecutor(new QuitCommand(this));
+		this.getCommand("gai").setExecutor(new GiveAbilityItemCommand(this));
 		
 		logMessage("Attemping to load all program Listeners.");
 		new UndroppableSpecialItemListener(this);

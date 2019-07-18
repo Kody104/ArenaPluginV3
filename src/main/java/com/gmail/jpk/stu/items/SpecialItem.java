@@ -38,6 +38,7 @@ public class SpecialItem extends ItemStack {
 		setMaterial(material);
 		setItemMeta(meta);
 		UID = uid;
+		this.display_name = display_name;
 	}
 	
 	public String getDisplayName() {

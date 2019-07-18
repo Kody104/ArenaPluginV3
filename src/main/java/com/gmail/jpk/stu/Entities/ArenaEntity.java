@@ -3,6 +3,7 @@ package com.gmail.jpk.stu.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.StatusEffect;
 
 public abstract class ArenaEntity {
@@ -35,6 +36,10 @@ public abstract class ArenaEntity {
 		this.cdr = cdr;
 		this.tenacity = tenacity;
 		allStatusEffects = new ArrayList<StatusEffect>();
+	}
+	
+	public void takeDamage(double damage, DamageType damageType) {
+		//Override this function
 	}
 
 	public double getMaxHp() {
@@ -120,8 +125,67 @@ public abstract class ArenaEntity {
 	public List<StatusEffect> getAllStatusEffects() {
 		return allStatusEffects;
 	}
-
-	public void setAllStatusEffects(List<StatusEffect> allStatusEffects) {
-		this.allStatusEffects = allStatusEffects;
+	
+	/**
+	 * Adds the status effect to the entity. Adds on to status effect if it already exists.
+	 * @param statusEffect	The status effect to add
+	 */
+	public void addStatusEffect(StatusEffect statusEffect) {
+		if(hasStatusEffect(statusEffect)) { // Check if entity has the status effect
+			for(int i = 0; i < allStatusEffects.size(); i++) {
+				StatusEffect s = allStatusEffects.get(i);
+				if(s.getType() == statusEffect.getType()) { // Check by status type
+					long duration = s.getDuration() + statusEffect.getDuration(); // Combine the durations
+					removeStatusEffect(s); // Remove old
+					StatusEffect newStatus = new StatusEffect(statusEffect.clone()); // Create new
+					newStatus.setDuration(duration); // Set new duration
+					allStatusEffects.add(newStatus); // Add new status effect
+				}
+			}
+		}
+	}
+	
+	/**
+	 *  Get a specific status effect by the type you want.
+	 * @param type	The type of status effect you want to get
+	 * @return	The status effect
+	 */
+	public StatusEffect getStatusEffectByType(StatusEffect.StatusEffectType type) {
+		for(StatusEffect s : allStatusEffects) {
+			if(s.getType() == type) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Check if entity has a specific status effect by the type.
+	 * @param type	The type of status effect you want to look up
+	 * @return	The status effect
+	 */
+	public boolean hasStatusEffect(StatusEffect statusEffect) {
+		for(StatusEffect s : allStatusEffects) {
+			if(s.getType() == statusEffect.getType()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Remove a status effect from the array list.
+	 * @param statusEffect	The status effect to remove
+	 */
+	public void removeStatusEffect(StatusEffect statusEffect) {
+		if(hasStatusEffect(statusEffect)) {
+			for(int i = 0; i < allStatusEffects.size(); i++) {
+				StatusEffect s = allStatusEffects.get(i);
+				if(s.getType() == statusEffect.getType()) {
+					allStatusEffects.remove(i);
+					return;
+				}
+			}
+		}
 	}
 }

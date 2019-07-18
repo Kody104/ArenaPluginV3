@@ -2,6 +2,7 @@ package com.gmail.jpk.stu.arena;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ import com.gmail.jpk.stu.tasks.DelaySpawnTask;
 
 public class GlobalW {
 	
+	public static final Random rand = new Random();
 	private static ArenaPlugin plugin;
 	private static final int maxSize = 6;
 	private static int round = 0;
@@ -138,6 +140,25 @@ public class GlobalW {
 			ArenaPlayer player = playersInArena.get(i);
 			if(player.getmPlayer().getUniqueId() == p.getUniqueId()) {
 				playersInArena.remove(i);
+				i--;
+			}
+		}
+	}
+	
+	public static ArenaCreature getArenaCreature(LivingEntity e) {
+		for(ArenaCreature creature : creaturesInArena) {
+			if(creature.getEntityType().getUniqueId() == e.getUniqueId()) {
+				return creature;
+			}
+		}
+		return null;
+	}
+	
+	public static void removeArenaCreature(LivingEntity e) {
+		for(int i = 0; i < creaturesInArena.size(); i++) {
+			ArenaCreature creature = creaturesInArena.get(i);
+			if(creature.getEntityType().getUniqueId() == e.getUniqueId()) {
+				creaturesInArena.remove(i);
 				i--;
 			}
 		}

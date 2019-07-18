@@ -1,29 +1,53 @@
 package com.gmail.jpk.stu.abilities;
 
-import org.bukkit.entity.LivingEntity;
-
 public class StatusEffect {
 	
+	public enum StatusEffectTarget {
+		CASTER, TARGET;
+	}
+	
 	public enum StatusEffectTrigger {
-		ON_HIT, IMMEDIATE;
+		IMMEDIATE, ON_HIT;
 	}
 	
 	public enum StatusEffectType {
-		BUFF_ARMOR, SUBVERT_DAMAGE; // This is specially used for Brute Juggernaut
+		BUFF_ARMOR, // Buffs armor
+		SOFT_SLOW, // Adds slow potion effect tier 1
+		
+		SUBVERT_DAMAGE; // This is specially used for Brute Juggernaut
 	}
 	
-	private StatusEffectTrigger trigger;
-	private StatusEffectType type;
+	private StatusEffectTarget target; // Who is affected by this
+	private StatusEffectTrigger trigger; // What triggers this effect
+	private StatusEffectType type; // What type of status effect is it
+	private double pow; // The power of this status effect. May not be necessary
 	private long triggerDuration; // Duration of the EffectTrigger, not the EffectType
 	private long duration; // Duration of the EffectType, not the EffectTrigger
-	private LivingEntity caster; // Caster of the status effect
 	
-	public StatusEffect(StatusEffectTrigger trigger, StatusEffectType type, long triggerDuration, long duration, LivingEntity caster) {
+	public StatusEffect(StatusEffectTarget target, StatusEffectTrigger trigger, StatusEffectType type, double pow, long triggerDuration, long duration) {
+		this.target = target;
 		this.trigger = trigger;
 		this.type = type;
+		this.pow = pow;
 		this.triggerDuration = triggerDuration;
 		this.duration = duration;
-		this.caster = caster;
+	}
+	
+	public StatusEffect(StatusEffect clone) {
+		this.target = clone.target;
+		this.trigger = clone.trigger;
+		this.type = clone.type;
+		this.pow = clone.pow;
+		this.triggerDuration = clone.triggerDuration;
+		this.duration = clone.duration;
+	}
+
+	public StatusEffectTarget getTarget() {
+		return target;
+	}
+
+	public void setTarget(StatusEffectTarget target) {
+		this.target = target;
 	}
 
 	public StatusEffectTrigger getTrigger() {
@@ -42,6 +66,14 @@ public class StatusEffect {
 		this.type = type;
 	}
 
+	public double getPow() {
+		return pow;
+	}
+
+	public void setPow(double pow) {
+		this.pow = pow;
+	}
+
 	public long getTriggerDuration() {
 		return triggerDuration;
 	}
@@ -57,13 +89,9 @@ public class StatusEffect {
 	public void setDuration(long duration) {
 		this.duration = duration;
 	}
-
-	public LivingEntity getCaster() {
-		return caster;
-	}
-
-	public void setCaster(LivingEntity caster) {
-		this.caster = caster;
-	}
 	
+	@Override
+	public StatusEffect clone(){
+		return new StatusEffect(target, trigger, type, pow, triggerDuration, duration);
+	}
 }

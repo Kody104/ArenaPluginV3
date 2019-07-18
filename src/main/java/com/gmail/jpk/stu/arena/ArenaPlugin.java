@@ -9,6 +9,7 @@ import com.gmail.jpk.stu.commands.QuitCommand;
 import com.gmail.jpk.stu.commands.ReadyCommand;
 import com.gmail.jpk.stu.commands.RoleCommand;
 import com.gmail.jpk.stu.listeners.DeathListener;
+import com.gmail.jpk.stu.listeners.PlayerCastListener;
 import com.gmail.jpk.stu.listeners.UndroppableSpecialItemListener;
 
 public class ArenaPlugin extends JavaPlugin {
@@ -34,6 +35,7 @@ public class ArenaPlugin extends JavaPlugin {
 		logMessage("Attemping to load all program Listeners.");
 		new UndroppableSpecialItemListener(this);
 		new DeathListener(this);
+		new PlayerCastListener(this);
 		
 		logMessage("Set-up complete.");
 	}

@@ -8,10 +8,10 @@ import org.bukkit.ChatColor;
 
 public enum Abilities {
 	
-	HOOKSHOT(new Ability("Hookshot", "Throws a hook that drags enemies towards you and slows them for 3 seconds. ", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 5, 0), 
+	HOOKSHOT(new Ability("Hookshot", "Drag and slow enemies for 3 seconds ", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 5, 0), 
 			DamageType.PHYSICAL, 20000L, ChatColor.BLUE, 0, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET, 
 					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.SOFT_SLOW, 0.0d, 0L, 3000L))),
-	ANNIHILATE(new Ability("Annihilate", "Your next attack will deal bonus physical damage that scales with your HP.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 1, 0),
+	ANNIHILATE(new Ability("Annihilate", "Deal bonus damage scaling with HP.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 1, 0),
 			DamageType.PHYSICAL, 12000L, ChatColor.BLUE, 35, 0.0d, 0.0d, 0.0d, 0.0d, 0.05d));
 	
 	private final Ability ability;

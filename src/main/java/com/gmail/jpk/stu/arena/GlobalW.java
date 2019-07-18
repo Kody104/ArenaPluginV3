@@ -145,19 +145,19 @@ public class GlobalW {
 		}
 	}
 	
-	public static ArenaCreature getArenaCreature(LivingEntity e) {
+	public static ArenaCreature getArenaCreature(LivingEntity le) {
 		for(ArenaCreature creature : creaturesInArena) {
-			if(creature.getEntityType().getUniqueId() == e.getUniqueId()) {
+			if(creature.getEntityType() == le) {
 				return creature;
 			}
 		}
 		return null;
 	}
 	
-	public static void removeArenaCreature(LivingEntity e) {
+	public static void removeArenaCreature(LivingEntity le) {
 		for(int i = 0; i < creaturesInArena.size(); i++) {
 			ArenaCreature creature = creaturesInArena.get(i);
-			if(creature.getEntityType().getUniqueId() == e.getUniqueId()) {
+			if(creature.getEntityType() == le) {
 				creaturesInArena.remove(i);
 				i--;
 			}

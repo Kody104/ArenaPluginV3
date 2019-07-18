@@ -3,8 +3,11 @@ package com.gmail.jpk.stu.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.abilities.Abilities;
 import com.gmail.jpk.stu.abilities.Ability;
@@ -51,6 +54,12 @@ public class GiveAbilityItemCommand extends BasicCommand {
 		target_player.getInventory().addItem(aItem);
 		GlobalW.toPlayer(player, String.format("Gave %s %s", args[1], args[0]));
 		GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %s!", aItem.getDisplayName()));
+		arena_player.getAllAbilties().add(aItem);
+		
+		//DEBUG 
+		
+		LivingEntity le = (LivingEntity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+		GlobalW.getCreaturesInArena().add(new ArenaCreature(le, 1, null));
 		
 		return true;
 	}

@@ -4,7 +4,6 @@ import org.bukkit.Material;
 
 import com.gmail.jpk.stu.Entities.ArenaEntity;
 import com.gmail.jpk.stu.abilities.Ability;
-import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.StatusEffect;
 import com.gmail.jpk.stu.arena.GlobalW;
 
@@ -13,7 +12,7 @@ public class AbilityItem extends SpecialItem {
 	private Ability owner;
 	
 	public AbilityItem(int uid, Ability owner) {
-		super(Material.STICK, uid, "Ability - " + owner.getName(), owner.getDescription(), "Target: "+owner.getTargetType().getTargetType().toString(), "Range: "+owner.getTargetType().getCastRange() + " person(s)", "Splash: "+owner.getTargetType().getAbilityRange() + " person(s)", "Damage Type: " + owner.getDamageType());
+		super(Material.STICK, uid, owner.getName(), "Ability", owner.getDescription(), "Target: "+owner.getTargetType().getTargetType().toString(), "Range: "+owner.getTargetType().getCastRange() + " person(s)", "Splash: "+owner.getTargetType().getAbilityRange() + " person(s)", "Damage Type: " + owner.getDamageType());
 		this.owner = owner;
 	}
 	

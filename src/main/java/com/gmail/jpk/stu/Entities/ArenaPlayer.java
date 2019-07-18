@@ -166,7 +166,7 @@ public class ArenaPlayer extends ArenaEntity {
 	}
 	
 	public boolean isHoldingAbilityItem() {
-		if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).contains("Ability")) {
+		if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).equalsIgnoreCase("ability")) {
 			return true;
 		}
 		return false;

@@ -14,6 +14,8 @@ public class ArenaCreature extends ArenaEntity {
 		this.entityType = entityType;
 		this.lvl = lvl;
 		this.passive = passive;
+		entityType.setCustomName(entityType.getType() + " Lvl " + lvl);
+		entityType.setCustomNameVisible(true);
 	}
 	
 	/**

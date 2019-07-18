@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
+import com.gmail.jpk.stu.abilities.Ability;
 import com.gmail.jpk.stu.abilities.AbilityTarget;
 import com.gmail.jpk.stu.arena.GlobalW;
 import com.gmail.jpk.stu.items.AbilityItem;
@@ -30,6 +31,7 @@ public class PlayerCastListener extends BasicListener {
 			// Is the player holding an ability item
 			if(player.isHoldingAbilityItem()) {
 				AbilityItem item = player.getAbilityItemInHand();
+				Ability ability = item.getOwner();
 				// If the entity is a player
 				if(e.getRightClicked() instanceof Player) {
 					Player otherP = (Player) e.getRightClicked();
@@ -43,7 +45,12 @@ public class PlayerCastListener extends BasicListener {
 					
 					// If creature is an arenacreature 
 					if(creature != null) {
-						//TODO:WORKING
+						AbilityTarget.TargetType targetType = ability.getTargetType().getTargetType();
+						//If the ability can target this creature.
+						if(targetType == AbilityTarget.TargetType.SINGLE_ENEMY || targetType == AbilityTarget.TargetType.AOE_ENEMIES ||
+								targetType == AbilityTarget.TargetType.SINGLE_ANY || targetType == AbilityTarget.TargetType.AOE_ANY ) {
+							item.useAbility(player, creature);
+						}
 					}
 				}
 			}

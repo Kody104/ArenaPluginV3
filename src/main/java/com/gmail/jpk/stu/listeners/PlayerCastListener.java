@@ -1,6 +1,5 @@
 package com.gmail.jpk.stu.listeners;
 
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

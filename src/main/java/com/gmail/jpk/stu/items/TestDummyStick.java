@@ -1,18 +1,22 @@
 package com.gmail.jpk.stu.items;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 /**
  * The TestDummyStick (UID: 100) is a SpecialItem that can have any ability or effect needed.<br/><br/>
  * It is intended to use for debugging abilities or testing out new features.
  * It is NOT intended to be a general use SpecialItem.
- * @deprecated This class is no longer in use. Use SpecialItems.TEST_DUMMY_STICK instead.
  */
-public class TestDummyStick extends SpecialItem {
+public class TestDummyStick extends SpecialItem implements UsableItem {
 
 	public TestDummyStick() {
-		super(Material.STICK, 100, ChatColor.YELLOW + "Test Dummy Stick", new String[] { "This item is intended to be used as a debugging tool." });
+		super(Material.STICK, SpecialItems.TEST_DUMMY_STICK.getUID(), SpecialItems.TEST_DUMMY_STICK.getDisplayName(), new String[] { "This item is intended to be used as a debugging tool." });
+	}
+	
+	@Override
+	public void useItem(Player player) {
+		player.sendMessage("I can do whatever you'd like...just gotta program it in first.");
 	}
 
 }

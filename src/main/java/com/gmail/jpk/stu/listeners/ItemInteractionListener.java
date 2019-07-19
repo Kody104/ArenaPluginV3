@@ -46,12 +46,10 @@ public class ItemInteractionListener extends BasicListener {
 		
 		//Handle Special Items
 		for (SpecialItem i : special_items) {
-			switch (i.getDisplayName().toUpperCase()) {
-				case "SHOP CHEST":
-				{
-					e.setDropItems(false);
-					e.setCancelled(true);
-				}				
+			SpecialItems used_item = SpecialItems.getSpecialItemEnumByDisplayName(i.getDisplayName());
+			
+			if (used_item != null) {
+				used_item.useItem(player);
 			}
 		}
 		

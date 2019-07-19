@@ -70,7 +70,7 @@ public enum SpecialItems {
 		//TODO: Add in SpecialItems as they are created
 		for (SpecialItems i : SpecialItems.values()) {
 			if (i.getItem().getUID() == uid) {
-				return i.getItem().clone();
+				return i.getItem();
 			}
 		}
 		
@@ -100,7 +100,22 @@ public enum SpecialItems {
 	public static SpecialItem getSpecialItemByDisplayName(String display_name) {
 		for (SpecialItems i : SpecialItems.values()) {
 			if (i.getItem().getDisplayName().equalsIgnoreCase(display_name)) {
-				return i.getItem().clone();
+				return i.getItem();
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Gets the Enum representation of the Special Item by its display name. Returns null if none was found.
+	 * @param display_name the display name of the SpecialItem
+	 * @return the Enum representation or null if not found.
+	 */
+	public static SpecialItems getSpecialItemEnumByDisplayName(String display_name) {
+		for (SpecialItems i : SpecialItems.values()) {
+			if (i.getItem().getDisplayName().equalsIgnoreCase(display_name)) {
+				return i;
 			}
 		}
 		

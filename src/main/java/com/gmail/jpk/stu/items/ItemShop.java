@@ -12,5 +12,6 @@ package com.gmail.jpk.stu.items;
  * 
  */
 public class ItemShop {
+
 	
 }

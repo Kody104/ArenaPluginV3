@@ -21,6 +21,7 @@ public enum SpecialItems {
 	BOOM_STICK       (105, "Boom Stick"),
 	PANIC_POWDER     (106, "Panic Powder"),
 	TEST_DUMMY_STICK (180, "Test Dummy Stick"),
+	SHOP_CHEST       (181, "Shop Chest"),
 	;
 
 	private final String DISPLAY_NAME;

@@ -43,7 +43,7 @@ public class SpecialItem extends ItemStack {
 		
 		//Add the price to lore (if applicable)
 		if (price > 0) {
-			item_lore.add(String.format("Item value: %d Golden Scraps", price));
+			item_lore.add(String.format("Value: %dGS", price));
 		}
 		
 		meta.setLore(item_lore);

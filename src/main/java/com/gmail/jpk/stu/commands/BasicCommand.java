@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,6 +24,14 @@ public abstract class BasicCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String[] args) {
 		return performCommand(sender, args);
+	}
+	
+	/**
+	 * Manually executes a command.
+	 * @param commandLine the command and its args.
+	 */
+	public static void executeCommand(String commandLine) {
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandLine);
 	}
 	
 	/**

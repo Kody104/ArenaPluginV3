@@ -5,12 +5,17 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.PassiveAbility;
 import com.gmail.jpk.stu.abilities.StatusEffect;
 import com.gmail.jpk.stu.arena.GlobalW;
+import com.gmail.jpk.stu.commands.BasicCommand;
 import com.gmail.jpk.stu.items.AbilityItem;
+import com.gmail.jpk.stu.items.SpecialItem;
+import com.gmail.jpk.stu.items.SpecialItems;
 
 public class ArenaPlayer extends ArenaEntity {
 
@@ -262,6 +267,153 @@ public class ArenaPlayer extends ArenaEntity {
 
 	public PlayerRole getClassRole() {
 		return classRole;
+	}
+	
+	/**
+	 * Converts an amount in GS value to the proper combination of Flawless Diamonds, Chipped Emeralds, Golden Bars, and Golden Scraps.
+	 * @param amount the GS (Golden Scraps) Value
+	 * @return the currencies as an array
+	 */
+	private int[] getAmountAsCurrencies(int amount) {
+		int[] currencies = {0, 0, 0, 0};
+		
+		//Determine diamonds, emeralds, and bars
+		for (int k = 90000, i = 0; k > 1; k /= 100) {
+			if (amount >= k) {
+				currencies[i] = (int) (amount / k);
+				amount -= (currencies[i] * k);
+			}
+			
+			i++;
+		}
+		
+		//Grab any remaining scraps
+		currencies[3] = (amount > 0 ? amount : 0);
+		
+		return currencies;
+	}
+	
+	/**
+	 * Adds the specified amount of money (in gold and gems) to the player. The function determines which gold and gems to give.<br/>
+	 * Example: 99999 = 90000 + 9000 + 900 + 90 + 9 = 1 Flawless Diamond, 11 Chipped Emeralds, 11 Gold bars.
+	 * @param amount the amount of money to add (must be positive)
+	 * @return true if successful
+	 */
+	public boolean addMoney(int amount) {
+		if (amount < 0) {
+			return false;
+		}
+		
+		int[] currencies = getAmountAsCurrencies(amount);
+		
+		//Grant Items
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.FLAWLESS_DIAMOND.getUID(), currencies[0]));
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.CHIPPED_EMERALD.getUID(), currencies[1]));
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.GOLDEN_BAR.getUID(), currencies[2]));
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.GOLDEN_SCRAP.getUID(), currencies[3]));
+		
+		return true;
+	}
+	
+	/**
+	 * Gets how much total GS value this ArenaPlayer has.
+	 * @return their total wealth in GS (Golden Scraps)
+	 */
+	public int getMoney() {
+		PlayerInventory player_inventory = mPlayer.getInventory();
+		ItemStack[] inventory_contents = player_inventory.getContents();
+		String display_name = "";
+		int currency = 0;
+		
+		//Get the estimated currency
+		for (ItemStack stack : inventory_contents) {
+			display_name = stack.getItemMeta().getDisplayName();
+			
+			if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_SCRAP.getDisplayName())) {
+				currency += 1;
+			}
+			
+			else if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_BAR.getDisplayName())) {
+				currency += 9;
+			}
+			
+			else if (display_name.equalsIgnoreCase(SpecialItems.CHIPPED_EMERALD.getDisplayName())) {
+				currency += 900;
+			}
+			
+			else if (display_name.equalsIgnoreCase(SpecialItems.FLAWLESS_DIAMOND.getDisplayName())) {
+				currency += 90000;
+			}
+		}
+		
+		return currency;
+	}
+	
+	
+	/**
+	 * Removes money from the ArenaPlayer by utilizing larger currencies first.
+	 * The amount must be less than the ArenaPlayer's total money.
+	 * @param amount the amount to charge the player
+	 * @return true if successful
+	 */
+	public boolean removeMoney(int amount) {
+		if (amount > getMoney()) {
+			return false;
+		}
+		
+		PlayerInventory player_inventory = mPlayer.getInventory();
+		int[] currencies = getAmountAsCurrencies(amount);
+		
+		for (int k = 0; k < currencies.length; k++) {
+			for (int i = 0; i < currencies[k]; i++) {
+				switch (k) {
+					case 0: 
+					{
+						removeSpecialItem(currencies[0], SpecialItems.FLAWLESS_DIAMOND.getDisplayName());
+						break;
+					}
+					case 1:
+					{
+						removeSpecialItem(currencies[1], SpecialItems.CHIPPED_EMERALD.getDisplayName());
+						break;
+					}
+					case 2:
+					{
+						removeSpecialItem(currencies[2], SpecialItems.GOLDEN_BAR.getDisplayName());
+						break;
+					}
+					case 3: 
+					{
+						removeSpecialItem(currencies[3], SpecialItems.GOLDEN_SCRAP.getDisplayName());
+						break;
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Removes a number of SpecialItem from a player's inventory by its display name
+	 * @param amount the amount of SpecialItems to remove
+	 * @param display_name the display name of the SpecialItem
+	 * @return true if successful
+	 */
+	public boolean removeSpecialItem(int amount, String display_name) {
+		PlayerInventory player_inventory = mPlayer.getInventory();
+		SpecialItem special_item = SpecialItems.getSpecialItemByDisplayName(display_name);
+		
+		if (special_item == null) {
+			return false;
+		}
+		
+		ItemStack stack = (ItemStack) special_item;
+		stack.setAmount(amount);
+		player_inventory.remove(stack);
+		
+		return true;
+		
 	}
 	
 	/**

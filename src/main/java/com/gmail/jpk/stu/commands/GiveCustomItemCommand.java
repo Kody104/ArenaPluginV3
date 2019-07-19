@@ -58,7 +58,7 @@ public class GiveCustomItemCommand extends BasicCommand {
 					target_player.getInventory().addItem(special_item);
 				}
 				
-				GlobalW.toPlayer(player, String.format("Gave %s %d %s", player.getName(), special_item_quantity, special_item.getDisplayName()));
+				GlobalW.toPlayer(player, String.format("Gave %s %d %s", target_player.getName(), special_item_quantity, special_item.getDisplayName()));
 				GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
 				return true;
 			} else {

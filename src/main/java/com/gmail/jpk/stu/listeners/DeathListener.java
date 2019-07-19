@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +42,14 @@ public class DeathListener extends BasicListener {
 	 */
 	@EventHandler
 	public void onPlayerDeathEvent(PlayerDeathEvent e) {
-
+		Player player = (Player) e.getEntity();
+		
+		if (GlobalW.getArenaPlayer(player) != null) {
+			player.getInventory().clear();
+			GlobalW.removeArenaPlayer(player);
+			GlobalW.toPlayer(player, ChatColor.RED + "You have died! You've been removed from the Arena.");
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.RED + String.format("%s has died! They've been removed from the Arena.", player.getName()));
+		}
 	}
 
 }

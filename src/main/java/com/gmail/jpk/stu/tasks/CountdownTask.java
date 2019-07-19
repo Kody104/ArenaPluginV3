@@ -51,7 +51,7 @@ public class CountdownTask extends BukkitRunnable {
 				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s%d", alert_message, seconds));
 			}
 			
-			this.runTaskLater(GlobalW.getPlugin(), 1000);
+			this.runTaskLater(GlobalW.getPlugin(), 20);
 		} 
 	}
 	

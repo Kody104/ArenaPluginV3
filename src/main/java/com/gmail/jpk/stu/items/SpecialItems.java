@@ -53,6 +53,8 @@ public enum SpecialItems {
 				return new TestDummyStick();
 			case PANIC_POWDER:
 				return new PanicPowder();
+			case BOOM_STICK:
+				return new BoomStick();
 			default:
 				return null;
 		}

@@ -37,12 +37,14 @@ public class ItemInteractionListener extends BasicListener {
 		
 		//Get the item, verify its a SpecialItem
 		ItemStack item_stack = e.getItemDrop().getItemStack();
+		String display_name = item_stack.getItemMeta().getDisplayName();
 		
-		if (SpecialItems.getSpecialItemByDisplayName(item_stack.getItemMeta().getDisplayName()) != null) {
-			SpecialItem special_item = (SpecialItem) item_stack;
+		if (SpecialItems.getSpecialItemByDisplayName(display_name) != null) {
+			SpecialItem special_item = SpecialItems.getSpecialItemByDisplayName(display_name);
 			
 			//Check if it's a UsableItem
 			if (special_item instanceof UsableItem) {
+				e.setCancelled(true);
 				((UsableItem) special_item).useItem(player);
 			}
 		}

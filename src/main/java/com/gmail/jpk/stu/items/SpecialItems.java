@@ -55,6 +55,8 @@ public enum SpecialItems {
 				return new PanicPowder();
 			case BOOM_STICK:
 				return new BoomStick();
+			case SHOP_CHEST:
+				return new ShopChest();
 			default:
 				return null;
 		}

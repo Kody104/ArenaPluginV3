@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class TestDummyStick extends SpecialItem implements UsableItem {
 
 	public TestDummyStick() {
-		super(Material.STICK, SpecialItems.TEST_DUMMY_STICK.getUID(), SpecialItems.TEST_DUMMY_STICK.getDisplayName(), new String[] { "This item is intended to be used as a debugging tool." });
+		super(Material.STICK, 900, SpecialItems.TEST_DUMMY_STICK.getUID(), SpecialItems.TEST_DUMMY_STICK.getDisplayName(), new String[] { "This item is intended to be used as a debugging tool." });
 	}
 	
 	@Override

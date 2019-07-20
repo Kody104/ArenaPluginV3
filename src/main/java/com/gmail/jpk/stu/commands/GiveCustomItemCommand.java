@@ -3,9 +3,9 @@ package com.gmail.jpk.stu.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
 import com.gmail.jpk.stu.arena.GlobalW;
 import com.gmail.jpk.stu.items.SpecialItem;
@@ -22,20 +22,9 @@ public class GiveCustomItemCommand extends BasicCommand {
 	}
 
 	@Override
-	public boolean performCommand(CommandSender sender, String[] args) {
-		//Minimum necessary check
-		ArenaPlayer arena_player = getArenaPlayer(sender);
-		
-		//Validate
-		if (arena_player == null) {
-			//If not, then exit.
-			return true;
-		}
-		
-		Player player = (Player) sender;
-		
+	public boolean performCommand(CommandSender sender, String[] args) {		
 		if (args.length < 2) {
-			GlobalW.toPlayerError(player, "Not enough arguments.");
+			sender.sendMessage("Not enough arguments.");
 			return false;
 		}
 		
@@ -58,16 +47,19 @@ public class GiveCustomItemCommand extends BasicCommand {
 					target_player.getInventory().addItem(special_item);
 				}
 				
-				GlobalW.toPlayer(player, String.format("Gave %s %d %s", target_player.getName(), special_item_quantity, special_item.getDisplayName()));
+				sender.sendMessage(String.format("Gave %s %d %s", target_player.getName(), special_item_quantity, special_item.getDisplayName()));
 				GlobalW.toPlayer(target_player, String.format(ChatColor.GREEN + "You have received %d %s(s)!", special_item_quantity, special_item.getDisplayName()));
 				return true;
 			} else {
-				GlobalW.toPlayer(player, "Item not found.");
+				sender.sendMessage("Item not found.");
 				return true;
 			}
 		}
 		
-		GlobalW.toPlayer(player, String.format("Failed to give %s %d %s", args[1], special_item_quantity, args[0]));
+		//The check prevents console spam for '0' item gifts. This occurs in ArenaPlayer's updatePlayerGems().
+		if (!(sender instanceof ConsoleCommandSender)) {
+			sender.sendMessage(String.format("Failed to give %s %d %s", args[1], special_item_quantity, args[0]));
+		}
 		
 		return false;
 	}

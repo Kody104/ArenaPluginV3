@@ -10,7 +10,7 @@ import com.gmail.jpk.stu.tasks.DelayedExplosionTask;
 public class BoomStick extends SpecialItem implements UsableItem {
 
 	public BoomStick() {
-		super(Material.STICK, SpecialItems.BOOM_STICK.getUID(), SpecialItems.BOOM_STICK.getDisplayName(), "Explodes when left behind.");
+		super(Material.STICK, 900, SpecialItems.BOOM_STICK.getUID(), SpecialItems.BOOM_STICK.getDisplayName(), "Explodes when left behind.");
 	}
 
 	@Override

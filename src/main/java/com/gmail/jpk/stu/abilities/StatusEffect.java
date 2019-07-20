@@ -21,10 +21,10 @@ public class StatusEffect {
 	private StatusEffectTrigger trigger; // What triggers this effect
 	private StatusEffectType type; // What type of status effect is it
 	private double pow; // The power of this status effect. May not be necessary
-	private long triggerDuration; // Duration of the EffectTrigger, not the EffectType
-	private long duration; // Duration of the EffectType, not the EffectTrigger
+	private int triggerDuration; // Duration of the EffectTrigger, not the EffectType
+	private int duration; // Duration of the EffectType, not the EffectTrigger
 	
-	public StatusEffect(StatusEffectTarget target, StatusEffectTrigger trigger, StatusEffectType type, double pow, long triggerDuration, long duration) {
+	public StatusEffect(StatusEffectTarget target, StatusEffectTrigger trigger, StatusEffectType type, double pow, int triggerDuration, int duration) {
 		this.target = target;
 		this.trigger = trigger;
 		this.type = type;
@@ -74,19 +74,19 @@ public class StatusEffect {
 		this.pow = pow;
 	}
 
-	public long getTriggerDuration() {
+	public int getTriggerDuration() {
 		return triggerDuration;
 	}
 
-	public void setTriggerDuration(long triggerDuration) {
+	public void setTriggerDuration(int triggerDuration) {
 		this.triggerDuration = triggerDuration;
 	}
 
-	public long getDuration() {
+	public int getDuration() {
 		return duration;
 	}
 
-	public void setDuration(long duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 	

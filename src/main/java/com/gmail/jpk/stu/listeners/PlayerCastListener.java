@@ -49,6 +49,7 @@ public class PlayerCastListener extends BasicListener {
 						if(targetType == AbilityTarget.TargetType.SINGLE_ENEMY || targetType == AbilityTarget.TargetType.AOE_ENEMIES ||
 								targetType == AbilityTarget.TargetType.SINGLE_ANY || targetType == AbilityTarget.TargetType.AOE_ANY ) {
 							item.useAbility(player, creature);
+							e.setCancelled(true);
 						}
 					}
 				}

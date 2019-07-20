@@ -28,6 +28,7 @@ public class ArenaPlayer extends ArenaEntity {
 	private boolean is_ready;
 	
 	public ArenaPlayer(Player mPlayer, PlayerRole role) {
+		setLivingEntity(mPlayer);
 		this.mPlayer = mPlayer;
 		this.classRole = role;
 		this.Level = 1;
@@ -171,7 +172,10 @@ public class ArenaPlayer extends ArenaEntity {
 	}
 	
 	public boolean isHoldingAbilityItem() {
-		if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).equalsIgnoreCase("ability")) {
+		if(mPlayer.getInventory().getItemInMainHand() == null) {
+			return false;
+		}
+		else if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).equalsIgnoreCase("ability")) {
 			return true;
 		}
 		return false;

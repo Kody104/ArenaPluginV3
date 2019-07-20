@@ -6,12 +6,11 @@ import com.gmail.jpk.stu.abilities.PassiveAbility;
 
 public class ArenaCreature extends ArenaEntity {
 	
-	private LivingEntity entityType;
 	private int lvl;
 	private PassiveAbility passive;
 	
 	public ArenaCreature(LivingEntity entityType, int lvl, PassiveAbility passive) {
-		this.entityType = entityType;
+		setLivingEntity(entityType);
 		this.lvl = lvl;
 		this.passive = passive;
 		entityType.setCustomName(entityType.getType() + " Lvl " + lvl);
@@ -25,14 +24,6 @@ public class ArenaCreature extends ArenaEntity {
 	 */
 	public int getExpDrop(int bonus) {
 		return (int) (bonus + (15 + (0.03 * Math.pow(lvl, 2))));
-	}
-
-	public LivingEntity getEntityType() {
-		return entityType;
-	}
-
-	public void setEntityType(LivingEntity entityType) {
-		this.entityType = entityType;
 	}
 
 	public int getLvl() {

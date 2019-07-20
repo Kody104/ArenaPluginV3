@@ -14,7 +14,7 @@ public class Ability {
 	private DamageType damageType; // The type of damage this ability does.
 	private int lvl; // Level of the ability
 	private boolean onCooldown; // Is this ability castable?
-	private long cooldown; // The duration of cooldown for this ability
+	private int cooldown; // The duration of cooldown for this ability
 	private ChatColor color; // May or may not be implemented. Thinking about it
 	private List<StatusEffect> allStatusEffects; // All the status effects this ability does.
 	private double baseDmg; // The base damage the ability will do.
@@ -39,7 +39,7 @@ public class Ability {
 	 * @param hpScale The maxhp stat scaling
 	 * @param effects The status effects that this ability applies
 	 */
-	public Ability(String name, String description, AbilityTarget target, DamageType damageType, long cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
+	public Ability(String name, String description, AbilityTarget target, DamageType damageType, int cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
 		this.name = name;
 		this.description = description;
 		this.targetType = target;
@@ -108,11 +108,11 @@ public class Ability {
 		this.onCooldown = onCooldown;
 	}
 
-	public long getCooldown() {
+	public int getCooldown() {
 		return cooldown;
 	}
 
-	public void setCooldown(long cooldown) {
+	public void setCooldown(int cooldown) {
 		this.cooldown = cooldown;
 	}
 

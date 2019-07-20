@@ -3,11 +3,18 @@ package com.gmail.jpk.stu.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.StatusEffect;
+import com.gmail.jpk.stu.arena.GlobalW;
+import com.gmail.jpk.stu.timers.StatusEffectTimer;
 
 public abstract class ArenaEntity {
 	
+	private LivingEntity livingEntity; // The living entity this represents
 	private double maxHp; // The max hp of this entity
 	private double curHp; // This current hp of this entity
 	private double atk; // The attack stat of this entity.
@@ -24,7 +31,8 @@ public abstract class ArenaEntity {
 		allStatusEffects = new ArrayList<StatusEffect>();
 	}
 	
-	public ArenaEntity(double Hp, double atk, double mag, double def, double res, double critchance, double critmulti, int cdr, int tenacity) {
+	public ArenaEntity(LivingEntity livingEntity, double Hp, double atk, double mag, double def, double res, double critchance, double critmulti, int cdr, int tenacity) {
+		this.livingEntity = livingEntity;
 		this.maxHp = Hp;
 		this.curHp = Hp;
 		this.atk = atk;
@@ -40,6 +48,14 @@ public abstract class ArenaEntity {
 	
 	public void takeDamage(double damage, DamageType damageType) {
 		//Override this function
+	}
+
+	public LivingEntity getLivingEntity() {
+		return livingEntity;
+	}
+
+	public void setLivingEntity(LivingEntity livingEntity) {
+		this.livingEntity = livingEntity;
 	}
 
 	public double getMaxHp() {
@@ -135,11 +151,38 @@ public abstract class ArenaEntity {
 			for(int i = 0; i < allStatusEffects.size(); i++) {
 				StatusEffect s = allStatusEffects.get(i);
 				if(s.getType() == statusEffect.getType()) { // Check by status type
-					long duration = s.getDuration() + statusEffect.getDuration(); // Combine the durations
+					int duration = s.getDuration() + statusEffect.getDuration(); // Combine the durations
 					removeStatusEffect(s); // Remove old
 					StatusEffect newStatus = new StatusEffect(statusEffect.clone()); // Create new
 					newStatus.setDuration(duration); // Set new duration
 					allStatusEffects.add(newStatus); // Add new status effect
+					new StatusEffectTimer(this, statusEffect).runTaskLater(GlobalW.getPlugin(), duration);
+					switch(statusEffect.getType()) {
+					case SOFT_SLOW:
+						{
+							livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 0));
+							break;
+						}
+						default:
+						{
+							break;
+						}
+					}
+				}
+			}
+		}
+		else {
+			allStatusEffects.add(statusEffect);
+			new StatusEffectTimer(this, statusEffect).runTaskLater(GlobalW.getPlugin(), statusEffect.getDuration());
+			switch(statusEffect.getType()) {
+			case SOFT_SLOW:
+				{
+					livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, statusEffect.getDuration(), 0));
+					break;
+				}
+				default:
+				{
+					break;
 				}
 			}
 		}
@@ -183,6 +226,17 @@ public abstract class ArenaEntity {
 				StatusEffect s = allStatusEffects.get(i);
 				if(s.getType() == statusEffect.getType()) {
 					allStatusEffects.remove(i);
+					switch(s.getType()) {
+						case SOFT_SLOW:
+						{
+							livingEntity.removePotionEffect(PotionEffectType.SLOW);
+							break;
+						}
+						default:
+						{
+							break;
+						}
+					}
 					return;
 				}
 			}

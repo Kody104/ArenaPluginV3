@@ -361,32 +361,12 @@ public class ArenaPlayer extends ArenaEntity {
 			return false;
 		}
 		
-		PlayerInventory player_inventory = mPlayer.getInventory();
 		int[] currencies = getAmountAsCurrencies(amount);
 		
 		for (int k = 0; k < currencies.length; k++) {
 			for (int i = 0; i < currencies[k]; i++) {
 				switch (k) {
-					case 0: 
-					{
-						removeSpecialItem(currencies[0], SpecialItems.FLAWLESS_DIAMOND.getDisplayName());
-						break;
-					}
-					case 1:
-					{
-						removeSpecialItem(currencies[1], SpecialItems.CHIPPED_EMERALD.getDisplayName());
-						break;
-					}
-					case 2:
-					{
-						removeSpecialItem(currencies[2], SpecialItems.GOLDEN_BAR.getDisplayName());
-						break;
-					}
-					case 3: 
-					{
-						removeSpecialItem(currencies[3], SpecialItems.GOLDEN_SCRAP.getDisplayName());
-						break;
-					}
+
 				}
 			}
 		}
@@ -400,20 +380,14 @@ public class ArenaPlayer extends ArenaEntity {
 	 * @param display_name the display name of the SpecialItem
 	 * @return true if successful
 	 */
-	public boolean removeSpecialItem(int amount, String display_name) {
+	public boolean removeSpecialItem(SpecialItem special_item) {
 		PlayerInventory player_inventory = mPlayer.getInventory();
-		SpecialItem special_item = SpecialItems.getSpecialItemByDisplayName(display_name);
 		
 		if (special_item == null) {
 			return false;
 		}
 		
-		ItemStack stack = (ItemStack) special_item;
-		stack.setAmount(amount);
-		player_inventory.remove(stack);
-		
 		return true;
-		
 	}
 	
 	/**

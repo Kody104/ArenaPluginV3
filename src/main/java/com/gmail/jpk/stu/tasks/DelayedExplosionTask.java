@@ -18,7 +18,7 @@ public class DelayedExplosionTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		World world = player.getWorld();
-		world.createExplosion(location, 1F);
+		world.createExplosion(location, 2F);
 	}
 
 	public Player getPlayer() {

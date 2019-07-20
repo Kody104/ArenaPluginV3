@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -73,11 +74,25 @@ public class GlobalW {
 	}
 	
 	/**
+	 * Plays a sound to all the arena players
+	 * @param sound The sound to play
+	 * @param volume the volume of the sound (1f is default)
+	 * @param pitch the pitch of the sound (1f is default)
+	 */
+	public static void playSoundToArenaPlayers(Sound sound, float volume, float pitch) {
+		for (ArenaPlayer arena_player : GlobalW.getPlayersInArena()) {
+			Player player = arena_player.getmPlayer();
+			player.playSound(player.getLocation(), sound, volume, pitch);
+		}
+	}
+	
+	/**
 	 * This will run automatically at the end of rounds until the round number divisible by 5. Then we send them to the shop.
 	 */
 	public static void nextRound() {
 		round++;
-		toArenaPlayers("Round " + round + " has started!");
+		toArenaPlayers(getChatTag() + ChatColor.GOLD + "Round " + round + " has started!");
+		playSoundToArenaPlayers(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
 		switch(round)
 		{
 			case 1:

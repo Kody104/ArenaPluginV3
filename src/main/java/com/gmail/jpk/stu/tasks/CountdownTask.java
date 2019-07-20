@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.tasks;
 
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.gmail.jpk.stu.arena.GlobalW;
@@ -46,12 +47,13 @@ public class CountdownTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		if (--seconds > 0) {
+		if (--seconds >= 0) {
 			if (alert_players) {
-				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s%d", alert_message, seconds));
+				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s%d", alert_message, (seconds + 1)));
+				GlobalW.playSoundToArenaPlayers(Sound.UI_BUTTON_CLICK, 1f, 1f);
 			}
 			
-			this.runTaskLater(GlobalW.getPlugin(), 20);
+			new CountdownTask(alert_message, alert_players, seconds).runTaskLater(GlobalW.getPlugin(), 20);
 		} 
 	}
 	

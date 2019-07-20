@@ -59,13 +59,11 @@ public class ItemInteractionListener extends BasicListener {
 			//Check if it's a UsableItem
 			if (special_item instanceof UsableItem) {
 				((UsableItem) special_item).useItem(player);
-				item_stack.setAmount(0);
-				player.getWorld().dropItem(player.getLocation(), special_item);
+				//NOTE: After much pain, having the class here is the only way to achieve the desired effect.
 				class DespawnItemTask extends BukkitRunnable {
 					public void run() {
 						player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
-						//TODO: This doesn't work. Cool.
-						special_item.setAmount(0);
+						item_stack.setAmount(0);
 					}
 				}
 				new DespawnItemTask().runTaskLater(GlobalW.getPlugin(), 60);

@@ -75,8 +75,8 @@ public class ReadyCommand extends BasicCommand {
 			setAllReady(true);
 			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
 			//GlobalW.teleArenaPlayers(null); --> implement when we have actual locations
-			new CountdownTask("Arena Begins in ", true, 5).runTaskLater(plugin, 100);
-			new StartArenaTask().runTaskLater(plugin, 15 * 20);
+			new CountdownTask(ChatColor.GOLD + "Arena Begins in ", true, 5).runTaskLater(plugin, 100);
+			new StartArenaTask().runTaskLater(plugin, 10 * 20);
 		}		
 		
 		return true;

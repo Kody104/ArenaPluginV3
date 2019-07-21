@@ -324,35 +324,97 @@ public class ArenaPlayer extends ArenaEntity {
 	 * @return their total wealth in GS (Golden Scraps)
 	 */
 	public int getMoney() {
-		PlayerInventory player_inventory = mPlayer.getInventory();
-		ItemStack[] inventory_contents = player_inventory.getContents();
-		String display_name = "";
-		int currency = 0;
-		
-		//Get the estimated currency
-		for (ItemStack stack : inventory_contents) {
-			display_name = stack.getItemMeta().getDisplayName();
-			
-			if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_SCRAP.getDisplayName())) {
-				currency += 1;
-			}
-			
-			else if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_BAR.getDisplayName())) {
-				currency += 9;
-			}
-			
-			else if (display_name.equalsIgnoreCase(SpecialItems.CHIPPED_EMERALD.getDisplayName())) {
-				currency += 900;
-			}
-			
-			else if (display_name.equalsIgnoreCase(SpecialItems.FLAWLESS_DIAMOND.getDisplayName())) {
-				currency += 90000;
-			}
-		}
-		
-		return currency;
+		int[] gems = getPlayerGems();
+		return ((90000 * gems[0]) + (900 * gems[1]) + (9 * gems[2]) + (gems[3]));	
 	}
 	
+	/**
+	 * Counts and gets the number of gems the player is holding.
+	 * {Diamonds, Emeralds, Bars, Scraps}
+	 * @return
+	 */
+	public int[] getPlayerGems() {
+		int[] gems = {0, 0, 0, 0};
+		
+		PlayerInventory player_invetory = mPlayer.getInventory();
+		String display_name = "";
+		
+		for (int i = 0; i < mPlayer.getInventory().getSize(); i++) {
+			ItemStack stack = player_invetory.getItem(i);
+			
+			if (stack == null) {
+				continue;
+			}
+			
+			display_name = stack.getItemMeta().getDisplayName();
+			
+			if (SpecialItems.getSpecialItemByDisplayName(display_name) != null) {
+				if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_SCRAP.getDisplayName())) {
+					gems[3] += stack.getAmount();
+				}
+				else if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_BAR.getDisplayName())) {
+					gems[2] += stack.getAmount();
+				}
+				else if (display_name.equalsIgnoreCase(SpecialItems.CHIPPED_EMERALD.getDisplayName())) {
+					gems[1] += stack.getAmount();
+				}
+				else if (display_name.equalsIgnoreCase(SpecialItems.FLAWLESS_DIAMOND.getDisplayName())) {
+					gems[0] += stack.getAmount();
+				}
+			}			
+		}
+		
+		return gems;
+	}
+	
+	/**
+	 * Clears all of the gems out of a Player's inventory.
+	 */
+	public void clearPlayerGems() {
+		PlayerInventory player_invetory = mPlayer.getInventory();
+		String display_name = "";
+		
+		for (int i = 0; i < mPlayer.getInventory().getSize(); i++) {
+			ItemStack stack = player_invetory.getItem(i);
+			
+			if (stack == null) {
+				continue;
+			}
+			
+			display_name = stack.getItemMeta().getDisplayName();
+			
+			if (SpecialItems.getSpecialItemByDisplayName(display_name) != null) {
+				if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_SCRAP.getDisplayName())) {
+					stack.setAmount(0);
+				}
+				else if (display_name.equalsIgnoreCase(SpecialItems.GOLDEN_BAR.getDisplayName())) {
+					stack.setAmount(0);
+				}
+				else if (display_name.equalsIgnoreCase(SpecialItems.CHIPPED_EMERALD.getDisplayName())) {
+					stack.setAmount(0);
+				}
+				else if (display_name.equalsIgnoreCase(SpecialItems.FLAWLESS_DIAMOND.getDisplayName())) {
+					stack.setAmount(0);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Updates the player's gems to set array.
+	 * @param gems the new array (must have length of 4)
+	 */
+	public void updatePlayerGems(int[] gems) {
+		if (gems.length != 4) {
+			return;
+		}
+		
+		clearPlayerGems();
+		BasicCommand.executeCommand(String.format("gci %d %s %d", SpecialItems.FLAWLESS_DIAMOND.getUID(), mPlayer.getName(), gems[3]));
+		BasicCommand.executeCommand(String.format("gci %d %s %d", SpecialItems.CHIPPED_EMERALD.getUID(), mPlayer.getName(), gems[2]));
+		BasicCommand.executeCommand(String.format("gci %d %s %d", SpecialItems.GOLDEN_BAR.getUID(), mPlayer.getName(), gems[1]));
+		BasicCommand.executeCommand(String.format("gci %d %s %d", SpecialItems.GOLDEN_SCRAP.getUID(), mPlayer.getName(), gems[0]));		
+	}
 	
 	/**
 	 * Removes money from the ArenaPlayer by utilizing larger currencies first.
@@ -361,19 +423,20 @@ public class ArenaPlayer extends ArenaEntity {
 	 * @return true if successful
 	 */
 	public boolean removeMoney(int amount) {
-		if (amount > getMoney()) {
+		int money = getMoney();
+		
+		mPlayer.sendMessage(String.format("Item costs %d. You have %d.", amount, money));
+		
+		if (amount > money) {
 			return false;
 		}
 		
-		int[] currencies = getAmountAsCurrencies(amount);
+		int change = (money - amount);
+		int[] gems = getAmountAsCurrencies(change);
+		mPlayer.sendMessage(String.format("%d diamonds, %d emeralds, %d bars, %d scraps", gems[0], gems[1], gems[2], gems[3]));
 		
-		for (int k = 0; k < currencies.length; k++) {
-			for (int i = 0; i < currencies[k]; i++) {
-				switch (k) {
-
-				}
-			}
-		}
+		//Update Player Inventory
+		updatePlayerGems(gems);
 		
 		return true;
 	}
@@ -386,9 +449,23 @@ public class ArenaPlayer extends ArenaEntity {
 	 */
 	public boolean removeSpecialItem(SpecialItem special_item) {
 		PlayerInventory player_inventory = mPlayer.getInventory();
+		ItemStack stack;
+		SpecialItem spec_item;
+		String display_name = "";
 		
-		if (special_item == null) {
-			return false;
+		for (int i = 0; i < player_inventory.getSize(); i++) {
+			stack = player_inventory.getItem(i);
+						
+			if (stack == null) {
+				continue;	
+			}
+						
+			display_name = stack.getItemMeta().getDisplayName();
+			spec_item = SpecialItems.getSpecialItemByDisplayName(display_name);
+			
+			if (spec_item != null) {
+				spec_item.setAmount(0);
+			}
 		}
 		
 		return true;

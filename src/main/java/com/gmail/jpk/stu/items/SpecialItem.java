@@ -3,6 +3,7 @@ package com.gmail.jpk.stu.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,7 +44,8 @@ public class SpecialItem extends ItemStack {
 		
 		//Add the price to lore (if applicable)
 		if (price > 0) {
-			item_lore.add(String.format("Value: %dGS", price));
+			item_lore.add(""); //new line
+			item_lore.add(ChatColor.GREEN + String.format("Value: %d GS", price));
 		}
 		
 		meta.setLore(item_lore);
@@ -52,6 +54,7 @@ public class SpecialItem extends ItemStack {
 		//Set local properties
 		this.UID = uid;
 		setItemMeta(meta);
+		setPrice(price);
 		setMaterial(material);
 	}
 	

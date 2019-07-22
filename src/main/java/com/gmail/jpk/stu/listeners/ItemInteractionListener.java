@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -125,7 +126,6 @@ public class ItemInteractionListener extends BasicListener {
 		}
 	}
 	
-	
 	/**
 	 * Handles when a Player interactions with blocks.
 	 * @param e the event
@@ -140,12 +140,32 @@ public class ItemInteractionListener extends BasicListener {
 			
 			//Verify Block is a Chest
 			if (block != null && block.getBlockData().getMaterial() == Material.CHEST) {
-				//TODO: Temp code, depending on future implementations, I may create a package for chest items.
+				//TODO: Add branches if more clickable items are added.
 				//Cancel the chest from opening
 				e.setCancelled(true);
 				Inventory basic_shop = ItemShop.getBasicShop();
 				player.openInventory(basic_shop);
 			}
+		}
+	}
+	
+	@EventHandler
+	public void playerConsumeItem(PlayerItemConsumeEvent e) {
+		Player player = e.getPlayer();
+		ItemStack item = e.getItem();
+		SpecialItem spec_item = SpecialItems.getSpecialItemByDisplayName(item.getItemMeta().getDisplayName());
+		
+		if (GlobalW.getArenaPlayer(player) != null && spec_item != null) {
+			//TODO: Add branches if more consumable items are added
+			if (spec_item instanceof UsableItem) {
+				int amount = item.getAmount();
+				amount = (amount == 1) ? (0) : (amount--);
+
+				e.setCancelled(true);
+				item.setAmount(amount);
+				
+				((UsableItem) spec_item).useItem(player);
+			} 
 		}
 	}
 	

@@ -20,6 +20,9 @@ public enum SpecialItems {
 	FLAWLESS_DIAMOND (104, "Flawless Diamond"),
 	BOOM_STICK       (105, "Boom Stick"),
 	PANIC_POWDER     (106, "Panic Powder"),
+	DECOY_BOY_TROY   (107, "Decoy Boy Troy"),
+	EMERGENCY_PORT   (108, "Emergency Teleport"),
+	TASTY_MELON      (109, "Tasty Melon"),
 	TEST_DUMMY_STICK (180, "Test Dummy Stick"),
 	SHOP_CHEST       (181, "Shop Chest"),
 	;
@@ -57,6 +60,12 @@ public enum SpecialItems {
 				return new BoomStick();
 			case SHOP_CHEST:
 				return new ShopChest();
+			case DECOY_BOY_TROY:
+				return new DecoyBoyTroy();
+			case EMERGENCY_PORT:
+				return new EmergencyTeleport();
+			case TASTY_MELON:
+				return new TastyMelon();
 			default:
 				return null;
 		}

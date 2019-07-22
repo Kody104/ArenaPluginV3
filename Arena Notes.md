@@ -36,16 +36,9 @@ How the Fight Goes:
 * A Slime and Magma Cube spawn.
 
 ##Custom Item Ideas
-* Enhanced Boom Stick - After a short delay, causes multiple, random explosions over a fixed radius.
-* Combustible Powder - After a short delay, it spawns a small fire.
-* Highly Combustible Powder - After a short delay, it spawns random fires over a fixed radius.
-* Weather Feather - After a short delay, strikes the area with lighting.
-* Better Weather Feather - After a short delay, random lightning will occur through-out the arena.
 * Emergency Teleport - Teleports a player to a random location in the arena (will blind them for a short time after).
 * Decoy Boy Troy - Spawns a cow that will draw aggro from nearby entities.
-* Glistening Melon - For a ten seconds, killing an enemy will heal the user by 2% max health. (50 enemies to full health)
-* Earthbending Style - Creates a temporary dirt wall around the player.
-* Plague Shroom - Creates a plague that infects ALL ArenaEntities for 5 seconds. (Plague will cause dot, it deals greater damage to non-players).
+* Glistening Melon - For ten seconds, killing an enemy will heal the user by 2% max health. (50 enemies to full health)
 
 ##Various Ideas
 

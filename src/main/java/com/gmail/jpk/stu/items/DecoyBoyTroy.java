@@ -15,7 +15,7 @@ import com.gmail.jpk.stu.arena.GlobalW;
 public class DecoyBoyTroy extends SpecialItem implements UsableItem {
 	
 	public DecoyBoyTroy() {
-		super(Material.COW_SPAWN_EGG, 900, SpecialItems.DECOY_BOY_TROY.getUID(), SpecialItems.DECOY_BOY_TROY.getDisplayName(), "Spawns your boy Troy to distract the enemies.");
+		super(Material.LEATHER, 900, SpecialItems.DECOY_BOY_TROY.getUID(), SpecialItems.DECOY_BOY_TROY.getDisplayName(), "Spawns your boy Troy to distract the enemies.");
 	}
 
 	@Override

@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.Entities.ArenaWave;
-import com.gmail.jpk.stu.tasks.DelaySpawnTask;
 
 public class GlobalW {
 	
@@ -33,7 +32,7 @@ public class GlobalW {
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
-		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
+//		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}
 	
 	/**
@@ -106,7 +105,7 @@ public class GlobalW {
 			}
 			default:
 			{
-				break;
+				ArenaWave.createBasicWave(20, 1, EntityType.ZOMBIE, EntityType.SKELETON).startWaveSequentially(round, 1);;
 			}
 		}
 	}
@@ -187,6 +186,10 @@ public class GlobalW {
 	
 	public static List<ArenaCreature> getCreaturesInArena() {
 		return creaturesInArena;
+	}
+	
+	public static List<Location> getPlayerSpawnLocations() {
+		return playerSpawnLocations;
 	}
 
 

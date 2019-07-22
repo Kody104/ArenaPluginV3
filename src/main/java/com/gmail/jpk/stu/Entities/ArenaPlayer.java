@@ -177,7 +177,7 @@ public class ArenaPlayer extends ArenaEntity {
 	public void addExp(int gained_exp) {
 		int next_exp = getNextExp();
 		int	upd_exp = exp + gained_exp;
-		
+				
 		if (upd_exp >= next_exp) {
 			LevelUp();
 			upd_exp = (next_exp) - (exp + gained_exp);

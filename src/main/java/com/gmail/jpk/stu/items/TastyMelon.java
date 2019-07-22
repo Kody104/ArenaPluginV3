@@ -11,7 +11,7 @@ public class TastyMelon extends SpecialItem implements UsableItem {
 	private Player user;
 	
 	public TastyMelon() {
-		super(Material.GLISTERING_MELON_SLICE, 900, SpecialItems.TASTY_MELON.getUID(), SpecialItems.TASTY_MELON.getDisplayName(), "Heals you when you kill an enemy.", "Requires you to eat it.");
+		super(Material.COOKED_BEEF, 900, SpecialItems.TASTY_MELON.getUID(), SpecialItems.TASTY_MELON.getDisplayName(), "Heals you when you kill an enemy.", "Requires you to eat it.");
 	}
 
 	@Override

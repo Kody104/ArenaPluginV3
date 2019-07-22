@@ -1,5 +1,6 @@
 package com.gmail.jpk.stu.Entities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class ArenaWave {
 	 * Creates an ArenaWave with no list.
 	 */
 	public ArenaWave() {
-		
+		this.enemies = new ArrayList<EntityType>();
 	}
 	
 	/**
@@ -94,18 +95,24 @@ public class ArenaWave {
 		this.enemies.add(type);
 	}
 	
+	public Location getRandomSpawnLocation() {
+//		List<Location> locations = GlobalW.getPlayerSpawnLocations();
+	
+		return new Location(GlobalW.getInWorld(), 0, 0, 0);
+//		return locations.get(GlobalW.rand.nextInt(locations.size()));
+	}
+	
 	/**
 	 * Spawns enemies in the wave sequentially (i.e. in the order they appear in the list).
 	 * @param level the level of the enemies
 	 * @param delay the delay (in ticks) between enemies
 	 */
 	public void startWaveSequentially(int level, int delay) {
-		World world = GlobalW.getInWorld();
 		Plugin plugin = GlobalW.getPlugin();
 		
 		//Schedule the spawns sequentially
 		for (int i = 0; i < enemies.size(); i++) {
-			new DelaySpawnTask(new Location(world, 0.0d, 0.0d, 0.0d), enemies.get(i), level).runTaskLater(plugin, (delay * i)); 
+			new DelaySpawnTask(getRandomSpawnLocation(), enemies.get(i), level).runTaskLater(plugin, (delay * i)); 
 		}
 	}
 	

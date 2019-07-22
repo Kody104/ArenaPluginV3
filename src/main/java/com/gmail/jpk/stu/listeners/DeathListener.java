@@ -8,6 +8,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
 
+import com.gmail.jpk.stu.Entities.ArenaCreature;
+import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.arena.GlobalW;
 
 /**
@@ -32,7 +34,25 @@ public class DeathListener extends BasicListener {
 		
 		//Verify a player killed this entity
 		if (killer != null && GlobalW.getArenaPlayer(killer) != null) {
-			//TODO: Stuff. Gotta add some base code in before we do anything cool.
+			ArenaCreature creature = GlobalW.getArenaCreature(entity);
+			ArenaPlayer player = GlobalW.getArenaPlayer(killer);
+						
+			//Verify both are in the Arena
+			if (creature != null && player != null) {
+				player.addExp(creature.getExpDrop(0));
+			}
+			
+			//See if the round has ended
+			if (creature != null) {
+				GlobalW.removeArenaCreature(entity);
+				
+				if (GlobalW.getCreaturesInArena().isEmpty()) {
+					int round = GlobalW.getRound();
+					int exp = (int) (1 + (round / 10));
+					
+					GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GOLD + String.format("%s Congrats! You have survived round %d! %d experience rewarded!", GlobalW.getChatTag(), round, exp));
+				}
+			}
 		}
 	}
 	
@@ -51,5 +71,4 @@ public class DeathListener extends BasicListener {
 			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.RED + String.format("%s has died! They've been removed from the Arena.", player.getName()));
 		}
 	}
-
 }

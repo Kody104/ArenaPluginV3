@@ -170,6 +170,24 @@ public class ArenaPlayer extends ArenaEntity {
 		}
 	}
 	
+	/**
+	 * Adds and updates Exp to the player
+	 * @param exp the amount to give
+	 */
+	public void addExp(int gained_exp) {
+		int next_exp = getNextExp();
+		int	upd_exp = exp + gained_exp;
+		
+		if (upd_exp >= next_exp) {
+			LevelUp();
+			upd_exp = (next_exp) - (exp + gained_exp);
+			addExp(upd_exp);
+		}
+		
+		mPlayer.setLevel(Level);
+		mPlayer.setExp((float)(upd_exp / getNextExp()));
+	}
+	
 	public boolean isHoldingAbilityItem() {
 		if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).equalsIgnoreCase("ability")) {
 			return true;
@@ -215,6 +233,19 @@ public class ArenaPlayer extends ArenaEntity {
 	public void LevelUp() {
 		if(Level + 1 < 19) {
 			Level++;
+						
+			if (Level % 5 == 0) {
+				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is now level %d!", mPlayer.getName(), this.classRole.getName(), Level));
+			} 
+			
+			else if (Level == 18) {
+				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is MAX level!", mPlayer.getName(), this.classRole.getName()));
+			}
+			
+			else {
+				GlobalW.toPlayer(mPlayer, String.format("Hoorah! You are now level %d!", Level));
+			}
+			
 			switch(classRole) {
 				case BLIGHT_ARCHER:
 				{
@@ -538,5 +569,13 @@ public class ArenaPlayer extends ArenaEntity {
 	
 	public List<AbilityItem> getAllAbilties() {
 		return allAbilities;
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
+	public void setExp(int exp) {
+		this.exp = exp;
 	}
 }

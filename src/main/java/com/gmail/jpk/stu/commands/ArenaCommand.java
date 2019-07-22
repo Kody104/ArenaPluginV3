@@ -20,6 +20,13 @@ public class ArenaCommand extends BasicCommand {
 	public boolean performCommand(CommandSender sender, String[] args) {
 		//Single Argument Commands 
 		if (args.length == 1) {
+			//Clear Arena Creatures
+			if (args[0].equalsIgnoreCase("-cc")) {
+				sender.sendMessage("Force clearing all creatures from the arena.");
+				GlobalW.getCreaturesInArena().clear();
+				return true;
+			}
+			
 			//Clear SpecialItems (-csi)
 			if (args[0].equalsIgnoreCase("-csi")) {
 				sender.sendMessage("Force clearing SpecialItems from the ground.");

@@ -1,5 +1,8 @@
 package com.gmail.jpk.stu.listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -9,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -30,11 +34,48 @@ import com.gmail.jpk.stu.items.UsableItem;
  *
  */
 public class ItemInteractionListener extends BasicListener {
+	
+	//A list of SpecialItems dropped on the ground.
+	private static List<SpecialItem> dropped_items = new ArrayList<SpecialItem>();
 
 	public ItemInteractionListener(Plugin plugin) {
 		super(plugin);
 	}
 	
+	/**
+	 * Adds a SpecialItem to the list.
+	 * @param item the item to add.
+	 */
+	public static void addDroppedItem(SpecialItem item) {
+		dropped_items.add(item);
+	}
+	
+	/**
+	 * Clears all the SpecialItems on the ground.
+	 */
+	public static void clearDroppedItems() {
+		for (SpecialItem item : dropped_items) {
+			if (item != null && item.getAmount() > 0) {
+				item.setAmount(0);
+			}
+		}
+		
+		dropped_items.clear();
+	}
+	
+	/**
+	 * Gets the SpecialItems that have been dropped on the Ground.
+	 * @return the list (NOTE: some elements may be null).
+	 */
+	public static List<SpecialItem> getDroppedItems() {
+		return dropped_items;
+	}
+	
+	
+	/**
+	 * Handles when a Player Breaks a Block. Critical for Arena's Shop.
+	 * @param e the event
+	 */
 	@EventHandler
 	public void playerBreakBlockEvent(BlockBreakEvent e) {
 		Player player = e.getPlayer();
@@ -46,6 +87,10 @@ public class ItemInteractionListener extends BasicListener {
 		}
 	}
 	
+	/**
+	 * Handles when a Player clicks on an item in an inventory. It is the core of the Arena's Shop.
+	 * @param e the event
+	 */
 	@EventHandler
 	public void playerClickInventoryEvent(InventoryClickEvent e) {
 		Inventory inventory = e.getClickedInventory();
@@ -80,6 +125,11 @@ public class ItemInteractionListener extends BasicListener {
 		}
 	}
 	
+	
+	/**
+	 * Handles when a Player interactions with blocks.
+	 * @param e the event
+	 */
 	@EventHandler
 	public void playerClickItemEvent(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
@@ -99,6 +149,33 @@ public class ItemInteractionListener extends BasicListener {
 		}
 	}
 	
+	/**
+	 * Handles when a Player tries to craft an Item. At present it stops all Arena Players from crafting. <br/>
+	 * However, it is likely that certain recipes will be permitted in the future.
+	 * @param e the event
+	 */
+	@EventHandler
+	public void playerCraftItemEvent(CraftItemEvent e) {
+		//Verify the Humanentity is a Player
+		HumanEntity human_entity = e.getWhoClicked();
+		
+		if (!(human_entity instanceof Player)) {
+			return;
+		}
+		
+		//Verify Player is an ArenaPlayer
+		Player player = (Player) human_entity;
+		
+		if (GlobalW.getArenaPlayer(player) != null) {
+			//Cancel the event (Except for recipes that we'll allow, but there aren't any that I know yet.)
+			e.setCancelled(true);
+		}
+	}
+	
+	/**
+	 * Handles when an Entity picks up an item. Critical to prevent Arena Players from picking up UsableItems.
+	 * @param e the event
+	 */
 	@EventHandler
 	public void entityPickupItemEvent(EntityPickupItemEvent e) {
 		ItemStack stack = e.getItem().getItemStack();
@@ -110,6 +187,10 @@ public class ItemInteractionListener extends BasicListener {
 		}
 	}
 	
+	/**
+	 * Handles when a Player drops an item. Critical for UsableItems.
+	 * @param e
+	 */
 	@EventHandler
 	public void playerDropItemEvent(PlayerDropItemEvent e) {
 		Player player = e.getPlayer();
@@ -127,7 +208,13 @@ public class ItemInteractionListener extends BasicListener {
 			
 			//Check if it's a UsableItem
 			if (special_item instanceof UsableItem) {
+				//Use the Item
 				((UsableItem) special_item).useItem(player);
+				
+				//Add it to the Drop List
+				addDroppedItem(special_item);
+				
+				//Schedule the Item to Despawn
 				//NOTE: After much pain, having the class here is the only way to achieve the desired effect.
 				class DespawnItemTask extends BukkitRunnable {
 					public void run() {

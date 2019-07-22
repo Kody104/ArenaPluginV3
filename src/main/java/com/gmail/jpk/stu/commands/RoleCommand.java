@@ -62,7 +62,7 @@ public class RoleCommand extends BasicCommand {
 			}
 			
 			//Build the description
-			String description = ChatColor.BOLD + role + ":" + ChatColor.RESET;
+			String description = role + ":";
 			description += lore;
 			
 			//Send the message

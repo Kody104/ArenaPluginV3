@@ -1,6 +1,7 @@
 package com.gmail.jpk.stu.arena;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.jpk.stu.commands.ArenaCommand;
 import com.gmail.jpk.stu.commands.GiveAbilityItemCommand;
 import com.gmail.jpk.stu.commands.GiveCustomItemCommand;
 import com.gmail.jpk.stu.commands.JoinCommand;
@@ -11,6 +12,7 @@ import com.gmail.jpk.stu.commands.RoleCommand;
 import com.gmail.jpk.stu.listeners.DeathListener;
 import com.gmail.jpk.stu.listeners.ItemInteractionListener;
 import com.gmail.jpk.stu.listeners.PlayerCastListener;
+import com.gmail.jpk.stu.listeners.PlayerServerInteractionListener;
 import com.gmail.jpk.stu.listeners.UndroppableSpecialItemListener;
 
 public class ArenaPlugin extends JavaPlugin {
@@ -25,6 +27,7 @@ public class ArenaPlugin extends JavaPlugin {
 		GlobalW.initialize(this);
 		
 		logMessage("Attempting to load all program commands.");
+		this.getCommand("arena").setExecutor(new ArenaCommand(this));
 		this.getCommand("gci").setExecutor(new GiveCustomItemCommand(this));
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
@@ -38,6 +41,7 @@ public class ArenaPlugin extends JavaPlugin {
 		new DeathListener(this);
 		new PlayerCastListener(this);
 		new ItemInteractionListener(this);
+		new PlayerServerInteractionListener(this);
 		
 		logMessage("Set-up complete.");
 	}
@@ -45,6 +49,7 @@ public class ArenaPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		logMessage("Disabling Arena!");
+		ItemInteractionListener.clearDroppedItems();
 	}
 	
 	public void logMessage(String message) {

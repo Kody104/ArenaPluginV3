@@ -11,10 +11,10 @@
 4. ~Create StatItem~(Made SpecialItem Base-Class)
 5. ~Create LoreItem~ (^)
 6. ~Create Gold Prices~
-7. Create DamageListener
-8. Create AllListener
+7. ~Create DamageListener~
+8. ~Create AllListener (Superseded)~
 9. ~Create Abilities~
-10. Create Timers
+10. ~Create Timers (Tasks)~
 
 **Commands**
 1. ~Create Join Command~

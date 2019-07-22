@@ -91,6 +91,7 @@ public class GlobalW {
 	 */
 	public static void nextRound() {
 		round++;
+		hasStarted = true;
 		toArenaPlayers(getChatTag() + ChatColor.GOLD + "Round " + round + " has started!");
 		playSoundToArenaPlayers(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
 		switch(round)

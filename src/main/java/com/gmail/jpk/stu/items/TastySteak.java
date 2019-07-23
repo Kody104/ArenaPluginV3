@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.arena.GlobalW;
 
-public class TastyMelon extends SpecialItem implements UsableItem {
+public class TastySteak extends SpecialItem implements UsableItem {
 
 	private Player user;
 	
-	public TastyMelon() {
-		super(Material.COOKED_BEEF, 900, SpecialItems.TASTY_MELON.getUID(), SpecialItems.TASTY_MELON.getDisplayName(), "Heals you when you kill an enemy.", "Requires you to eat it.");
+	public TastySteak() {
+		super(Material.COOKED_BEEF, 900, SpecialItems.TASTY_STEAK.getUID(), SpecialItems.TASTY_STEAK.getDisplayName(), "Heals you when you kill an enemy.", "Requires you to eat it.");
 	}
 
 	@Override

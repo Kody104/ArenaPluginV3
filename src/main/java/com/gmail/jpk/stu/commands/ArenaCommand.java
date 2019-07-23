@@ -2,6 +2,7 @@ package com.gmail.jpk.stu.commands;
 
 import org.bukkit.command.CommandSender;
 
+import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.arena.ArenaPlugin;
 import com.gmail.jpk.stu.arena.GlobalW;
@@ -23,6 +24,12 @@ public class ArenaCommand extends BasicCommand {
 			//Clear Arena Creatures
 			if (args[0].equalsIgnoreCase("-cc")) {
 				sender.sendMessage("Force clearing all creatures from the arena.");
+
+				//Kill Entities
+				for (ArenaCreature creature : GlobalW.getCreaturesInArena()) {
+					creature.setCurHp(0);
+				}
+				
 				GlobalW.getCreaturesInArena().clear();
 				return true;
 			}

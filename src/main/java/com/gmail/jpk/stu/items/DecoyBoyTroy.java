@@ -1,7 +1,9 @@
 package com.gmail.jpk.stu.items;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -15,18 +17,19 @@ import com.gmail.jpk.stu.arena.GlobalW;
 public class DecoyBoyTroy extends SpecialItem implements UsableItem {
 	
 	public DecoyBoyTroy() {
-		super(Material.LEATHER, 900, SpecialItems.DECOY_BOY_TROY.getUID(), SpecialItems.DECOY_BOY_TROY.getDisplayName(), "Spawns your boy Troy to distract the enemies.");
+		super(Material.LEATHER, 900, SpecialItems.DECOY_BOY_TROY.getUID(), SpecialItems.DECOY_BOY_TROY.getDisplayName(), "Summons your boy Troy when left behind.");
 	}
 
 	@Override
 	public void useItem(Player player) {
 		Location location = player.getLocation();
 		
-		LivingEntity cow = (LivingEntity) GlobalW.getInWorld().spawnEntity(location, EntityType.COW); 
-		player.sendMessage("<Decoy Boy Troy> Don't worry bro, I got your back. Let's kill some monsters!");
+		LivingEntity cow = (LivingEntity) GlobalW.getInWorld().spawnEntity(location, EntityType.COW);
+		cow.setCustomName("Decoy Boy Troy");
+		player.sendMessage("<Decoy Boy Troy>" + ChatColor.GOLD + " YEE HAW! Let's kill some monsters!");
 		int radius = 15;
 		
-		cow.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 1));
+		cow.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 3));
 		cow.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 1));
 			
 		for (Entity e : cow.getNearbyEntities(radius, 5, radius)) {

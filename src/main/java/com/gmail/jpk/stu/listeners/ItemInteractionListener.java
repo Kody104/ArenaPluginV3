@@ -3,6 +3,7 @@ package com.gmail.jpk.stu.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -117,6 +118,7 @@ public class ItemInteractionListener extends BasicListener {
 				
 				if (arena_player != null) {
 					if (arena_player.removeMoney(item.getPrice())) {
+						GlobalW.toPlayer(player, ChatColor.GREEN + "Thank you for your purchase!");
 						BasicCommand.executeCommand(String.format("gci %d %s 1", item.getUID(), player.getName()));
 					} else {
 						GlobalW.toPlayerError(player, "You don't have enough money!");
@@ -145,6 +147,7 @@ public class ItemInteractionListener extends BasicListener {
 				e.setCancelled(true);
 				Inventory basic_shop = ItemShop.getBasicShop();
 				player.openInventory(basic_shop);
+				player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f);
 			}
 		}
 	}

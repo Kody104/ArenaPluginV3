@@ -33,11 +33,13 @@ public class DeathListener extends BasicListener {
 		Player killer = entity.getKiller();
 		ArenaCreature creature = GlobalW.getArenaCreature(entity);
 		
+		//Don't drop exp or items
+		e.getDrops().clear();
+		e.setDroppedExp(0);
+		
 		//See if the round has ended
 		if (creature != null) {
 			GlobalW.removeArenaCreature(entity);
-			e.getDrops().clear();
-			e.setDroppedExp(0);
 			
 			if (GlobalW.getCreaturesInArena().isEmpty()) {
 				int round = GlobalW.getRound();

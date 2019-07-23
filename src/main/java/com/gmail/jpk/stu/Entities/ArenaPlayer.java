@@ -451,19 +451,17 @@ public class ArenaPlayer extends ArenaEntity {
 	 */
 	public boolean removeMoney(int amount) {
 		int money = getMoney();
-		
-		mPlayer.sendMessage(String.format("Item costs %d. You have %d.", amount, money));
-		
+				
 		if (amount > money) {
 			return false;
 		}
 		
 		int change = (money - amount);
 		int[] gems = getAmountAsCurrencies(change);
-		mPlayer.sendMessage(String.format("%d diamonds, %d emeralds, %d bars, %d scraps", gems[0], gems[1], gems[2], gems[3]));
 		
 		//Update Player Inventory
 		updatePlayerGems(gems);
+		GlobalW.toPlayer(mPlayer, "Your gems have been updated.");
 		
 		return true;
 	}

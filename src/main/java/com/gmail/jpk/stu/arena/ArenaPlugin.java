@@ -50,6 +50,7 @@ public class ArenaPlugin extends JavaPlugin {
 	public void onDisable() {
 		logMessage("Disabling Arena!");
 		ItemInteractionListener.clearDroppedItems();
+		GlobalW.terminate();
 	}
 	
 	public void logMessage(String message) {

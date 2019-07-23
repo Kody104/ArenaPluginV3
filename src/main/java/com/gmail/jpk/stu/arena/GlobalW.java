@@ -20,6 +20,7 @@ public class GlobalW {
 	
 	public static final Random rand = new Random();
 	private static ArenaPlugin plugin;
+	private static ChatSystem chat_system;
 	private static final int maxSize = 6;
 	private static int round = 0;
 	private static boolean hasStarted = false;
@@ -28,9 +29,14 @@ public class GlobalW {
 	private static List<ArenaCreature> creaturesInArena = new ArrayList<ArenaCreature>();
 	private static List<Location> playerSpawnLocations = new ArrayList<Location>();
 	
+	private GlobalW() {
+		//Don't instantiate this class
+	}
+	
 	//TODO: This needs to init all the important things
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
+		setChatSystem(new ChatSystem("config/"));
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
 //		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}
@@ -180,6 +186,10 @@ public class GlobalW {
 		}
 	}
 	
+	public static void terminate() {
+		GlobalW.chat_system.closeSystem();
+	}
+	
 	public static List<ArenaPlayer> getPlayersInArena() {
 		return playersInArena;
 	}
@@ -190,6 +200,14 @@ public class GlobalW {
 	
 	public static List<Location> getPlayerSpawnLocations() {
 		return playerSpawnLocations;
+	}
+
+	public static ChatSystem getChatSystem() {
+		return chat_system;
+	}
+
+	public static void setChatSystem(ChatSystem chat_system) {
+		GlobalW.chat_system = chat_system;
 	}
 
 

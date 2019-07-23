@@ -59,6 +59,21 @@ public abstract class BasicCommand implements CommandExecutor {
 	}
 	
 	/**
+	 * Gets a player by their name. Returns null if they do not exist or are offline.
+	 * @param name the name of the player
+	 * @return the Player or null if not found / offline.
+	 */
+	protected Player getPlayer(String name) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getName().equalsIgnoreCase(name)) {
+				return player;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Checks if the given string input is a valid integer.
 	 * @param string the input to validate
 	 * @return the valid int or -1 if invalid
@@ -72,6 +87,16 @@ public abstract class BasicCommand implements CommandExecutor {
 		} catch (NumberFormatException e) {
 			return -1;
 		}
+	}
+	
+	/**
+	 * Checks if a String has a proper Boolean value.
+	 * Note: Does NOT return the respective boolean value.
+	 * @param value the value to check
+	 * @return true if the value is "true" or "false"
+	 */
+	protected boolean isBoolean(String value) {
+		return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"));
 	}
 	
 	public ArenaPlugin getPlugin() {

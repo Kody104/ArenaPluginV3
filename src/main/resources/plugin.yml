@@ -4,6 +4,9 @@ version: 0.0.1
 authors: [Kody104, ASquanchyPenguin]
 
 commands:
+    all:
+      description: Sends a message to all players.
+      usage: /all [message]
     arena:
       description: Runs various tasks for the Arena.
       usage: /arena -[task] -(sub-task)

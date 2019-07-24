@@ -9,6 +9,19 @@ import com.gmail.jpk.stu.arena.ChatSystem;
 import com.gmail.jpk.stu.arena.ChatSystem.Role;
 import com.gmail.jpk.stu.arena.GlobalW;
 
+/**
+ * Runs tasks for the ChatSystem.<br/><br/>
+ * 
+ * Current Commands
+ * <ul>
+ * 	<li>chsys role PLAYER -> gets the chat-role of the player.</li>
+ * 	<li>chsys remove PLAYER -> removes the name of the player.</li>
+ * 	<li>chsys debug true|false -> toggles debug text for the dev channel.</li>
+ * 	<li>chsys color true|false -> toggles if color codes are allowed in-line for VIPs and DEVs.</li>
+ *  <li>chsys set PLAYER ROLE -> sets the player to a role.</li>
+ * </ul> 
+ *
+ */
 public class ChatSystemCommand extends BasicCommand {
 
 	public ChatSystemCommand(ArenaPlugin plugin) {

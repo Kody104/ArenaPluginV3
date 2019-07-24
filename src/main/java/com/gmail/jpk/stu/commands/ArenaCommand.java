@@ -9,7 +9,15 @@ import com.gmail.jpk.stu.arena.GlobalW;
 import com.gmail.jpk.stu.listeners.ItemInteractionListener;
 
 /**
- * Runs various tasks for the Arena. Intended to be used more for dev work than in-game content.
+ * Runs various tasks for the Arena. Intended to be used more for dev work than in-game content.<br/><br/>
+ * 
+ * Current Commands
+ * <ul>
+ * 	<li>arena -cc : clears all creatures from the arena.</li>
+ *  <li>arena -csi: clears all special items from the arena.</li>
+ *  <li>arena -fr : readies all arena players.</li>
+ *  <li>arena </li>
+ * </ul>
  */
 public class ArenaCommand extends BasicCommand {
 

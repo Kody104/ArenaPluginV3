@@ -3,7 +3,6 @@ package com.gmail.jpk.stu.items;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -17,7 +16,7 @@ import com.gmail.jpk.stu.arena.GlobalW;
 public class DecoyBoyTroy extends SpecialItem implements UsableItem {
 	
 	public DecoyBoyTroy() {
-		super(Material.LEATHER, 900, SpecialItems.DECOY_BOY_TROY.getUID(), SpecialItems.DECOY_BOY_TROY.getDisplayName(), "Summons your boy Troy when left behind.");
+		super(Material.LEATHER, 900, SpecialItems.DECOY_BOY_TROY.getUID(), SpecialItems.DECOY_BOY_TROY.getDisplayName(), "Summons your boy Troy.");
 	}
 
 	@Override

@@ -7,11 +7,21 @@ commands:
     all:
       description: Sends a message to all players.
       usage: /all [message]
+      #permission is built into the ChatSystem
     arena:
       description: Runs various tasks for the Arena.
       usage: /arena -[task] -(sub-task)
       permission: Arena.mod.arena
       permission-message: You don't have permission.
+    chsys:
+      description: Runs various tasks for the ChatSystem.
+      usage: /chsys [task] (value) (value)
+      permission: Arena.mod.chsys
+      permission-message: You don't have permission.
+    dev:
+      description: Sends a message to the dev channel.
+      usage: /dev [message]
+      #permission is built into the ChatSystem
     gci:
       description: Gives an ArenaPlayer a SpecialItem
       usage: /gci [item] [target-player] (quantity)
@@ -49,3 +59,7 @@ commands:
       usage: /quit
       permission: Arena.quit
       permission-message: You don't have permission.
+    vip:
+      description: Sends a message to the VIP channel.
+      usage: /vip [message]
+      #permission is built into the ChatSystem

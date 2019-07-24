@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -50,7 +50,8 @@ public class ChatSystem {
 	}
 	
 	/**
-	 * Adds a player to the ChatSystem with a given role.
+	 * Adds a player to the ChatSystem with a given role. If the player already exists in the role,
+	 * then their role is updated.
 	 * @param uid the unique-ID of the player
 	 * @param role the role to assign that player
 	 */
@@ -213,78 +214,98 @@ public class ChatSystem {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Sends a messages to all Players in this ChatSystem
+	 * @param name the name of the sender
+	 * @param message the message to send everyone
+	 */
+	public void messageAllPlayers(String name, String message) {
+		String tag = getAllChatTag(name);
+		
+		//Message all online players
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			player.sendMessage(tag + message);
+		}		
+	}
+	
 	
 	/**
-	 * Messages a single player. Does not include any chat tags.
-	 * @param uid the uid of the target player
-	 * @param format the format of the message
-	 * @param objects the objects of the message
+	 * Messages a CommandSender as the console.
+	 * @param sender CommandSender
 	 */
-	public void messagePlayer(UUID uid, String format, Object... objects) {
-		OfflinePlayer player = Bukkit.getOfflinePlayer(uid);
-		
-		//Send the message
-		if (player != null && player.isOnline()) {
-			player.getPlayer().sendMessage(String.format(format, objects));
-		}
+	public void messageCommandSender(CommandSender sender, String message) {
+		sender.sendMessage(getDefaultChatTag() + message); 
 	}
 	
 	/**
-	 * Messages the channel from the console
-	 * @param role the targetted channel
-	 * @param format the format of the message
-	 * @param objects the objects of the message
+	 * Sends a message from the sender to the target. Use "null" for sender to indicate
+	 * that the console is sending a message.
+	 * @param sender the UUID of the sender, or null if it's the console
+	 * @param target the target player 
+	 * @param message the message the send wants to send.
 	 */
-	public void messageChannelFromConsole(Role role, String format, Object...objects) {
-		Set<UUID> keys = getPlayersByRole(role);
-		String tag = getFormattedRoleTag(role);
+	public void messagePlayer(UUID sender, Player target, String message) {
+		//Get the sender's info
+		String name;
+		Role role;
 		
-		this.messagePlayers(keys, tag + format, "Console", objects);
+		if (sender == null) {
+			name = "Console";
+			role = Role.CONSOLE;
+		} else {
+			name = Bukkit.getOfflinePlayer(sender).getName();
+			role = getRole(sender);
+		}
+		
+		target.sendMessage(role.getChatTag(name) + message);
+	}
+	
+	/**
+	 * Messages a player's default channel. Should not be used by the console.
+	 * @param sender the UUID of the sender
+	 * @param message the message they wish to send
+	 */
+	public void messagePlayerChannel(UUID sender, String message) {
+		if (sender != null) {
+			Role role = getRole(sender);
+			this.messagePlayersByRole(sender, role, message);
+			return;
+		}
 	}
 		
 	/**
 	 * Messages all the players in a given set.
-	 * @param keys the set of players
-	 * @param format the format of the message
-	 * @param objects the objects of the message
+	 * @param sender the UUID of the sender or null if using the console
+	 * @param message the message
+	 * @param players the players to whom this message will be sent
 	 */
-	public void messagePlayers(Set<UUID> keys, String format, Object... objects) {
-		OfflinePlayer player;
+	public void messagePlayers(UUID sender, String message, Set<UUID> players) {
+		//Send a message to all the players in a list
+		Player target;
 		
-		//Send each player the message
-		for (UUID key : keys) {
-			player = Bukkit.getOfflinePlayer(key);
+		for (UUID uuid : players) {
+			target = Bukkit.getOfflinePlayer(uuid).getPlayer();
 			
-			//Send message if player is online
-			if (player.isOnline() && player != null) {
-				Player target = player.getPlayer();
-				target.sendMessage(String.format(format, objects));
+			if (target != null) {
+				this.messagePlayer(sender, target, message);
 			}
 		}
 	}
 	
 	/**
-	 * Sends a messages to all Players in this ChatSystem
-	 * @param format the format of the string
-	 * @param objects any objects
+	 * Sends a message to all Players of a given role. Will not execute if the sender
+	 * does not have permission to speak in that channel.
+	 * @param sender the UUID of the sender or null if using the console
+	 * @param role the targeted role
+	 * @param objects the message
 	 */
-	public void messageAllPlayers(UUID sender, String name, String format, Object...objects) {
-		Set<UUID> keys = players.keySet();
-		
-		this.messagePlayers(keys, getAllFormattedChatTag() + format, name, objects);
-	}
-	
-	/**
-	 * Sends a message to all Players of a given role
-	 * @param role the role the players should be
-	 * @param format the format of the string
-	 * @param objects the objects of the string
-	 */
-	public void messagePlayersByRole(Role role, String format, Object... objects) {
-		Set<UUID> keys = this.getPlayersByRole(role);
-		String tag = role.getChatTag();
-		
-		this.messagePlayers(keys, tag + format, objects);
+	public void messagePlayersByRole(UUID sender, Role role, String message) {
+		Set<UUID> players = getPlayersByRole(role);
+
+		if (sender != null && hasPermissionToSpeak(sender, role)) {
+			this.messagePlayers(sender, message, players);
+		}
 	}
 	
 	/**
@@ -299,7 +320,7 @@ public class ChatSystem {
 	/**
 	 * Replaces color codes with their respective colors
 	 * @param message the raw message
-	 * @return a decorated message (if applica
+	 * @return a decorated message (if applicable)
 	 */
 	public static String replaceCodes(String message) {
 		if (message.split("&\\w").length <= 1) {
@@ -310,130 +331,135 @@ public class ChatSystem {
 	}
 	
 	/**
-	 * Sends a message from a player to all players of a given role -- if the player has permission to do so.
-	 * The player will be notified if they can't post in that channel.
-	 * @param sender the sender of the message
-	 * @param role the group they want to send the message to
-	 * @param format the format of the message
-	 * @param objects the objects of the message
+	 * Gets the default chat tag
+	 * @return &lt;Arena-Chat&gt;
 	 */
-	public void sendPlayerChatToRole(Player sender, Role role, String format, Object... objects) {
-		UUID uid = sender.getUniqueId();
-		String name = sender.getName();
-		Role sender_role = getRole(uid);
-		
-		if (!hasPermissionToSpeak(uid, role)) {
-			this.messagePlayer(uid, "You don't have permission to post in this channel.");
-			this.messagePlayersByRole(Role.DEV, ChatColor.GRAY + "%s failed to send a message to " + role + " channel.", name);
-			this.messagePlayersByRole(Role.DEV, ChatColor.GRAY + "Message: %s", format);
-			return;
-		} 
-		
-		this.sendPlayerChatToRole(sender, sender_role, format, objects);
-	}
-	
-	/**
-	 * Sends a message from a player to all of the appropriate channels.
-	 * NOTE: If you want the player to message a 
-	 * @param sender who sent the message
-	 * @param format the format of the message
-	 * @param objects the objects of the message
-	 */
-	public void sendPlayerChat(Player sender, String format, Object... objects) {
-		UUID uid = sender.getUniqueId();
-		String name = sender.getName();
-		
-		//In the unlikely that a player isn't registered, we'll alert the devs and send their message to all.
-		if (!this.contains(uid)) {
-			this.messagePlayersByRole(Role.DEV, ChatColor.GRAY + "%s is not registered in the chat system!", name);
-			this.messageAllPlayers(sender.getUniqueId(), getAllFormattedChatTag() + format, name, objects);
-			return;
-		}
-		
-		//Grab necessary info
-		Role role = this.getRole(uid);
-		String tag = getFormattedRoleTag(role);
-		
-		switch (role) {
-			case PLAYER:
-			{
-				messagePlayersByRole(Role.PLAYER, tag + format, name, objects);
-				messagePlayersByRole(Role.VIP, tag + format, name, objects);
-				messagePlayersByRole(Role.DEV, tag + format, name, objects);
-				break;
-			}
-			
-			case VIP:
-			{
-				messagePlayersByRole(Role.VIP, tag + format, name, objects);
-				messagePlayersByRole(Role.DEV, tag  + format, name, objects);
-				break;
-			}
-			case DEV:
-			{
-				messagePlayersByRole(Role.DEV, tag  + format, name, objects);
-				break;
-			}
-			case ALL:
-			{
-				this.messageAllPlayers(uid, name, format, objects);
-				break;
-			}
-		}
-	}
-	
 	public static String getDefaultChatTag() {
 		return ("<Arena-Chat> ");
 	}
 	
 	/**
 	 * Gets the All channel chat tag
-	 * @return the Tag
+	 * @param sender the name of the sender
+	 * @return &lt;sender-name:ALL&gt;
 	 */
-	public static String getAllFormattedChatTag() {
-		return (ChatColor.GOLD + "<%s:ALL> " + ChatColor.RESET);
+	public static String getAllChatTag(String sender) {
+		String tag = "<%s:all> ".replace("%s", sender);
+		
+		return (ChatColor.GOLD + tag + ChatColor.RESET);
 	}
 	
 	/**
-	 * Gets the Dev Channel chat tag
-	 * @return the tag
+	 * Gets the tag for the console
+	 * @return &lt;Console&gt;
 	 */
-	public static String getDevChatTag() {
-		return (ChatColor.LIGHT_PURPLE + "<Arena-DEV> " + ChatColor.RESET);
+	public static String getConsoleTag() {
+		return (ChatColor.LIGHT_PURPLE + "<Console> " + ChatColor.RESET);
+	}
+
+	/**
+	 * Gets the dev channel chat tag
+	 * @param sender the name of the sender
+	 * @return &lt;sender-name:dev&gt;
+	 */
+	public static String getDevChatTag(String sender) {
+		String tag = "<%s:dev> ".replace("%s", sender);
+		
+		return (ChatColor.LIGHT_PURPLE + tag + ChatColor.RESET);
 	}
 	
 	/**
 	 * Gets the Player Channel chat tag
-	 * @return the tag
+	 * @param sender the name of the sender
+	 * @return &lt;sender-name:player&gt;
 	 */
-	public static String getPlayerChatTag() {
-		return (ChatColor.LIGHT_PURPLE + "<Arena-Player> " + ChatColor.RESET);
+	public static String getPlayerChatTag(String sender) {
+		String tag = "<%s:player> ".replace("%s", sender);
+		
+		return (ChatColor.LIGHT_PURPLE + tag + ChatColor.RESET);
 	}
 	
 	/**
-	 * Gets the VIP Channel Tag Tag
-	 * @return the tag
+	 * Gets the unregistered player tag
+	 * @param sender the name of the sender
+	 * @return &lt;sender-name:UNREGISTERED&gt;
 	 */
-	public static String getVIPChatTag() {
-		return (ChatColor.BLUE + "<Arena-VIP> " + ChatColor.RESET);
+	public static String getUnregisteredTag(String sender) {
+		return ("<%s:UNREGISTERED> ").replace("%s", sender);
+	}
+	
+	/**
+	 * Gets the VIP Channel Tag
+	 * @param sender the name of the sender
+	 * @return &lt;sender-name:vip&gt;
+	 */
+	public static String getVIPChatTag(String sender) {
+		String tag = "<%s:vip> ".replace("%s", sender);
+		return (ChatColor.BLUE + tag + ChatColor.RESET);
 	}
 	
 	//The Roles in the ChatSystem
 	public enum Role { 
-		PLAYER, VIP, DEV, ALL;
+		PLAYER, VIP, DEV, ALL, CONSOLE;
 		
-		public String getChatTag() {
+		public String toString() {
 			switch (this) {
-			case DEV:
-				return getDevChatTag();
-			case PLAYER:
-				return getPlayerChatTag();
-			case VIP:
-				return getVIPChatTag();
 			case ALL:
-				return getAllFormattedChatTag();
+				return "ALL";
+			case CONSOLE:
+				return "Console";
+			case DEV:
+				return "DEV";
+			case PLAYER:
+				return "Player";
+			case VIP:
+				return "VIP";
 			default:
-				return "";
+				return "UNREGISTERED";
+			}
+		}
+		
+		/**
+		 * Gets a role by a string input. May return null.
+		 * @param role the name of the role
+		 * @return the role or null if not found
+		 */
+		public static Role getRoleByString(String role) {
+			switch (role.toUpperCase()) {
+				case "ALL":
+					return ALL;
+				case "CONSOLE:":
+					return CONSOLE;
+				case "DEV":
+					return DEV;
+				case "PLAYER":
+					return PLAYER;
+				case "VIP":
+					return VIP;
+				default:
+					return null;
+			}
+		}
+		
+		/**
+		 * Gets the ChatTag associated with this role.
+		 * @param name
+		 * @return
+		 */
+		public String getChatTag(String name) {
+			switch (this) {
+			case ALL:
+				return getAllChatTag(name);
+			case CONSOLE:
+				return getConsoleTag();
+			case DEV:
+				return getDevChatTag(name);
+			case PLAYER:
+				return getPlayerChatTag(name);
+			case VIP:
+				return getVIPChatTag(name);
+			default:
+				return getUnregisteredTag(name);
 			}
 		}
  	}

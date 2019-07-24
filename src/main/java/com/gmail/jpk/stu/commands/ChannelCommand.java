@@ -1,13 +1,18 @@
 package com.gmail.jpk.stu.commands;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.arena.ArenaPlugin;
 import com.gmail.jpk.stu.arena.ChatSystem;
-import com.gmail.jpk.stu.arena.GlobalW;
 import com.gmail.jpk.stu.arena.ChatSystem.Role;
+import com.gmail.jpk.stu.arena.GlobalW;
 
 public abstract class ChannelCommand extends BasicCommand {
 
@@ -17,6 +22,21 @@ public abstract class ChannelCommand extends BasicCommand {
 		super(plugin);
 		
 		setRole(role);
+	}
+	
+	/**
+	 * Gets the of UUIDs for all of the Online Players.
+	 * @return
+	 */
+	protected Set<UUID> getOnlinePlayers() {
+		Set<UUID> set = new HashSet<UUID>();
+		
+		//Grab the UUIDs
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			set.add(player.getUniqueId());
+		}
+		
+		return set;
 	}
 	
 	@Override
@@ -31,13 +51,12 @@ public abstract class ChannelCommand extends BasicCommand {
 		
 		//Handle console
 		if (sender instanceof ConsoleCommandSender) {
-			GlobalW.getChatSystem().messageChannelFromConsole(role, "%s", message);
+			GlobalW.getChatSystem().messagePlayersByRole(null, role, message);
 			return true;
 		}
 		
 		else if (sender instanceof Player) {
-			Player player = (Player) sender;
-			GlobalW.getChatSystem().sendPlayerChatToRole(player, role, "%s", message);
+			GlobalW.getChatSystem().messagePlayersByRole(((Player) sender).getUniqueId(), role, message);
 			return true;
 		}
 		

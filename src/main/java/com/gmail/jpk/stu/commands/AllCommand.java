@@ -25,16 +25,15 @@ public class AllCommand extends ChannelCommand {
 		
 		//If console, then send as announcement
 		if (sender instanceof ConsoleCommandSender) {
-			GlobalW.getChatSystem().messageChannelFromConsole(role, "%s", message);
+			GlobalW.getChatSystem().messageAllPlayers("Console", message);
 			return true;
 		}
 		
 		//If player, then send through all-channel
 		else if (sender instanceof Player) {
-			GlobalW.getChatSystem().messageAllPlayers(((Player) sender).getUniqueId(), "%s", message);
+			GlobalW.getChatSystem().messageAllPlayers(((Player) sender).getName(), message);
 			return true;
 		}
-		
 		
 		return false;
 	}

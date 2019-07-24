@@ -41,8 +41,10 @@ public class PlayerServerInteractionListener extends BasicListener {
 	 */
 	@EventHandler
 	public void playerChatEvent(AsyncPlayerChatEvent e) {
+		UUID sender = e.getPlayer().getUniqueId();
 		String message = e.getMessage();
-		GlobalW.getChatSystem().sendPlayerChat(e.getPlayer(), "%s", message);
+		
+		GlobalW.getChatSystem().messagePlayerChannel(sender, message);;
 		e.setCancelled(true);
 	}
 		

@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -251,7 +252,7 @@ public class ChatSystem {
 		Role role;
 		
 		if (sender == null) {
-			name = "Console";
+			name = "";
 			role = Role.CONSOLE;
 		} else {
 			name = Bukkit.getOfflinePlayer(sender).getName();
@@ -267,11 +268,16 @@ public class ChatSystem {
 	 * @param message the message they wish to send
 	 */
 	public void messagePlayerChannel(UUID sender, String message) {
+		if (!this.contains(sender)) {
+			OfflinePlayer player = Bukkit.getOfflinePlayer(sender);
+			this.messageAllPlayers(player.getName() + "-UNREGISTERED", message);
+		}
+		
 		if (sender != null) {
 			Role role = getRole(sender);
 			this.messagePlayersByRole(sender, role, message);
 			return;
-		}
+		} 
 	}
 		
 	/**
@@ -302,9 +308,21 @@ public class ChatSystem {
 	 */
 	public void messagePlayersByRole(UUID sender, Role role, String message) {
 		Set<UUID> players = getPlayersByRole(role);
+		OfflinePlayer off = (sender == null) ? null : Bukkit.getOfflinePlayer(sender);
 
+		//If the sender has permission
 		if (sender != null && hasPermissionToSpeak(sender, role)) {
+			//If not the sender's native channel, send it to him.
+			if (getRole(sender) != role) {
+				off.getPlayer().sendMessage(role.getChatTag(off.getName() + "-" + getRole(sender)) + message);
+			}
+			
 			this.messagePlayers(sender, message, players);
+		} 
+		
+		else if (off != null && off.isOnline()) {
+				this.messagePlayersByRole(null, Role.DEV, String.format("%s tried to send \"%s\" to the %s channel.", off.getName(), message, role.toString()));
+				this.messagePlayer(null, off.getPlayer(), "You don't have permission to speak in this channel.");
 		}
 	}
 	
@@ -354,7 +372,7 @@ public class ChatSystem {
 	 * @return &lt;Console&gt;
 	 */
 	public static String getConsoleTag() {
-		return (ChatColor.LIGHT_PURPLE + "<Console> " + ChatColor.RESET);
+		return (ChatColor.LIGHT_PURPLE + "<Arena-Chat> " + ChatColor.RESET);
 	}
 
 	/**
@@ -376,7 +394,7 @@ public class ChatSystem {
 	public static String getPlayerChatTag(String sender) {
 		String tag = "<%s:player> ".replace("%s", sender);
 		
-		return (ChatColor.LIGHT_PURPLE + tag + ChatColor.RESET);
+		return tag;
 	}
 	
 	/**
@@ -405,15 +423,15 @@ public class ChatSystem {
 		public String toString() {
 			switch (this) {
 			case ALL:
-				return "ALL";
+				return "all";
 			case CONSOLE:
-				return "Console";
+				return "console";
 			case DEV:
-				return "DEV";
+				return "dev";
 			case PLAYER:
-				return "Player";
+				return "player";
 			case VIP:
-				return "VIP";
+				return "vip";
 			default:
 				return "UNREGISTERED";
 			}

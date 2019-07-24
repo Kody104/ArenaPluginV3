@@ -32,7 +32,7 @@ public class JoinCommand extends BasicCommand{
 				}
 				p.getInventory().clear(); // No outside items allowed!
 				p.setFoodLevel(10); // Too much food meter = healing. NO FREE HEALING!
-				p.setLevel(0); //Clear level
+				p.setLevel(1); //Set level to default level in Arena
 				p.setExp(0); //Clear exp
 				p.setGameMode(GameMode.SURVIVAL); //Just in case
 				GlobalW.toPlayer(p, "You have joined the arena as a spectator!");

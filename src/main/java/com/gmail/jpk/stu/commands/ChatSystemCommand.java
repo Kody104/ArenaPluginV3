@@ -54,7 +54,7 @@ public class ChatSystemCommand extends BasicCommand {
 					Role role = system.getRole(player.getUniqueId());
 					
 					if (role != null) {
-						system.messageCommandSender(sender, String.format("%s is a " + role, player.getName()));
+						system.messageCommandSender(sender, String.format("%s is a %s.", role.toString(), player.getName()));
 						return true;
 					}
 					
@@ -82,13 +82,13 @@ public class ChatSystemCommand extends BasicCommand {
 				//Run debug command
 				if (args[0].equalsIgnoreCase("debug")) {
 					system.setShowDebugOutput(Boolean.valueOf(args[1].toLowerCase()));
-					system.messageCommandSender(sender, String.format("Set show-debug-text to %s.", args[1]).toUpperCase());
+					system.messageCommandSender(sender, String.format("Set show-debug-text to %s.", args[1].toUpperCase()));
 					return true;
 				}
 				
 				//Otherwise it's color
 				system.setColorCodesEnabled(Boolean.valueOf(args[1].toLowerCase()));
-				system.messageCommandSender(sender, String.format("Set enable-color-codes to %s.", args[1]).toUpperCase());
+				system.messageCommandSender(sender, String.format("Set enable-color-codes to %s.", args[1].toUpperCase()));
 				return true;
 			}
 		}

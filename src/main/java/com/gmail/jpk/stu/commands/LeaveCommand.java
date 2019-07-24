@@ -27,6 +27,7 @@ public class LeaveCommand extends BasicCommand {
 				return true;
 			}
 			p.setFoodLevel(20); // Max out food level
+			p.setExp(0); //Remove any experience
 			GlobalW.toPlayer(p, "You have left the arena!");
 			GlobalW.removeArenaPlayer(p);
 			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + p.getName() + " has left the arena!");

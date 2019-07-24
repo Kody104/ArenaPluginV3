@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -174,23 +175,38 @@ public class ArenaPlayer extends ArenaEntity {
 	 * Adds exp to the ArenaPlayer and levels them up if they have enough exp.
 	 * This is method will level them mutliple times if they have enough exp.
 	 * @param exp the amount to give
+	 * @param flag <b>Should be set to false by default.</b> This flag tracks the recursive nature of this function.
 	 */
-	public void addExp(int reward) {
+	public void addExp(int reward, boolean flag) {
+		if (Level >= 18) {
+			//Ensures no oddball bugs occur
+			mPlayer.setLevel(18);
+			mPlayer.setExp(0);
+			return;
+		}
+		
 		int required = getNextExp();
 		int current = getExp();
 		
 		//Level up recursively
 		if (current + reward >= required) {
+			if (!flag) {
+				//This branch prevents a bug where the sound will play VERY loudly if the player levels up more than once.
+				mPlayer.playSound(mPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+			}
+			
 			LevelUp();
 			reward -= required; 
 			current = 0;
-			addExp(reward);
+			addExp(reward, true);
 			return;
 		}
 		
 		//Add remaining exp
-		current += reward;
-		mPlayer.setExp((float) (current / required));
+		this.setExp((current + reward)); 
+		mPlayer.setLevel(Level);
+		mPlayer.setExp(((float) getExp() / (float) required));
+		mPlayer.playSound(mPlayer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
 	}
 	
 	/**
@@ -260,17 +276,17 @@ public class ArenaPlayer extends ArenaEntity {
 	public void LevelUp() {
 		if(Level + 1 < 19) {
 			Level++;
-						
+
 			if (Level % 5 == 0) {
-				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is now level %d!", mPlayer.getName(), this.classRole.getName(), Level));
+				GlobalW.toArenaPlayers(ChatColor.GREEN + String.format("%s the %s is now level %d!", mPlayer.getName(), this.classRole.getName(), Level));
 			} 
 			
 			else if (Level == 18) {
-				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is MAX level!", mPlayer.getName(), this.classRole.getName()));
+				GlobalW.toArenaPlayers(ChatColor.GOLD + String.format("%s the %s is MAX level!", mPlayer.getName(), this.classRole.getName()));
 			}
 			
 			else {
-				GlobalW.toPlayer(mPlayer, String.format("Hoorah! You are now level %d!", Level));
+				GlobalW.toPlayer(mPlayer, ChatColor.GREEN + String.format("Hoorah! You are now level %d!", Level));
 			}
 			
 			switch(classRole) {

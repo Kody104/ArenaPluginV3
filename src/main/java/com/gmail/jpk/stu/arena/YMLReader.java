@@ -2,7 +2,9 @@ package com.gmail.jpk.stu.arena;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -35,14 +37,14 @@ public class YMLReader {
 	}
 	
 	/**
-	 * Returns a String from the given path
+	 * Returns a Double list from the given path
 	 * @param path the path of the value
 	 * @return the String
 	 */
-	public double getDouble(String path) {
-		return config.getDouble(path);
+	public List<Double> getDoubleList(String path) {
+		return config.getDoubleList(path);
 	}
-	
+
 	/**
 	 * Returns an integer from the given path
 	 * @param path the path of the value
@@ -50,6 +52,17 @@ public class YMLReader {
 	 */
 	public int getInt(String path) {
 		return config.getInt(path);
+	}
+	
+	/**
+	 * Converts a list of doubles to a Location if present at the path.
+	 * @param path the path of the list
+	 */
+	public Location getLocation(String path) {
+		List<Double> list = getDoubleList(path);
+		Location location = new Location(GlobalW.getInWorld(), list.get(0), list.get(1), list.get(2));
+		
+		return location;
 	}
 	
 	/**

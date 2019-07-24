@@ -54,7 +54,7 @@ public class DeathListener extends BasicListener {
 				
 				//Grant surviving players experience.
 				for (ArenaPlayer ap : GlobalW.getPlayersInArena()) {
-					ap.addExp(exp);
+					ap.addExp(exp, false);
 				}
 			}
 		}
@@ -64,7 +64,7 @@ public class DeathListener extends BasicListener {
 			ArenaPlayer player = GlobalW.getArenaPlayer(killer);
 			//Verify both are in the Arena
 			if (creature != null && player != null) {
-				player.addExp(creature.getExpDrop(0));
+				player.addExp(creature.getExpDrop(0), false);
 			}
 		}
 	}

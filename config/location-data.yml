@@ -13,15 +13,12 @@ arena-0:
     corner-4: [0, 0, 0] #HEIGHT 
     
 
-# Sets the spawn locations for creatures
+# Sets the spawn locations for creatures (working)
 creature-spawns:
-    location-0: [0, 0, 0]
-    location-1: [0, 0, 0]
-    location-2: [0, 0, 0]
+    location-0: [157, 63, -51]
+    location-1: [153, 63, -51]
+    location-2: [151, 63, -51]
 
-# Sets the spawn points for players
+# Sets the spawn points for players (working)
 player-spawns:
-    location-0: [0, 0, 0]
-    location-1: [0, 0, 0]
-    location-2: [0, 0, 0]
-    
+    location-0: [152, 63, -59]

@@ -21,6 +21,7 @@ public class GlobalW {
 	public static final Random rand = new Random();
 	private static ArenaPlugin plugin;
 	private static ChatSystem chat_system;
+	private static YMLReader location_data;
 	private static final int maxSize = 6;
 	private static int round = 0;
 	private static boolean hasStarted = false;
@@ -28,6 +29,7 @@ public class GlobalW {
 	private static List<ArenaPlayer> playersInArena = new ArrayList<ArenaPlayer>();
 	private static List<ArenaCreature> creaturesInArena = new ArrayList<ArenaCreature>();
 	private static List<Location> playerSpawnLocations = new ArrayList<Location>();
+	private static List<Location> creatureSpawnLocations = new ArrayList<Location>();
 	
 	private GlobalW() {
 		//Don't instantiate this class
@@ -37,17 +39,34 @@ public class GlobalW {
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
 		setChatSystem(new ChatSystem("config/"));
+		setLocationData("config/location-data.yml");
+//		loadCreatureSpawnLocations(); --> WIP
+//		loadPlayerSpawnLocations(); --> WIP
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
 //		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}
 	
+	/**
+	 * Loads the player spawn locations
+	 */
+	private static void loadPlayerSpawnLocations() {
+		playerSpawnLocations.add(location_data.getLocation("player-spawns.location-0"));
+	}
+
+	/**
+	 * Loads the enemy spawn locations
+	 */
+	private static void loadCreatureSpawnLocations() {
+		creatureSpawnLocations.add(location_data.getLocation("creature-spawns.location-0"));		
+	}
+
 	/**
 	 * Sends a message to the Player with the ChatTag
 	 * @param player the player to whom will receive the message
 	 * @param message what the message should be
 	 */
 	public static void toPlayer(Player player, String message) {
-		player.sendMessage(String.format("%s %s", getChatTag(), message));
+		player.sendMessage(String.format("%s%s", getChatTag(), message));
 	}
 	
 	/**
@@ -56,7 +75,7 @@ public class GlobalW {
 	 * @param message what the message should be
 	 */
 	public static void toPlayerError(Player player, String message) {
-		player.sendMessage(String.format("%s %s", getChatErrorTag(), message));
+		player.sendMessage(String.format("%s%s", getChatErrorTag(), message));
 	}
 	
 	/**
@@ -65,7 +84,7 @@ public class GlobalW {
 	 */
 	public static void toArenaPlayers(String message) {
 		for(ArenaPlayer player : playersInArena) {
-			player.getmPlayer().sendMessage(message);
+			toPlayer(player.getmPlayer(), message);
 		}
 	}
 	
@@ -217,6 +236,22 @@ public class GlobalW {
 	 */
 	public static void setRound(int round) {
 		GlobalW.round = round;
+	}
+
+	public static YMLReader getLocatioData() {
+		return location_data;
+	}
+
+	public static void setLocationData(String path) {
+		GlobalW.location_data = new YMLReader(path);
+	}
+
+	public static List<Location> getEnemySpawnLocations() {
+		return creatureSpawnLocations;
+	}
+
+	public static void setEnemySpawnLocations(List<Location> enemySpawnLocations) {
+		GlobalW.creatureSpawnLocations = enemySpawnLocations;
 	}
 
 	public static enum ErrorMsgs { 

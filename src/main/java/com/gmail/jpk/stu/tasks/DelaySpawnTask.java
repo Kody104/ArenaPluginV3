@@ -23,6 +23,7 @@ public class DelaySpawnTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
+//		Location spawnPoint = new Location(GlobalW.getInWorld(), 153, 63, -52); --> Used for Charlie's test server
 		LivingEntity le = (LivingEntity) GlobalW.getInWorld().spawnEntity(spawnPoint, entityType); // Spawns the livingentity in the world.
 		PassiveAbility a = null;
 		switch(entityType) {

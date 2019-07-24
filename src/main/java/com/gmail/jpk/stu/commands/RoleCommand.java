@@ -76,9 +76,9 @@ public class RoleCommand extends BasicCommand {
 			}
 			
 			//Check if player doesn't have a role yet
-			else if (desired != null && player_role == null && target == null) {
+			else if (desired != null && target == null) {
 				//Verify they didn't pick spectator
-				if (player_role == PlayerRole.SPECTATOR) {
+				if (desired == PlayerRole.SPECTATOR) {
 					GlobalW.toPlayer(player, "You can't choose this role.");
 					return true;
 				}
@@ -120,7 +120,7 @@ public class RoleCommand extends BasicCommand {
 			
 			//Verify this is a proper role and send
 			if (desired != null) {
-				GlobalW.toPlayer(player, String.format("%s is %s.", desired.getName(), desired.getDescription()));
+				GlobalW.toPlayer(player, String.format("%s is %s", desired.getName(), desired.getDescription()));
 				return true;
 			} 
 			

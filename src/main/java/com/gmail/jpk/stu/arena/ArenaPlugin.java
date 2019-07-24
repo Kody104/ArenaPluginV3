@@ -3,6 +3,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.jpk.stu.commands.AllCommand;
 import com.gmail.jpk.stu.commands.ArenaCommand;
+import com.gmail.jpk.stu.commands.ChatSystemCommand;
 import com.gmail.jpk.stu.commands.DevCommand;
 import com.gmail.jpk.stu.commands.GiveAbilityItemCommand;
 import com.gmail.jpk.stu.commands.GiveCustomItemCommand;
@@ -31,6 +32,7 @@ public class ArenaPlugin extends JavaPlugin {
 		logMessage("Attempting to load all program commands.");
 		this.getCommand("arena").setExecutor(new ArenaCommand(this));
 		this.getCommand("all").setExecutor(new AllCommand(this));
+		this.getCommand("chsys").setExecutor(new ChatSystemCommand(this));
 		this.getCommand("dev").setExecutor(new DevCommand(this));
 		this.getCommand("gci").setExecutor(new GiveCustomItemCommand(this));
 		this.getCommand("join").setExecutor(new JoinCommand(this));
@@ -47,7 +49,7 @@ public class ArenaPlugin extends JavaPlugin {
 		new ItemInteractionListener(this);
 		new PlayerServerInteractionListener(this);
 		
-		logMessage("Set-up complete.");
+		logMessage("Set-up complete.");		
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package com.gmail.jpk.stu.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
@@ -16,7 +17,11 @@ import com.gmail.jpk.stu.listeners.ItemInteractionListener;
  * 	<li>arena -cc : clears all creatures from the arena.</li>
  *  <li>arena -csi: clears all special items from the arena.</li>
  *  <li>arena -fr : readies all arena players.</li>
- *  <li>arena </li>
+ *  <br />
+ *  <li>arena -round [round]: sets (but does not start) the round number</li>
+ *  <br />
+ *  <li>arena -xp [player] [amount]: gives an arena player exp.</li>
+ *  <li>arena -lvl [player] [level]: sets the level of an ArenaPlayer.</li>
  * </ul>
  */
 public class ArenaCommand extends BasicCommand {
@@ -58,8 +63,67 @@ public class ArenaCommand extends BasicCommand {
 				
 				//Update ReadyCommand and run command
 				ReadyCommand.setAllReady(true);
-				BasicCommand.executeCommand("ready");				
+				BasicCommand.executeCommand("ready");	
+				return true;
 			}
+		} 
+		
+		//Handles two args
+		if (args.length == 2) {
+			//Handles /arena -round [round]
+			if (args[0].equalsIgnoreCase("-round")) {
+				int round = this.getValidInteger(args[1]);
+				
+				//Validate round
+				if (round < 0) {
+					sender.sendMessage(GlobalW.getChatErrorTag() + String.format("%s is not a valid round.", args[1]));
+					return true;
+				}
+				
+				GlobalW.setRound(round);
+			}
+		}
+		
+		//Handles three arguments
+		if (args.length == 3) {
+			//Validate args
+			Player player = this.getPlayer(args[1]);
+			int val = this.getValidInteger(args[2]);
+			
+			//Verify args
+			if (player == null || val <= 0) {
+				sender.sendMessage(GlobalW.getChatErrorTag() + String.format("Invalid argument(s): %s, %s", args[1], args[2]));
+				return true;
+			}
+			
+			ArenaPlayer arena_player = GlobalW.getArenaPlayer(player);
+			
+			if (arena_player == null) {
+				sender.sendMessage(GlobalW.getChatErrorTag() + GlobalW.ErrorMsgs.NOT_ARENA_PLAYER);
+				return true;
+			}
+						
+			//Handles /arena -xp [player] [amount]
+			if (args[0].equalsIgnoreCase("-xp")) {
+				arena_player.addExp(val);
+				sender.sendMessage(GlobalW.getChatTag() + String.format("Gave %s %d experience.", player.getName(), val));
+				return true;
+			}
+			
+			//Handles /arena -lvl [player] [amount]
+			if (args[0].equalsIgnoreCase("-lvl")) {
+				//Verify lvl <= 18
+				if (val > 18) {
+					sender.sendMessage(GlobalW.getChatErrorTag() + String.format("%d is not a valid arena player level.", val));
+					return true;
+				}
+				
+				//Set the level
+				arena_player.setLevel(val);
+				sender.sendMessage(GlobalW.getChatTag() + String.format("Set %s to level %d.", player.getName(), val));
+				return true;
+			}
+			
 		}
 		
 		return false;

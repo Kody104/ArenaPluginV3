@@ -16,7 +16,6 @@ import com.gmail.jpk.stu.listeners.DeathListener;
 import com.gmail.jpk.stu.listeners.ItemInteractionListener;
 import com.gmail.jpk.stu.listeners.PlayerCastListener;
 import com.gmail.jpk.stu.listeners.PlayerServerInteractionListener;
-import com.gmail.jpk.stu.listeners.UndroppableSpecialItemListener;
 
 public class ArenaPlugin extends JavaPlugin {
 	
@@ -43,7 +42,6 @@ public class ArenaPlugin extends JavaPlugin {
 		this.getCommand("vip").setExecutor(new VIPCommand(this));
 		
 		logMessage("Attemping to load all program Listeners.");
-		new UndroppableSpecialItemListener(this);
 		new DeathListener(this);
 		new PlayerCastListener(this);
 		new ItemInteractionListener(this);

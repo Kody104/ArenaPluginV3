@@ -11,6 +11,7 @@ public class StartArenaTask extends BukkitRunnable {
 	public void run() {
 		GlobalW.nextRound();
 		ReadyCommand.setAllReady(false);
+		ReadyCommand.unreadyAllPlayers();
 	}
 
 }

@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
@@ -41,13 +42,20 @@ public class DeathListener extends BasicListener {
 		if (creature != null) {
 			GlobalW.removeArenaCreature(entity);
 			
+			//Have all the creatures been killed?
 			if (GlobalW.getCreaturesInArena().isEmpty()) {
 				int round = GlobalW.getRound();
-				int exp = (int) (1 + (round / 10));
-				ArenaPlayer player = GlobalW.getArenaPlayer(killer);
-				player.addExp(exp);
+				int exp = (int) (1 + (round / 10)); //How much exp should we give at the end of a round?
 				
-				GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GOLD + String.format("%s Congrats! You have survived round %d! %d experience rewarded!", GlobalW.getChatTag(), round, exp));
+				//Check if round is divisible by 5
+				if (round % 5 == 0) {
+					//teleport players to shop
+				}
+				
+				//Grant surviving players experience.
+				for (ArenaPlayer ap : GlobalW.getPlayersInArena()) {
+					ap.addExp(exp);
+				}
 			}
 		}
 		
@@ -63,17 +71,18 @@ public class DeathListener extends BasicListener {
 	
 	/**
 	 * Handles ArenaPlayer's deaths. ArenaPlayer should not drop their EXP.
+	 * High priority as this needs to ran as soon as possible to remove player from list of arena players.
 	 * @param e the event that triggered this method
 	 */
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeathEvent(PlayerDeathEvent e) {
 		Player player = (Player) e.getEntity();
 		
 		if (GlobalW.getArenaPlayer(player) != null) {
+			e.setDroppedExp(0);
+			e.setDeathMessage(ChatColor.RED + String.format("%s has died! They've been removed from the arena!", player.getName()));
 			player.getInventory().clear();
 			GlobalW.removeArenaPlayer(player);
-			GlobalW.toPlayer(player, ChatColor.RED + "You have died! You've been removed from the Arena.");
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.RED + String.format("%s has died! They've been removed from the Arena.", player.getName()));
 		}
 	}
 }

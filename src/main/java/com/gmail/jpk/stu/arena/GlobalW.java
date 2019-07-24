@@ -94,14 +94,12 @@ public class GlobalW {
 	
 	/**
 	 * This will run automatically at the end of rounds until the round number divisible by 5. Then we send them to the shop.
+	 * The plugin detects if they have finished a 5-round through <DeathListener>
 	 */
 	public static void nextRound() {
-		round++;
 		hasStarted = true;
-		toArenaPlayers(getChatTag() + ChatColor.GOLD + "Round " + round + " has started!");
-		playSoundToArenaPlayers(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
 		
-		switch(round)
+		switch(++round)
 		{
 			case 1:
 			{
@@ -114,6 +112,9 @@ public class GlobalW {
 				ArenaWave.createBasicWave(20, 1, EntityType.ZOMBIE, EntityType.SKELETON).startWaveSequentially(round, 1);;
 			}
 		}
+		
+		toArenaPlayers(getChatTag() + ChatColor.GOLD + String.format("Round %d has started! Good luck!", round));
+		playSoundToArenaPlayers(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
 	}
 	
 	public static void setPlugin(ArenaPlugin aplug) {
@@ -210,6 +211,13 @@ public class GlobalW {
 		GlobalW.chat_system = chat_system;
 	}
 
+	/**
+	 * Sets the round number
+	 * @param round the new number
+	 */
+	public static void setRound(int round) {
+		GlobalW.round = round;
+	}
 
 	public static enum ErrorMsgs { 
 		NOT_PLAYER("You must be a player!"), 

@@ -11,6 +11,7 @@ import com.gmail.jpk.stu.items.UndroppableSpecialItem;
 
 /**
  * Prevents an UndroppableSpecialItem from being dropped.
+ * @deprecated Use <ItemInteractionListener> isntead.
  */
 public class UndroppableSpecialItemListener extends BasicListener {
 

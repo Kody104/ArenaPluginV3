@@ -1,0 +1,27 @@
+# This YML is a WIP and might change depending on need
+
+# Sets the location of the Arenas's shop
+shop: [0, 0, 0]
+
+# Sets the position of an arena. 
+# Four corners are required to define the 3D space the arena occupies.
+arena-0:
+    name: Forest Arena
+    corner-1: [0, 0, 0] #GROUND LEVEL
+    corner-2: [0, 0, 0] #GROUND LEVEL
+    corner-3: [0, 0, 0] #GROUND LEVEL
+    corner-4: [0, 0, 0] #HEIGHT 
+    
+
+# Sets the spawn locations for creatures
+creature-spawns:
+    location-0: [0, 0, 0]
+    location-1: [0, 0, 0]
+    location-2: [0, 0, 0]
+
+# Sets the spawn points for players
+player-spawns:
+    location-0: [0, 0, 0]
+    location-1: [0, 0, 0]
+    location-2: [0, 0, 0]
+    

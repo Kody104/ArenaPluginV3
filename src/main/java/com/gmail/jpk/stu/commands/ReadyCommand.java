@@ -105,4 +105,10 @@ public class ReadyCommand extends BasicCommand {
 		ReadyCommand.all_ready = all_ready;
 	}
 
+	public static void unreadyAllPlayers() {
+		for (ArenaPlayer player : GlobalW.getPlayersInArena()) {
+			player.setReady(false);
+		}
+	}
+
 }

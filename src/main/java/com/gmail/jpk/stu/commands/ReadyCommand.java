@@ -54,11 +54,11 @@ public class ReadyCommand extends BasicCommand {
 		//If the player has already readied-up, un-ready them.
 		if (arena_player.isReady()) {
 			arena_player.setReady(false);
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.RED + String.format("%s the %s is no longer ready!", display_name, player_role_name));
+			GlobalW.toArenaPlayers(ChatColor.RED + String.format("%s the %s is no longer ready!", display_name, player_role_name));
 		} else {
 			//Ready the player and alert other ArenaPlayers.
 			arena_player.setReady(true);
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + String.format("%s the %s is ready to fight!", display_name, player_role_name));
+			GlobalW.toArenaPlayers(ChatColor.GREEN + String.format("%s the %s is ready to fight!", display_name, player_role_name));
 		}
 		
 		//Check that all players are ready.
@@ -78,12 +78,12 @@ public class ReadyCommand extends BasicCommand {
 		}
 		
 		//Show ArenaPlayers the ready count.
-		GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("There are (%d/%d) players ready!", ready, total));
+		GlobalW.toArenaPlayers(String.format("There are (%d/%d) players ready!", ready, total));
 		
 		//Checks if we are starting at round 1.
 		if (ready == total && !all_ready && !GlobalW.isHasStarted()) {
 			setAllReady(true);
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
+			GlobalW.toArenaPlayers(ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
 //			GlobalW.teleArenaPlayers(GlobalW.getPlayerSpawnLocations().get(0));
 			new CountdownTask(ChatColor.GOLD + "Arena Begins in ", true, 5).runTaskLater(plugin, 100);
 			new StartArenaTask().runTaskLater(plugin, 200);
@@ -91,7 +91,7 @@ public class ReadyCommand extends BasicCommand {
 		
 		//Checks if we are starting past round 1
 		if (ready == total && !all_ready) {
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
+			GlobalW.toArenaPlayers(ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
 			new CountdownTask(ChatColor.GOLD + "Next round starts in ", true, 3).runTask(plugin);
 			new StartArenaTask().runTaskLater(plugin, 60);
 		}

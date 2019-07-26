@@ -7,11 +7,11 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import com.gmail.jpk.stu.items.UndroppableSpecialItem;
+import com.gmail.jpk.stu.items.UndroppableItem;
 
 /**
  * Prevents an UndroppableSpecialItem from being dropped.
- * @deprecated Use <ItemInteractionListener> isntead.
+ * @deprecated Use <ItemInteractionListener> instead.
  */
 public class UndroppableSpecialItemListener extends BasicListener {
 
@@ -29,7 +29,7 @@ public class UndroppableSpecialItemListener extends BasicListener {
 		ItemStack stack = drop.getItemStack();
 		
 		//TODO: I don't think this will work, but we'll try it.
-		if (stack instanceof UndroppableSpecialItem) { // This won't work - Jerome
+		if (stack instanceof UndroppableItem) { // This won't work - Jerome
 			/*
 			 * Try this instead
 			 * if(stack.hasItemMeta()) {

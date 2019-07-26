@@ -49,7 +49,7 @@ public class CountdownTask extends BukkitRunnable {
 	public void run() {
 		if (--seconds >= 0) {
 			if (alert_players) {
-				GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s%d", alert_message, (seconds + 1)));
+				GlobalW.toArenaPlayers(String.format("%s%d", alert_message, (seconds + 1)));
 				GlobalW.playSoundToArenaPlayers(Sound.UI_BUTTON_CLICK, 1f, 1f);
 			}
 			

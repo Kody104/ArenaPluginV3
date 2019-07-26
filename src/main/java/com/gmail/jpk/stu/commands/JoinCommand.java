@@ -37,7 +37,7 @@ public class JoinCommand extends BasicCommand{
 				p.setGameMode(GameMode.SURVIVAL); //Just in case
 				GlobalW.toPlayer(p, "You have joined the arena as a spectator!");
 				GlobalW.toPlayer(p, "Type " + ChatColor.GOLD + "/role all " + ChatColor.WHITE + "to see a list of current roles.");
-				GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + p.getName() + " has joined the arena!");
+				GlobalW.toArenaPlayers(ChatColor.YELLOW + p.getName() + " has joined the arena!");
 				GlobalW.getPlayersInArena().add(new ArenaPlayer(p, PlayerRole.SPECTATOR));
 //				p.teleport(GlobalW.getPlayerSpawnLocations().get(0)); 
 			}

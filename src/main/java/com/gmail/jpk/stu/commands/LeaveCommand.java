@@ -30,7 +30,7 @@ public class LeaveCommand extends BasicCommand {
 			p.setExp(0); //Remove any experience
 			GlobalW.toPlayer(p, "You have left the arena!");
 			GlobalW.removeArenaPlayer(p);
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.YELLOW + p.getName() + " has left the arena!");
+			GlobalW.toArenaPlayers(ChatColor.YELLOW + p.getName() + " has left the arena!");
 			return true;
 		}
 		else {

@@ -59,6 +59,8 @@ public class QuitCommand extends BasicCommand {
 		} else {
 			arena_player.setClassRole(PlayerRole.SPECTATOR);
 			GlobalW.toPlayer(player, "You have quit the " + player_role_name + " role. You are now a spectator.");
+			arena_player.setLevel(0); //Clear level 
+			arena_player.setExp(0); //Clear exp
 			arena_player.setReady(false); //Prevents players from auto-readying after quitting
 			return true;
 		}		

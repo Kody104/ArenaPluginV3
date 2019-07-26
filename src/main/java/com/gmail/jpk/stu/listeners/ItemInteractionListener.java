@@ -29,6 +29,7 @@ import com.gmail.jpk.stu.commands.BasicCommand;
 import com.gmail.jpk.stu.items.ItemShop;
 import com.gmail.jpk.stu.items.SpecialItem;
 import com.gmail.jpk.stu.items.SpecialItems;
+import com.gmail.jpk.stu.items.UndroppableItem;
 import com.gmail.jpk.stu.items.UsableItem;
 
 /**
@@ -38,7 +39,7 @@ import com.gmail.jpk.stu.items.UsableItem;
 public class ItemInteractionListener extends BasicListener {
 	
 	//A list of SpecialItems dropped on the ground.
-	private static List<SpecialItem> dropped_items = new ArrayList<SpecialItem>();
+	private static List<ItemStack> dropped_items = new ArrayList<ItemStack>();
 
 	public ItemInteractionListener(Plugin plugin) {
 		super(plugin);
@@ -48,7 +49,7 @@ public class ItemInteractionListener extends BasicListener {
 	 * Adds a SpecialItem to the list.
 	 * @param item the item to add.
 	 */
-	public static void addDroppedItem(SpecialItem item) {
+	public static void addDroppedItem(ItemStack item) {
 		dropped_items.add(item);
 	}
 	
@@ -56,7 +57,7 @@ public class ItemInteractionListener extends BasicListener {
 	 * Clears all the SpecialItems on the ground.
 	 */
 	public static void clearDroppedItems() {
-		for (SpecialItem item : dropped_items) {
+		for (ItemStack item : dropped_items) {
 			if (item != null && item.getAmount() > 0) {
 				item.setAmount(0);
 			}
@@ -69,7 +70,7 @@ public class ItemInteractionListener extends BasicListener {
 	 * Gets the SpecialItems that have been dropped on the Ground.
 	 * @return the list (NOTE: some elements may be null).
 	 */
-	public static List<SpecialItem> getDroppedItems() {
+	public static List<ItemStack> getDroppedItems() {
 		return dropped_items;
 	}
 	
@@ -217,13 +218,16 @@ public class ItemInteractionListener extends BasicListener {
 	@EventHandler
 	public void playerDropItemEvent(PlayerDropItemEvent e) {
 		Player player = e.getPlayer();
+		ItemStack item_stack = e.getItemDrop().getItemStack();
+		
+		//Add this item to the drop list
+		addDroppedItem(item_stack);
 		
 		if (GlobalW.getArenaPlayer(player) == null) {
 			return;
 		}
 		
 		//Get the item, verify its a SpecialItem
-		ItemStack item_stack = e.getItemDrop().getItemStack();
 		String display_name = item_stack.getItemMeta().getDisplayName();
 		
 		if (SpecialItems.getSpecialItemByDisplayName(display_name) != null) {
@@ -234,18 +238,22 @@ public class ItemInteractionListener extends BasicListener {
 				//Use the Item
 				((UsableItem) special_item).useItem(player);
 				
-				//Add it to the Drop List
-				addDroppedItem(special_item);
-				
 				//Schedule the Item to Despawn
 				//NOTE: After much pain, having the class here is the only way to achieve the desired effect.
 				class DespawnItemTask extends BukkitRunnable {
 					public void run() {
 						player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
 						item_stack.setAmount(0);
+						ItemInteractionListener.dropped_items.remove(item_stack);
 					}
 				}
 				new DespawnItemTask().runTaskLater(GlobalW.getPlugin(), 60);
+			}
+			//Don't drop UndroppableItems
+			else if (special_item instanceof UndroppableItem) {
+				//Remove Undroppable from list
+				ItemInteractionListener.dropped_items.remove(item_stack);
+				e.setCancelled(true);
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package com.gmail.jpk.stu.tasks;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.gmail.jpk.stu.arena.GlobalW;
+
 public class DelayedMessageTask extends BukkitRunnable {
 
 	private String message;
@@ -15,7 +17,7 @@ public class DelayedMessageTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		
+		GlobalW.toPlayer(player, message);
 	}
 
 	public String getMessage() {

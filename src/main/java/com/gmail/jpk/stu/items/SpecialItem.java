@@ -10,8 +10,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class SpecialItem extends ItemStack {
 
-	
-	
 	/**
 	 * The Unique Identification (UID) of a SpecialItem is a unique value assigned to each item.
 	 * The UIDs for SpecialItems start with 100. (i.e. 100-199 are valid special items)

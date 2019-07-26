@@ -1,10 +1,8 @@
 package com.gmail.jpk.stu.arena;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.jpk.stu.commands.AllCommand;
 import com.gmail.jpk.stu.commands.ArenaCommand;
 import com.gmail.jpk.stu.commands.ChatSystemCommand;
-import com.gmail.jpk.stu.commands.DevCommand;
 import com.gmail.jpk.stu.commands.GiveAbilityItemCommand;
 import com.gmail.jpk.stu.commands.GiveCustomItemCommand;
 import com.gmail.jpk.stu.commands.JoinCommand;
@@ -12,7 +10,6 @@ import com.gmail.jpk.stu.commands.LeaveCommand;
 import com.gmail.jpk.stu.commands.QuitCommand;
 import com.gmail.jpk.stu.commands.ReadyCommand;
 import com.gmail.jpk.stu.commands.RoleCommand;
-import com.gmail.jpk.stu.commands.VIPCommand;
 import com.gmail.jpk.stu.listeners.DeathListener;
 import com.gmail.jpk.stu.listeners.ItemInteractionListener;
 import com.gmail.jpk.stu.listeners.PlayerCastListener;
@@ -20,7 +17,7 @@ import com.gmail.jpk.stu.listeners.PlayerServerInteractionListener;
 
 public class ArenaPlugin extends JavaPlugin {
 	
-	private final String ver = "0.0.1";
+	private final String ver = "0.5.6";
 	
 	@Override
 	public void onEnable() {
@@ -31,9 +28,9 @@ public class ArenaPlugin extends JavaPlugin {
 		
 		logMessage("Attempting to load all program commands.");
 		this.getCommand("arena").setExecutor(new ArenaCommand(this));
-		this.getCommand("all").setExecutor(new AllCommand(this));
+//		this.getCommand("all").setExecutor(new AllCommand(this)); --> this command will be removed in major update
 		this.getCommand("chsys").setExecutor(new ChatSystemCommand(this));
-		this.getCommand("dev").setExecutor(new DevCommand(this));
+//		this.getCommand("dev").setExecutor(new DevCommand(this)); --> this command will be removed in major update
 		this.getCommand("gci").setExecutor(new GiveCustomItemCommand(this));
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
@@ -41,7 +38,7 @@ public class ArenaPlugin extends JavaPlugin {
 		this.getCommand("role").setExecutor(new RoleCommand(this));
 		this.getCommand("quit").setExecutor(new QuitCommand(this));
 		this.getCommand("gai").setExecutor(new GiveAbilityItemCommand(this));
-		this.getCommand("vip").setExecutor(new VIPCommand(this));
+//		this.getCommand("vip").setExecutor(new VIPCommand(this)); --> this command will be removed in major update
 		
 		logMessage("Attemping to load all program Listeners.");
 		new DeathListener(this);

@@ -1,13 +1,19 @@
 # Arena Notes and Ideas
 *This is an internal markdown file used for communication between us.*
 
+# Current Issues (as of 26 July)
+1. In YMLReader, getLocation() throws an IndexArrayOutBoundsException for the list.
+2. Phantoms can currently spawn as they please.
+3. ChatSystem is too convoluted. A simplification is needed.
+4. Not all SpecialItems are cleared through arena -csi. A stronger approach may be required.
+
 # Current Detailed Features in the Arena
 
 ## Commands
 *key: command <required-args> (optional-args)*
 
 * all <message> : messages all players on the server
-*
+
 * arena -cc  : clears all creatures from the arena.
 * arena -csi : clears all special items from the arena.
 * arena -fr  : readies all the arena players.
@@ -15,35 +21,35 @@
 * arena -round <quantity> : sets (but does not start) the arena round number.
 * arena -xp <player> <quantity> : gives the player a set amount of arena-xp.
 * arena -lvl <player> <quantity> : sets the level of an arena player.
-*
+
 * chsys role <player> : returns the role of the player. *likely to be removed in future chat update*
 * chsys remove <player> : removes a player from the chat system.
 * chsys debug <true|false> : toggles if various debug messages should be sent to the dev channel.
 * chsys color <true|false> : toggles if color codes are allow in-line. *untested as it may be removed*
 * chsys set <player> <role> : set a player's role. *likely to be replaced by set <player> <channel>*
-*
+
 * dev <message> : messages the dev channel. *deprecated* 
-*
+
 * gai <item> <player> : gives an ability item to an arena player.
-*
+
 * gci <item> <player> (quantity) : gives a special item to an arena player.
-*
+
 * join : allows a player to join the arena, if the arena hasn't already started.
-*
+
 * leave: allows a player to leave the arena, if the arena isn't already in progress.
-* 
+
 * player <message>  : messages the player channel. *deprecated* 
-*
+
 * quit : allows a player to quit their role, if the arena isn't already in progress and they haven't readied up.
-*
+
 * ready : readies an arena player for the fight.
-*
+
 * role: show the arena player their current role (if any).
 * role all: shows the arena player a list of available roles.
 * role <role> : assigns an arena player their role.
 * role <player> : shows the role of the target player.
 * role about <role> : shows the description of a role.
-*
+
 * vip <message> : messages the VIP channel. *deprecated* 
 
 ## Experience and Levels
@@ -90,9 +96,9 @@
 * Creatures can drop an undetermined amount of scraps/bars/emeralds on an undetermined small chance.
 * Bosses are much more likely than regular creatures to drop gold.
 
-##Boss Ideas
+## Boos Ideas
 
-###The Skeleton Riders
+### The Skeleton Riders
 
 How the Fight Goes:
 * Six powerful Jockies spawn with a Big Magma Cube.
@@ -108,7 +114,7 @@ How the Fight Goes:
 Notes:
 * Final phase currently has a minimum of 40 tiny magma cubes.
 
-###Petite Pete and Towering Tim
+### Petite Pete and Towering Tim
 
 How the Fight Goes:
 * Petite Peat (a baby zombie) spawns in the arena.
@@ -121,15 +127,15 @@ How the Fight Goes:
 * [Giant Zombie] can rally the [Baby zombie] and its spawns to increase their damage.
 * Killing the duo wins the fight.
 
-###Great Slime and Absymal Cube
+### Great Slime and Absymal Cube
 * A Slime and Magma Cube spawn.
 
-##Custom Item Ideas
+## Custom Item Ideas
 * Emergency Teleport - Teleports a player to a random location in the arena (will blind them for a short time after).
 * Decoy Boy Troy - Spawns a cow that will draw aggro from nearby entities.
 * Glistening Melon - For ten seconds, killing an enemy will heal the user by 2% max health. (50 enemies to full health)
 
-##Various Ideas
+## Various Ideas
 
 Arena Marked by YAML File
 * Create the Arenas where desired and then set their location through a YAML file.

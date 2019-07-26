@@ -22,7 +22,7 @@ import com.gmail.jpk.stu.arena.GlobalW;
 public class RoleCommand extends BasicCommand {
 
 	public RoleCommand(ArenaPlugin plugin) {
-		super(plugin);
+		super(plugin); 
 	}
 
 	@Override

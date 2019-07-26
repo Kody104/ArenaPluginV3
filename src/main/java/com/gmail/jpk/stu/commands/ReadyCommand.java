@@ -2,6 +2,7 @@ package com.gmail.jpk.stu.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
@@ -28,7 +29,11 @@ public class ReadyCommand extends BasicCommand {
 		
 		//Validate the CommandSender is an ArenaPlayer
 		if (arena_player == null) {
-			//If not, then exit.
+			//Check if CommandSender is the console then check if all players are ready.
+			if (sender instanceof ConsoleCommandSender) {
+				runReadyCheck();
+			}
+			
 			return true;
 		}
 		
@@ -49,15 +54,20 @@ public class ReadyCommand extends BasicCommand {
 		//If the player has already readied-up, un-ready them.
 		if (arena_player.isReady()) {
 			arena_player.setReady(false);
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is no longer ready!", display_name, player_role_name));
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.RED + String.format("%s the %s is no longer ready!", display_name, player_role_name));
 		} else {
 			//Ready the player and alert other ArenaPlayers.
 			arena_player.setReady(true);
-			GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("%s the %s is ready to fight!", display_name, player_role_name));
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + String.format("%s the %s is ready to fight!", display_name, player_role_name));
 		}
 		
+		//Check that all players are ready.
+		runReadyCheck();
 		
-		//Check if all players are ready.
+		return true;
+	}
+	
+	private void runReadyCheck() {		
 		int ready = 0;
 		int total = GlobalW.getPlayersInArena().size();
 		
@@ -70,16 +80,21 @@ public class ReadyCommand extends BasicCommand {
 		//Show ArenaPlayers the ready count.
 		GlobalW.toArenaPlayers(GlobalW.getChatTag() + String.format("There are (%d/%d) players ready!", ready, total));
 		
-		//TODO: Auto-start round if all players are ready.
-		if (ready == total && !all_ready) {
+		//Checks if we are starting at round 1.
+		if (ready == total && !all_ready && !GlobalW.isHasStarted()) {
 			setAllReady(true);
 			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
-			//GlobalW.teleArenaPlayers(null); --> implement when we have actual locations
+//			GlobalW.teleArenaPlayers(GlobalW.getPlayerSpawnLocations().get(0));
 			new CountdownTask(ChatColor.GOLD + "Arena Begins in ", true, 5).runTaskLater(plugin, 100);
 			new StartArenaTask().runTaskLater(plugin, 200);
-		}		
+		}
 		
-		return true;
+		//Checks if we are starting past round 1
+		if (ready == total && !all_ready) {
+			GlobalW.toArenaPlayers(GlobalW.getChatTag() + ChatColor.GREEN + "All players are ready! The arena will begin shortly!");
+			new CountdownTask(ChatColor.GOLD + "Next round starts in ", true, 3).runTask(plugin);
+			new StartArenaTask().runTaskLater(plugin, 60);
+		}
 	}
 	
 	public static boolean allReady() {
@@ -88,6 +103,12 @@ public class ReadyCommand extends BasicCommand {
 	
 	public static void setAllReady(boolean all_ready) {
 		ReadyCommand.all_ready = all_ready;
+	}
+
+	public static void unreadyAllPlayers() {
+		for (ArenaPlayer player : GlobalW.getPlayersInArena()) {
+			player.setReady(false);
+		}
 	}
 
 }

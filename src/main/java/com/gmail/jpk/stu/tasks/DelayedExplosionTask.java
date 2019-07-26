@@ -5,6 +5,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.gmail.jpk.stu.arena.GlobalW;
+
 public class DelayedExplosionTask extends BukkitRunnable {
 
 	private Player player;
@@ -17,7 +19,7 @@ public class DelayedExplosionTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		World world = player.getWorld();
+		World world = GlobalW.getInWorld();
 		world.createExplosion(location, 2F);
 	}
 

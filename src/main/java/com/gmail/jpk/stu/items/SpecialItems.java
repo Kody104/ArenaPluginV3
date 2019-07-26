@@ -20,6 +20,9 @@ public enum SpecialItems {
 	FLAWLESS_DIAMOND (104, "Flawless Diamond"),
 	BOOM_STICK       (105, "Boom Stick"),
 	PANIC_POWDER     (106, "Panic Powder"),
+	DECOY_BOY_TROY   (107, "Summon Decoy Boy Troy"),
+	EMERGENCY_PORT   (108, "Emergency Teleport"),
+	TASTY_STEAK      (109, "Tasty Steak"),
 	TEST_DUMMY_STICK (180, "Test Dummy Stick"),
 	SHOP_CHEST       (181, "Shop Chest"),
 	;
@@ -40,13 +43,13 @@ public enum SpecialItems {
 		switch (this) {
 			//Unusable Items
 			case GOLDEN_SCRAP:
-				return new SpecialItem(Material.GOLD_NUGGET, 1, GOLDEN_SCRAP.UID, GOLDEN_SCRAP.DISPLAY_NAME, "Don't let its color fool you - it's not worth much.");
+				return new SpecialItem(Material.GOLD_NUGGET, 1, GOLDEN_SCRAP.UID, GOLDEN_SCRAP.DISPLAY_NAME, "It's barely worth its weight.");
 			case GOLDEN_BAR:
-				return new SpecialItem(Material.GOLD_INGOT, 9, GOLDEN_BAR.UID, GOLDEN_BAR.DISPLAY_NAME, "A compact way to store your golden scraps.");
+				return new SpecialItem(Material.GOLD_INGOT, 9, GOLDEN_BAR.UID, GOLDEN_BAR.DISPLAY_NAME, "Compactly store your scraps.");
 			case CHIPPED_EMERALD:
-				return new SpecialItem(Material.EMERALD, 900, CHIPPED_EMERALD.UID, CHIPPED_EMERALD.DISPLAY_NAME, "A chipped but shiny gem with a modest value.");
+				return new SpecialItem(Material.EMERALD, 900, CHIPPED_EMERALD.UID, CHIPPED_EMERALD.DISPLAY_NAME, "Worth a modest value.");
 			case FLAWLESS_DIAMOND:
-				return new SpecialItem(Material.DIAMOND, 90000, FLAWLESS_DIAMOND.UID, FLAWLESS_DIAMOND.DISPLAY_NAME, "A perfect gem you can use to flaunt your wealth around.");
+				return new SpecialItem(Material.DIAMOND, 90000, FLAWLESS_DIAMOND.UID, FLAWLESS_DIAMOND.DISPLAY_NAME, "Use it to flaunt your wealth around.");
 			
 			//Usable Items with their own class.
 			case TEST_DUMMY_STICK:
@@ -57,6 +60,12 @@ public enum SpecialItems {
 				return new BoomStick();
 			case SHOP_CHEST:
 				return new ShopChest();
+			case DECOY_BOY_TROY:
+				return new DecoyBoyTroy();
+			case EMERGENCY_PORT:
+				return new EmergencyTeleport();
+			case TASTY_STEAK:
+				return new TastySteak();
 			default:
 				return null;
 		}

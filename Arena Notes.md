@@ -36,9 +36,14 @@ How the Fight Goes:
 * A Slime and Magma Cube spawn.
 
 ##Custom Item Ideas
-*No items to suggest!*
+* Emergency Teleport - Teleports a player to a random location in the arena (will blind them for a short time after).
+* Decoy Boy Troy - Spawns a cow that will draw aggro from nearby entities.
+* Glistening Melon - For ten seconds, killing an enemy will heal the user by 2% max health. (50 enemies to full health)
 
 ##Various Ideas
+
+Arena Marked by YAML File
+* Create the Arenas where desired and then set their location through a YAML file.
 
 Bonus Loot Rounds:
 * Players will have an arena filled with glowstone.

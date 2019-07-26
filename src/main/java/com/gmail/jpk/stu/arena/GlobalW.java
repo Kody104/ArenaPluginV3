@@ -14,12 +14,14 @@ import org.bukkit.entity.Player;
 
 import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
-import com.gmail.jpk.stu.tasks.DelaySpawnTask;
+import com.gmail.jpk.stu.Entities.ArenaWave;
 
 public class GlobalW {
 	
 	public static final Random rand = new Random();
 	private static ArenaPlugin plugin;
+	private static ChatSystem chat_system;
+	private static YMLReader location_data;
 	private static final int maxSize = 6;
 	private static int round = 0;
 	private static boolean hasStarted = false;
@@ -27,21 +29,44 @@ public class GlobalW {
 	private static List<ArenaPlayer> playersInArena = new ArrayList<ArenaPlayer>();
 	private static List<ArenaCreature> creaturesInArena = new ArrayList<ArenaCreature>();
 	private static List<Location> playerSpawnLocations = new ArrayList<Location>();
+	private static List<Location> creatureSpawnLocations = new ArrayList<Location>();
+	
+	private GlobalW() {
+		//Don't instantiate this class
+	}
 	
 	//TODO: This needs to init all the important things
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
+		setChatSystem(new ChatSystem("config/"));
+		setLocationData("config/location-data.yml");
+//		loadCreatureSpawnLocations(); --> WIP
+//		loadPlayerSpawnLocations(); --> WIP
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
-		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
+//		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}
 	
+	/**
+	 * Loads the player spawn locations
+	 */
+	private static void loadPlayerSpawnLocations() {
+		playerSpawnLocations.add(location_data.getLocation("player-spawns.location-0"));
+	}
+
+	/**
+	 * Loads the enemy spawn locations
+	 */
+	private static void loadCreatureSpawnLocations() {
+		creatureSpawnLocations.add(location_data.getLocation("creature-spawns.location-0"));		
+	}
+
 	/**
 	 * Sends a message to the Player with the ChatTag
 	 * @param player the player to whom will receive the message
 	 * @param message what the message should be
 	 */
 	public static void toPlayer(Player player, String message) {
-		player.sendMessage(String.format("%s %s", getChatTag(), message));
+		player.sendMessage(String.format("%s%s", getChatTag(), message));
 	}
 	
 	/**
@@ -50,7 +75,7 @@ public class GlobalW {
 	 * @param message what the message should be
 	 */
 	public static void toPlayerError(Player player, String message) {
-		player.sendMessage(String.format("%s %s", getChatErrorTag(), message));
+		player.sendMessage(String.format("%s%s", getChatErrorTag(), message));
 	}
 	
 	/**
@@ -59,7 +84,7 @@ public class GlobalW {
 	 */
 	public static void toArenaPlayers(String message) {
 		for(ArenaPlayer player : playersInArena) {
-			player.getmPlayer().sendMessage(message);
+			toPlayer(player.getmPlayer(), message);
 		}
 	}
 	
@@ -88,25 +113,27 @@ public class GlobalW {
 	
 	/**
 	 * This will run automatically at the end of rounds until the round number divisible by 5. Then we send them to the shop.
+	 * The plugin detects if they have finished a 5-round through <DeathListener>
 	 */
 	public static void nextRound() {
-		round++;
-		toArenaPlayers(getChatTag() + ChatColor.GOLD + "Round " + round + " has started!");
-		playSoundToArenaPlayers(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
-		switch(round)
+		hasStarted = true;
+		
+		switch(++round)
 		{
 			case 1:
 			{
 				/* We need to create the arenas before we can set an actual location for these spawns. */
-				new DelaySpawnTask(new Location(inWorld, 0.0d, 0.0d, 0.0d), EntityType.ZOMBIE, 1).runTaskLater(plugin, 0); // The last arg for this is 0. v
-				/*new DelaySpawnTask(etc, etc, etc).runTaskLater(plugin, 0+20) */ // We do plus 20 per entity that we spawn in the arena.
+				ArenaWave.createBasicWave(20, 1, EntityType.ZOMBIE, EntityType.SKELETON).startWaveSequentially(round, 1);;				
 				break;
 			}
 			default:
 			{
-				break;
+				ArenaWave.createBasicWave(20, 1, EntityType.ZOMBIE, EntityType.SKELETON).startWaveSequentially(round, 1);;
 			}
 		}
+		
+		toArenaPlayers(getChatTag() + ChatColor.GOLD + String.format("Round %d has started! Good luck!", round));
+		playSoundToArenaPlayers(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
 	}
 	
 	public static void setPlugin(ArenaPlugin aplug) {
@@ -179,6 +206,10 @@ public class GlobalW {
 		}
 	}
 	
+	public static void terminate() {
+		GlobalW.chat_system.closeSystem();
+	}
+	
 	public static List<ArenaPlayer> getPlayersInArena() {
 		return playersInArena;
 	}
@@ -186,7 +217,42 @@ public class GlobalW {
 	public static List<ArenaCreature> getCreaturesInArena() {
 		return creaturesInArena;
 	}
+	
+	public static List<Location> getPlayerSpawnLocations() {
+		return playerSpawnLocations;
+	}
 
+	public static ChatSystem getChatSystem() {
+		return chat_system;
+	}
+
+	public static void setChatSystem(ChatSystem chat_system) {
+		GlobalW.chat_system = chat_system;
+	}
+
+	/**
+	 * Sets the round number
+	 * @param round the new number
+	 */
+	public static void setRound(int round) {
+		GlobalW.round = round;
+	}
+
+	public static YMLReader getLocatioData() {
+		return location_data;
+	}
+
+	public static void setLocationData(String path) {
+		GlobalW.location_data = new YMLReader(path);
+	}
+
+	public static List<Location> getEnemySpawnLocations() {
+		return creatureSpawnLocations;
+	}
+
+	public static void setEnemySpawnLocations(List<Location> enemySpawnLocations) {
+		GlobalW.creatureSpawnLocations = enemySpawnLocations;
+	}
 
 	public static enum ErrorMsgs { 
 		NOT_PLAYER("You must be a player!"), 

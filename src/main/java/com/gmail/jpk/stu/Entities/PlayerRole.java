@@ -57,6 +57,11 @@ public enum PlayerRole {
 		return abilities;
 	}
 
+	/**
+	 * Gets a role by a String input or null if not found.
+	 * @param role the role of the String
+	 * @return the role
+	 */
 	public static PlayerRole getRoleByString(String role) {
 		//Convert the role input to all uppercase
 				String role_upper = role.toUpperCase();

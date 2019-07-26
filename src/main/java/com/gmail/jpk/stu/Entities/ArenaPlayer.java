@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -171,6 +172,66 @@ public class ArenaPlayer extends ArenaEntity {
 		}
 	}
 	
+	/**
+	 * Adds exp to the ArenaPlayer and levels them up if they have enough exp.
+	 * This is method will level them mutliple times if they have enough exp.
+	 * @param exp the amount to give
+	 * @param flag <b>Should be set to false by default.</b> This flag tracks the recursive nature of this function.
+	 */
+	public void addExp(int reward, boolean flag) {
+		if (Level >= 18) {
+			//Ensures no oddball bugs occur
+			mPlayer.setLevel(18);
+			mPlayer.setExp(0);
+			return;
+		}
+		
+		int required = getNextExp();
+		int current = getExp();
+		
+		//Level up recursively
+		if (current + reward >= required) {
+			if (!flag) {
+				//This branch prevents a bug where the sound will play VERY loudly if the player levels up more than once.
+				mPlayer.playSound(mPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+			}
+			
+			LevelUp();
+			reward -= required; 
+			current = 0;
+			addExp(reward, true);
+			return;
+		}
+		
+		//Add remaining exp
+		this.setExp((current + reward)); 
+		mPlayer.setLevel(Level);
+		mPlayer.setExp(((float) getExp() / (float) required));
+		mPlayer.playSound(mPlayer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+	}
+	
+	/**
+	 * Adds the specified amount of money (in gold and gems) to the player. The function determines which gold and gems to give.<br/>
+	 * Example: 99999 = 90000 + 9000 + 900 + 90 + 9 = 1 Flawless Diamond, 11 Chipped Emeralds, 11 Gold bars.
+	 * @param amount the amount of money to add (must be positive)
+	 * @return true if successful
+	 */
+	public boolean addMoney(int amount) {
+		if (amount < 0) {
+			return false;
+		}
+		
+		int[] currencies = getAmountAsCurrencies(amount);
+		
+		//Grant Items
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.FLAWLESS_DIAMOND.getUID(), currencies[0]));
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.CHIPPED_EMERALD.getUID(), currencies[1]));
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.GOLDEN_BAR.getUID(), currencies[2]));
+		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.GOLDEN_SCRAP.getUID(), currencies[3]));
+		
+		return true;
+	}
+	
 	public boolean isHoldingAbilityItem() {
 		if(mPlayer.getInventory().getItemInMainHand() == null) {
 			return false;
@@ -219,6 +280,19 @@ public class ArenaPlayer extends ArenaEntity {
 	public void LevelUp() {
 		if(Level + 1 < 19) {
 			Level++;
+
+			if (Level % 5 == 0) {
+				GlobalW.toArenaPlayers(ChatColor.GREEN + String.format("%s the %s is now level %d!", mPlayer.getName(), this.classRole.getName(), Level));
+			} 
+			
+			else if (Level == 18) {
+				GlobalW.toArenaPlayers(ChatColor.GOLD + String.format("%s the %s is MAX level!", mPlayer.getName(), this.classRole.getName()));
+			}
+			
+			else {
+				GlobalW.toPlayer(mPlayer, ChatColor.GREEN + String.format("Hoorah! You are now level %d!", Level));
+			}
+			
 			switch(classRole) {
 				case BLIGHT_ARCHER:
 				{
@@ -295,28 +369,6 @@ public class ArenaPlayer extends ArenaEntity {
 		currencies[3] = (amount > 0 ? amount : 0);
 		
 		return currencies;
-	}
-	
-	/**
-	 * Adds the specified amount of money (in gold and gems) to the player. The function determines which gold and gems to give.<br/>
-	 * Example: 99999 = 90000 + 9000 + 900 + 90 + 9 = 1 Flawless Diamond, 11 Chipped Emeralds, 11 Gold bars.
-	 * @param amount the amount of money to add (must be positive)
-	 * @return true if successful
-	 */
-	public boolean addMoney(int amount) {
-		if (amount < 0) {
-			return false;
-		}
-		
-		int[] currencies = getAmountAsCurrencies(amount);
-		
-		//Grant Items
-		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.FLAWLESS_DIAMOND.getUID(), currencies[0]));
-		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.CHIPPED_EMERALD.getUID(), currencies[1]));
-		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.GOLDEN_BAR.getUID(), currencies[2]));
-		BasicCommand.executeCommand(String.format("gci %s %d %d", mPlayer.getName(), SpecialItems.GOLDEN_SCRAP.getUID(), currencies[3]));
-		
-		return true;
 	}
 	
 	/**
@@ -424,19 +476,17 @@ public class ArenaPlayer extends ArenaEntity {
 	 */
 	public boolean removeMoney(int amount) {
 		int money = getMoney();
-		
-		mPlayer.sendMessage(String.format("Item costs %d. You have %d.", amount, money));
-		
+				
 		if (amount > money) {
 			return false;
 		}
 		
 		int change = (money - amount);
 		int[] gems = getAmountAsCurrencies(change);
-		mPlayer.sendMessage(String.format("%d diamonds, %d emeralds, %d bars, %d scraps", gems[0], gems[1], gems[2], gems[3]));
 		
 		//Update Player Inventory
 		updatePlayerGems(gems);
+		GlobalW.toPlayer(mPlayer, "Your gems have been updated.");
 		
 		return true;
 	}
@@ -542,5 +592,13 @@ public class ArenaPlayer extends ArenaEntity {
 	
 	public List<AbilityItem> getAllAbilties() {
 		return allAbilities;
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
+	public void setExp(int exp) {
+		this.exp = exp;
 	}
 }

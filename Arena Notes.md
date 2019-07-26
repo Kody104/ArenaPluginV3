@@ -3,9 +3,9 @@
 
 # Current Issues (as of 26 July)
 1. In YMLReader, getLocation() throws an IndexArrayOutBoundsException for the list.
-2. Phantoms can currently spawn as they please.
+2. ~Phantoms can currently spawn as they please.~
 3. ChatSystem is too convoluted. A simplification is needed.
-4. Not all SpecialItems are cleared through arena -csi. A stronger approach may be required.
+4. ~Not all SpecialItems are cleared through arena -csi. A stronger approach may be required.~
 
 # Current Detailed Features in the Arena
 

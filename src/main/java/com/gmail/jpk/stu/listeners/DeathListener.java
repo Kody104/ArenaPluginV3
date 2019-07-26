@@ -5,8 +5,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.jpk.stu.Entities.ArenaCreature;
@@ -21,6 +23,18 @@ public class DeathListener extends BasicListener {
 
 	public DeathListener(Plugin plugin) {
 		super(plugin);
+	}
+	
+	/**
+	 * Prevents Creatures from spawning unless the plugin asks it to.
+	 * @param e the event
+	 */
+	@EventHandler
+	public void onCreatureSpawnEvent(CreatureSpawnEvent e) {
+		//If the creature isn't spawn by this plugin, then cancel it.
+		if (e.getSpawnReason() != SpawnReason.CUSTOM) {
+			e.setCancelled(true);
+		}
 	}
 	
 	/**

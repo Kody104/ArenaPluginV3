@@ -35,7 +35,11 @@ public class ArenaPlayer extends ArenaEntity {
 		this.Level = 1;
 		this.allAbilities = new ArrayList<AbilityItem>();
 		this.is_ready = false;
-		switch(role) {
+		initRoleStats();
+	}
+	
+	private void initRoleStats() {
+		switch(classRole) {
 			case BLIGHT_ARCHER:
 			{
 				passive = PassiveAbility.SCAVENGE;
@@ -151,25 +155,29 @@ public class ArenaPlayer extends ArenaEntity {
 	}
 	
 	@Override
-	public void takeDamage(double damage, DamageType damageType) {
+	public double takeDamage(double damage, DamageType damageType) {
 		// Calculate resistance based on damage type
+		
+		double damageAfter = 0.0d;
 		if(damageType == DamageType.PHYSICAL) {
 			double amrMulti = (100.0d / (100.0d + getDef()));
-			double damageAfter = damage * amrMulti;
+			damageAfter = damage * amrMulti;
 			//TODO: Subtract from health
 		}
 		else if(damageType == DamageType.MAGICAL) {
 			double resMulti = (100.0d / (100.0d + getRes()));
-			double damageAfter = damage * resMulti;
+			damageAfter = damage * resMulti;
 			//TODO: Subtract from health
 		}
 		else if(damageType == DamageType.TRUE) {
 			//TODO: Subtract from health
 		}
 		else {
-			damage = 0.0d;
+			damageAfter = 0.0d;
 			GlobalW.toPlayerError(mPlayer, "What is this damage type? " + damageType);
+			GlobalW.getPlugin().getLogger().info("[ERROR] What is this damage type? " + damageType);
 		}
+		return damageAfter;
 	}
 	
 	/**
@@ -234,6 +242,9 @@ public class ArenaPlayer extends ArenaEntity {
 	
 	public boolean isHoldingAbilityItem() {
 		if(mPlayer.getInventory().getItemInMainHand() == null) {
+			return false;
+		}
+		else if(!mPlayer.getInventory().getItemInMainHand().hasItemMeta()) {
 			return false;
 		}
 		else if(mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0).equalsIgnoreCase("ability")) {
@@ -572,6 +583,7 @@ public class ArenaPlayer extends ArenaEntity {
 	
 	public void setClassRole(PlayerRole classRole) {
 		this.classRole = classRole;
+		initRoleStats();
 	}
 
 	public int getLevel() {

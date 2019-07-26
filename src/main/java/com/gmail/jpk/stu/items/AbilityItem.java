@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
+import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaEntity;
+import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.abilities.Ability;
 import com.gmail.jpk.stu.abilities.StatusEffect;
 import com.gmail.jpk.stu.arena.GlobalW;
+import com.gmail.jpk.stu.timers.AbilityCooldownTimer;
 
 public class AbilityItem extends ItemStack {
 
@@ -49,13 +55,27 @@ public class AbilityItem extends ItemStack {
 		this.owner = owner;
 	}
 	
-	public void useAbility(ArenaEntity caster, ArenaEntity... targets) {
+	public void useAbility(ArenaEntity caster, List<ArenaEntity> targets) {
 		for(ArenaEntity entity : targets) {
 			useAbility(caster, entity);
 		}
 	}
 	
 	public void useAbility(ArenaEntity caster, ArenaEntity target) {
+		if(owner.isOnCooldown()) {
+			return;
+		}
+		if(owner.getHiddenEffect() != null) {
+			LivingEntity le = target.getLivingEntity();
+			switch(owner.getHiddenEffect()) {
+				case HOOK:
+				{
+					Vector vec = le.getLocation().getDirection().multiply(-2.0d); // Invert the entity's direction
+					le.setVelocity(vec); // Give the inversion to the entity
+					break;
+				}
+			}
+		}
 		// Calculate the damage
 		double damage = owner.getBaseDmg();
 		damage += owner.getAtkScale() * caster.getAtk();
@@ -64,21 +84,50 @@ public class AbilityItem extends ItemStack {
 		damage += owner.getResScale() * caster.getRes();
 		damage += owner.getHpScale() * caster.getMaxHp();
 		
-		target.takeDamage(damage, owner.getDamageType());
+		double actualDmg = 0.0d;
+		
+		//If the damage is too small I don't want it to even matter
+		if(damage >= 0.1d) {
+			actualDmg = target.takeDamage(damage, owner.getDamageType());
+		}
 		
 		// If there is a status effect in this ability
 		if(owner.getAllStatusEffects().size() > 0) {
 			// For all the status effects
 			for(int i = 0; i < owner.getAllStatusEffects().size(); i++) {
 				StatusEffect s = owner.getAllStatusEffects().get(i);
-				// Calculate the target's tenacity (chance to not get hit by status effect)
-				int chance = GlobalW.rand.nextInt(100) + 1;
-				if(chance > target.getTenacity()) { // Their tenacity doesn't save them
-					target.addStatusEffect(s);
+				if(s.getTarget() == StatusEffect.StatusEffectTarget.TARGET) {
+					// Calculate the target's tenacity (chance to not get hit by status effect)
+					int chance = GlobalW.rand.nextInt(100) + 1;
+					if(chance > target.getTenacity()) { // Their tenacity doesn't save them
+						target.addStatusEffect(s);
+					}
+				}
+				else { // The status effect is a caster status effect
 					caster.addStatusEffect(s);
 				}
 			}
 		}
+		
+		if(caster.getLivingEntity() instanceof Player) {
+			Player player = (Player) caster.getLivingEntity();
+			ArenaPlayer aPlayer = GlobalW.getArenaPlayer(player);
+			
+			if(aPlayer != null) {
+				GlobalW.toPlayer(player, String.format("You have dealt %.2f %s damage!", actualDmg, owner.getDamageType()));
+			}
+		}
+		else if(target.getLivingEntity() instanceof Player) {
+			Player player = (Player) target.getLivingEntity();
+			ArenaPlayer aPlayer = GlobalW.getArenaPlayer(player);
+			
+			if(aPlayer != null) {
+				GlobalW.toPlayer(player, String.format("You have taken %.2f %s damage!", actualDmg, owner.getDamageType()));
+			}
+		}
+		
+		owner.setOnCooldown(true);
+		new AbilityCooldownTimer(caster, owner).runTaskLater(GlobalW.getPlugin(), owner.getCooldown());
 	}
 	
 	public String getDisplayName() {

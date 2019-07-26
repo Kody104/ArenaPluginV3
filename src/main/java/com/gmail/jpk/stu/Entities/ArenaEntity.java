@@ -46,8 +46,9 @@ public abstract class ArenaEntity {
 		allStatusEffects = new ArrayList<StatusEffect>();
 	}
 	
-	public void takeDamage(double damage, DamageType damageType) {
+	public double takeDamage(double damage, DamageType damageType) {
 		//Override this function
+		return 0.0d;
 	}
 
 	public LivingEntity getLivingEntity() {

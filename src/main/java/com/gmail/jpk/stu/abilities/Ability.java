@@ -10,6 +10,7 @@ public class Ability {
 	
 	private String name;
 	private String description; // What this ability does.
+	private HiddenEffect hiddenEffect; // Used for very specific abilities
 	private AbilityTarget targetType; // The target and range of this ability.
 	private DamageType damageType; // The type of damage this ability does.
 	private int lvl; // Level of the ability
@@ -42,6 +43,29 @@ public class Ability {
 	public Ability(String name, String description, AbilityTarget target, DamageType damageType, int cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, StatusEffect... effects) {
 		this.name = name;
 		this.description = description;
+		this.hiddenEffect = null;
+		this.targetType = target;
+		this.damageType = damageType;
+		this.lvl = 0;
+		this.onCooldown = false;
+		this.cooldown = cooldown;
+		this.color = color;
+		this.allStatusEffects = new ArrayList<StatusEffect>();
+		for(StatusEffect e : effects) {
+			allStatusEffects.add(e);
+		}
+		this.baseDmg = baseDmg;
+		this.atkScale = atkScale;
+		this.magScale = magScale;
+		this.amrScale = amrScale;
+		this.resScale = resScale;
+		this.hpScale = hpScale;
+	}
+	
+	public Ability(String name, String description, AbilityTarget target, DamageType damageType, int cooldown, ChatColor color, double baseDmg, double atkScale, double magScale, double amrScale, double resScale, double hpScale, HiddenEffect hiddenEffect, StatusEffect... effects) {
+		this.name = name;
+		this.description = description;
+		this.hiddenEffect = hiddenEffect;
 		this.targetType = target;
 		this.damageType = damageType;
 		this.lvl = 0;
@@ -74,6 +98,14 @@ public class Ability {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public HiddenEffect getHiddenEffect() {
+		return hiddenEffect;
+	}
+
+	public void setHiddenEffect(HiddenEffect hiddenEffect) {
+		this.hiddenEffect = hiddenEffect;
 	}
 
 	public AbilityTarget getTargetType() {

@@ -2,7 +2,6 @@ package com.gmail.jpk.stu.listeners;
 
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -14,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 import com.gmail.jpk.stu.arena.ChatSystem;
 import com.gmail.jpk.stu.arena.ChatSystem.Role;
 import com.gmail.jpk.stu.arena.GlobalW;
-import com.gmail.jpk.stu.tasks.DelayedMessageTask;
 
 /**
  * Listens for various interactions between Players and the Server
@@ -41,10 +39,10 @@ public class PlayerServerInteractionListener extends BasicListener {
 	 */
 	@EventHandler
 	public void playerChatEvent(AsyncPlayerChatEvent e) {
-		UUID sender = e.getPlayer().getUniqueId();
-		String message = e.getMessage();
+		ChatSystem system = GlobalW.getChatSystem();
 		
-		GlobalW.getChatSystem().messagePlayerChannel(sender, message);
+		system.messageAll(e.getPlayer().getUniqueId(), e.getMessage());
+		
 		e.setCancelled(true);
 	}
 		
@@ -57,18 +55,11 @@ public class PlayerServerInteractionListener extends BasicListener {
 		Player player = e.getPlayer();
 		UUID uid = player.getUniqueId();
 		ChatSystem system = GlobalW.getChatSystem();
-		Plugin plugin = GlobalW.getPlugin();
-		String tag = GlobalW.getChatTag();
-		int delay = 20; //(in ticks)
 		
 		//Add the player if they aren't in the system.
 		if (!system.contains(uid)) {
 			system.addPlayer(uid, Role.PLAYER);
-			new DelayedMessageTask(player, tag + String.format("Welcome to the server %s! Type" + ChatColor.GOLD + " /join " + ChatColor.WHITE +"to join the Arena.", player.getName())).runTaskLater(plugin, delay);
-			return;
 		}
-		
-		new DelayedMessageTask(player, tag + String.format("Welcome back %s!", player.getName())).runTaskLater(plugin, delay);
 	}
 	
 	/**

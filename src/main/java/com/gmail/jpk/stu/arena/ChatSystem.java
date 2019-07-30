@@ -62,6 +62,14 @@ public class ChatSystem {
 	public void addPlayer(UUID uid, Role role) {
 		if (uid != null && role != null) {
 			players.put(uid, role);
+			
+			if (role == Role.VIP) {
+				vips.add(uid);
+			}
+			
+			else if (role == Role.DEV) {
+				devs.add(uid);
+			}
 		}
 	}
 	
@@ -100,7 +108,7 @@ public class ChatSystem {
 	 * @return true if they are in the system
 	 */
 	public boolean contains(UUID uid) { 
-		return (uid != null && players.containsKey(uid));
+		return (players.containsKey(uid));
 	}
 	
 	/**
@@ -120,17 +128,7 @@ public class ChatSystem {
 	 * @return the role
 	 */
 	public Role getRole(UUID uid) {
-		if (uid == null) {
-			return Role.CONSOLE;
-		}
-		
-		else if (isVip(uid) || isDev(uid)) {
-			return (players.get(uid));
-		}
-		
-		else {
-			return null;
-		}
+		return players.get(uid);
 	}
 	
 	/**
@@ -139,7 +137,7 @@ public class ChatSystem {
 	 * @return true if they're a dev
 	 */
 	public boolean isDev(UUID uid) {
-		return (uid != null && devs.contains(uid));
+		return devs.contains(uid);
 	}
 	
 	/**
@@ -148,7 +146,7 @@ public class ChatSystem {
 	 * @return true if they're a VIP
 	 */
 	public boolean isVip(UUID uid) {
-		return (uid != null && vips.contains(uid));
+		return vips.contains(uid);
 	}
 	
 	/**
@@ -164,7 +162,7 @@ public class ChatSystem {
 		
 		//Grab name and tag
 		String name = Bukkit.getOfflinePlayer(sender).getName();
-		Role role = getRole(sender);
+		Role role = (getRole(sender) == null ? Role.PLAYER : getRole(sender));
 		String tag = String.format("<%s> ", role.getFormattedName(name));
 		
 		//Message the players
@@ -260,12 +258,14 @@ public class ChatSystem {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initSerializedMap(String path) {
-		File file = new File(path + "chsys.ser");
+		File file = new File(path + "players.ser");
 		
 		//Check if the file exists
 		if (!file.exists()) {
 			//Make a new instance and return.
 			players = new HashMap<UUID, Role>();
+			devs = new ArrayList<UUID>();
+			vips = new ArrayList<UUID>();
 			return;
 		}
 		

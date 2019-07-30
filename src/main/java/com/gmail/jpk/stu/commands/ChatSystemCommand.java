@@ -54,7 +54,7 @@ public class ChatSystemCommand extends BasicCommand {
 					Role role = system.getRole(player.getUniqueId());
 					
 					if (role != null) {
-						ChatSystem.toCommandSender(sender, String.format("%s is a %s.", role.toString(), player.getName()));
+						ChatSystem.toCommandSender(sender, String.format("%s is a %s.", player.getName(), role.toString()));
 						return true;
 					}
 					

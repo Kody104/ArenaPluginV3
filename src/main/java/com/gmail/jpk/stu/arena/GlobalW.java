@@ -38,7 +38,7 @@ public class GlobalW {
 	//TODO: This needs to init all the important things
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
-//		setChatSystem(new ChatSystem("config/"));
+		setChatSystem(new ChatSystem("config/"));
 		setLocationData("location-data.yml");
 //		loadCreatureSpawnLocations(); --> WIP
 //		loadPlayerSpawnLocations(); --> WIP

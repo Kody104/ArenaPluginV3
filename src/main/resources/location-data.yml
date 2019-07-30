@@ -21,4 +21,4 @@ creature-spawns:
 
 # Sets the spawn points for players (working)
 player-spawns:
-    location-0: [152, 63, -59]
+    location-0: 123.123

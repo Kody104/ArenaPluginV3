@@ -35,6 +35,14 @@ public class ArenaCommand extends BasicCommand {
 
 	@Override
 	public boolean performCommand(CommandSender sender, String[] args) {
+		if (args.length == 0) {
+			boolean e = GlobalW.getLocationData().getFile().exists();
+			sender.sendMessage("Exists?: " + e);
+			sender.sendMessage("List?: " + GlobalW.getLocationData().getDouble("player-spawns.location-0"));
+			GlobalW.getLocationData().save();
+			return true;
+		}
+		
 		//Single Argument Commands 
 		if (args.length == 1) {
 			//Clear Arena Creatures

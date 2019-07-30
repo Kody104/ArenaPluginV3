@@ -38,8 +38,8 @@ public class GlobalW {
 	//TODO: This needs to init all the important things
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
-		setChatSystem(new ChatSystem("config/"));
-		setLocationData("config/location-data.yml");
+//		setChatSystem(new ChatSystem("config/"));
+		setLocationData("location-data.yml");
 //		loadCreatureSpawnLocations(); --> WIP
 //		loadPlayerSpawnLocations(); --> WIP
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
@@ -238,7 +238,7 @@ public class GlobalW {
 		GlobalW.round = round;
 	}
 
-	public static YMLReader getLocatioData() {
+	public static YMLReader getLocationData() {
 		return location_data;
 	}
 

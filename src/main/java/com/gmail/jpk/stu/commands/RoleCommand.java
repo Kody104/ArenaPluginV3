@@ -44,7 +44,7 @@ public class RoleCommand extends BasicCommand {
 		
 		//Runs /role
 		if (length == 0) {
-			GlobalW.toPlayer(player, "Your current role is " + player_role_name + ".");
+			GlobalW.toPlayer(player, String.format("Your current role is %s.", ChatColor.GOLD + player_role_name +ChatColor.RESET));
 			return true;
 		}
 		
@@ -57,7 +57,7 @@ public class RoleCommand extends BasicCommand {
 			int i = 1;
 			
 			for (PlayerRole role : PlayerRole.values()) {
-				line = String.format("%d. %s: %s", i++, role.getName(), role.getDescription());
+				line = String.format("%d. %s: %s", i++, ChatColor.GOLD + role.getName() + ChatColor.RESET, role.getDescription());
 				player.sendMessage(line);
 			}
 			
@@ -71,7 +71,7 @@ public class RoleCommand extends BasicCommand {
 			
 			//Check if player has a role already
 			if (desired != null && player_role != null && player_role != PlayerRole.SPECTATOR && target == null) {
-				GlobalW.toPlayer(player, String.format("You are already a %s. Use %s to quit your current role.", player_role_name, ChatColor.GOLD + "/quit" + ChatColor.RESET));
+				GlobalW.toPlayer(player, String.format("You are already a %s. Use %s to quit your current role.", ChatColor.GOLD + player_role_name + ChatColor.RESET, ChatColor.GOLD + "/quit" + ChatColor.RESET));
 				return true;
 			}
 			
@@ -84,7 +84,7 @@ public class RoleCommand extends BasicCommand {
 				}
 				
 				arena_player.setClassRole(desired);
-				GlobalW.toArenaPlayers(String.format("%s has chosen to be a %s!", player.getName(), desired.getName()));
+				GlobalW.toArenaPlayers(String.format("%s has chosen to be a %s!", player.getName(), ChatColor.GOLD + desired.getName() + ChatColor.RESET));
 				return true;
 			}
 			
@@ -98,7 +98,7 @@ public class RoleCommand extends BasicCommand {
 					
 					//Send the message depending if the target has a role
 					if (target_role != null) {
-						GlobalW.toPlayer(player, String.format("%s is a %s.", target.getName(), target_role.getName()));
+						GlobalW.toPlayer(player, String.format("%s is a %s.", target.getName(), ChatColor.GOLD + target_role.getName() + ChatColor.RESET));
 						return true;
 					} else {
 						GlobalW.toPlayer(player, String.format("%s doesn't have a role yet.", target.getName()));

@@ -16,6 +16,11 @@ public class YMLReader {
 	
 	public YMLReader(String path) {
 		file = new File(path);
+		
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		
 		config = YamlConfiguration.loadConfiguration(file);
 	}
 
@@ -34,6 +39,15 @@ public class YMLReader {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Gets a double from the specified path
+	 * @param path the path
+	 * @return a double (if present)
+	 */
+	public double getDouble(String path) {
+		return config.getDouble(path);
 	}
 	
 	/**

@@ -9,6 +9,11 @@ commands:
       usage: /arena -[cc|csi|fr|spawn|round|xp|lvl] -(subtask)
       permission: Arena.mod.arena
       permission-message: You don't have permission.
+    ch:
+      description: Messages the player's channel or used to toggle channel lock.
+      usage: /ch (-lock) [message]
+      permission: Arena.ch
+      permission-message: You don't have permission.
     chsys:
       description: Runs various tasks for the ChatSystem.
       usage: /chsys [role|remove|debug|color|set] (value) (value)

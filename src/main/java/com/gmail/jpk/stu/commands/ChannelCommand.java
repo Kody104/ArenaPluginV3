@@ -15,7 +15,7 @@ import com.gmail.jpk.stu.arena.ChatSystem;
 import com.gmail.jpk.stu.arena.ChatSystem.Role;
 import com.gmail.jpk.stu.arena.GlobalW;
 
-public abstract class ChannelCommand extends BasicCommand {
+public class ChannelCommand extends BasicCommand {
 
 	//The list of players locked into their channels
 	private Set<UUID> locked_players;

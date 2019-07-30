@@ -2,6 +2,7 @@ package com.gmail.jpk.stu.arena;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.jpk.stu.commands.ArenaCommand;
+import com.gmail.jpk.stu.commands.ChannelCommand;
 import com.gmail.jpk.stu.commands.ChatSystemCommand;
 import com.gmail.jpk.stu.commands.GiveAbilityItemCommand;
 import com.gmail.jpk.stu.commands.GiveCustomItemCommand;
@@ -28,9 +29,8 @@ public class ArenaPlugin extends JavaPlugin {
 		
 		logMessage("Attempting to load all program commands.");
 		this.getCommand("arena").setExecutor(new ArenaCommand(this));
-//		this.getCommand("all").setExecutor(new AllCommand(this)); --> this command will be removed in major update
+		this.getCommand("ch").setExecutor(new ChannelCommand(this));
 		this.getCommand("chsys").setExecutor(new ChatSystemCommand(this));
-//		this.getCommand("dev").setExecutor(new DevCommand(this)); --> this command will be removed in major update
 		this.getCommand("gci").setExecutor(new GiveCustomItemCommand(this));
 		this.getCommand("join").setExecutor(new JoinCommand(this));
 		this.getCommand("leave").setExecutor(new LeaveCommand(this));
@@ -38,7 +38,6 @@ public class ArenaPlugin extends JavaPlugin {
 		this.getCommand("role").setExecutor(new RoleCommand(this));
 		this.getCommand("quit").setExecutor(new QuitCommand(this));
 		this.getCommand("gai").setExecutor(new GiveAbilityItemCommand(this));
-//		this.getCommand("vip").setExecutor(new VIPCommand(this)); --> this command will be removed in major update
 		
 		logMessage("Attemping to load all program Listeners.");
 		new DeathListener(this);

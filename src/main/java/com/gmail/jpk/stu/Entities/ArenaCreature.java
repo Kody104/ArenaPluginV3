@@ -24,6 +24,7 @@ public class ArenaCreature extends ArenaEntity {
 		this.passive = passive;
 		entityType.setCustomName(entityType.getType() + " Lvl " + lvl);
 		entityType.setCustomNameVisible(true);
+		setPassive(passive);
 		switch(entityType.getType()) {
 			case BAT:
 				break;
@@ -40,7 +41,20 @@ public class ArenaCreature extends ArenaEntity {
 			case COW:
 				break;
 			case CREEPER:
+			{
+				setMaxHp(135d + (23.4d * lvl));
+				setCurHp(getMaxHp());
+				setAtk(50.0d + (8.9d * lvl));
+				setMag(0.0d);
+				setDef(20.0d + (1.2d * lvl));
+				setFireRes(75);
+				setWaterRes(20);
+				setEarthRes(15);
+				setAirRes(75);
+				setHolyRes(20);
+				setDarkRes(25);
 				break;
+			}
 			case DOLPHIN:
 				break;
 			case DONKEY:
@@ -112,7 +126,20 @@ public class ArenaCreature extends ArenaEntity {
 			case SILVERFISH:
 				break;
 			case SKELETON:
+			{
+				setMaxHp(90d + (21.8d * lvl));
+				setCurHp(getMaxHp());
+				setAtk(90.0d + (18.5d * lvl));
+				setMag(7.8d * lvl);
+				setDef(18.0d + (3.1d * lvl));
+				setFireRes(0);
+				setWaterRes(15);
+				setEarthRes(40);
+				setAirRes(25);
+				setHolyRes(40);
+				setDarkRes(35);
 				break;
+			}
 			case SKELETON_HORSE:
 				break;
 			case SLIME:
@@ -120,7 +147,20 @@ public class ArenaCreature extends ArenaEntity {
 			case SNOWMAN:
 				break;
 			case SPIDER:
+			{
+				setMaxHp(80d + (19.9d * lvl));
+				setCurHp(getMaxHp());
+				setAtk(35.0d + (4.9d * lvl));
+				setMag(10.0d + (3.8 * lvl));
+				setDef(18.0d + (3.1d * lvl));
+				setFireRes(0);
+				setWaterRes(15);
+				setEarthRes(25);
+				setAirRes(10);
+				setHolyRes(15);
+				setDarkRes(80);
 				break;
+			}
 			case SQUID:
 				break;
 			case STRAY:
@@ -147,7 +187,6 @@ public class ArenaCreature extends ArenaEntity {
 				break;
 			case ZOMBIE:
 			{
-				setPassive(passive);
 				setMaxHp(70.0d + (18.7d * lvl));
 				setCurHp(getMaxHp());
 				setAtk(45.0d + (2.7d * lvl));

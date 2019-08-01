@@ -38,7 +38,9 @@ public class GlobalW {
 	//TODO: This needs to init all the important things
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
-		setChatSystem(new ChatSystem("config/"));
+		setChatSystem(new ChatSystem(plugin, "plugins/arena/"));
+		chat_system.initialize();
+//		chat_system.initSerializedMap(plugin);
 		setLocationData("location-data.yml");
 //		loadCreatureSpawnLocations(); --> WIP
 //		loadPlayerSpawnLocations(); --> WIP
@@ -207,7 +209,7 @@ public class GlobalW {
 	}
 	
 	public static void terminate() {
-		GlobalW.chat_system.closeSystem();
+		GlobalW.chat_system.close();
 	}
 	
 	public static List<ArenaPlayer> getPlayersInArena() {

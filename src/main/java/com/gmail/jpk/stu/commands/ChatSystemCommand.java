@@ -54,25 +54,25 @@ public class ChatSystemCommand extends BasicCommand {
 					Role role = system.getRole(player.getUniqueId());
 					
 					if (role != null) {
-						ChatSystem.toCommandSender(sender, String.format("%s is a %s.", player.getName(), role.toString()));
+						system.toCommandSender(sender, String.format("%s is a %s.", player.getName(), role.toString()));
 						return true;
 					}
 					
-					ChatSystem.toCommandSender(sender, String.format("%s has no role.", player.getName()));
+					system.toCommandSender(sender, String.format("%s has no role.", player.getName()));
 					return true;
 				}
 				
 				//Run command /chysys remove PLAYER
 				if (args[0].equalsIgnoreCase("remove") && GlobalW.getChatSystem().removePlayer(player.getUniqueId())) {
-					ChatSystem.toCommandSender(sender, String.format("%s was successfully removed from the ChatSystem.", player.getName()));
+					system.toCommandSender(sender, String.format("%s was successfully removed from the ChatSystem.", player.getName()));
 					return true;
 				}
 				
-				ChatSystem.toCommandSender(sender, ChatColor.RED + String.format("Unable to find %s from the ChatSystem.", player.getName()));
+				system.toCommandSender(sender, ChatColor.RED + String.format("Unable to find %s from the ChatSystem.", player.getName()));
 				return true;
 			}
 			
-			//Verify debug, color (Grouped since they share info)
+/*			//Verify debug, color (Grouped since they share info)
 			if (args[0].equalsIgnoreCase("debug") || args[0].equalsIgnoreCase("color")) {
 				if (!isBoolean(args[1])) {
 					ChatSystem.toCommandSender(sender, ChatColor.RED + String.format("%s isn't a valid input.", args[1]));
@@ -90,7 +90,7 @@ public class ChatSystemCommand extends BasicCommand {
 				system.setColorCodesEnabled(Boolean.valueOf(args[1].toLowerCase()));
 				ChatSystem.toCommandSender(sender, String.format("Set enable-color-codes to %s.", args[1].toUpperCase()));
 				return true;
-			}
+			} --> may be put back in - I have other things I'm fixing atm. */
 		}
 		
 		//Runs /chsys set PLAYER ROLE
@@ -100,22 +100,22 @@ public class ChatSystemCommand extends BasicCommand {
 			
 			//Verify inputs
 			if (role == Role.CONSOLE) {
-				ChatSystem.toCommandSender(sender, ChatColor.RED + String.format("Players are not permitted to use the %s role.", role.toString()));
+				system.toCommandSender(sender, ChatColor.RED + String.format("Players are not permitted to use the %s role.", role.toString()));
 				return true;
 			} 
 			else if (player != null && role != null) {
 				system.addPlayer(player.getUniqueId(), role);
-				ChatSystem.toCommandSender(sender, String.format("%s was moved to the %s role.", player.getName(), role.toString()));
-				ChatSystem.toPlayer(player, String.format("Your chat role has been updated to %s.", role.toString()));
+				system.toCommandSender(sender, String.format("%s was moved to the %s role.", player.getName(), role.toString()));
+				system.toPlayer(player, String.format("Your chat role has been updated to %s.", role.toString()));
 				return true;
 			}
 			else {
-				ChatSystem.toCommandSender(sender, String.format("Failed to set %s as the %s role.", args[1], args[2]));
+				system.toCommandSender(sender, String.format("Failed to set %s as the %s role.", args[1], args[2]));
 				return true;
 			}
-		}
+		} 
 				
 		return false;
-	}
+	} 
 
 }

@@ -3,6 +3,7 @@ package com.gmail.jpk.stu.arena;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -17,182 +18,202 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * A ChatSystem is a way to organize Players into groups to receive various levels of input.
- * By default there are three channels 
- *
+ * A ChatSystem controls player chat on the server. There are three channels users can speak on.<br />
+ * The default (player) channel is open to all.<br />
+ * The VIP channel is restricted to VIPs and Developers.<br />
+ * The Dev channel is restricted to Devs.<br />
+ * The system will also save and load to file.
  */
 public class ChatSystem {
+	
+	//The ArenaPlugin this ChatSystem works for
+	private ArenaPlugin plugin;
 	
 	//The name of the ChatSystem file
 	private final String FILE_NAME = "chsys.ser";
 	
-	//The path to the file
+	//The location of the ChatSystem file
 	private String path;
 	
-	//Should the System message devs with error?
-	private boolean showDebugOutput;
-	
-	//Should the System allow VIPs and higher to use Color Codes?
-	private boolean colorCodesEnabled;
-	
-	//The HashMap that handles the Roles
+	//The Map with all of the Players
 	private HashMap<UUID, Role> players;
 	
-	//The unique channels for this server
+	//The lists of who is a VIP and who is a DEV
 	private List<UUID> vips;
 	private List<UUID> devs;
 	
 	/**
-	 * Creates a ChatSystem from the given path. If the path does not contain the proper file,
-	 * it will be made.
-	 * @param path the location of the serialized HashMap
+	 * Creates a ChatSystem for the given Plugin and loads (or creates) the necessary files at the specified location.
+	 * @param plugin the plugin this ChatSystem works for
+	 * @param path the location of the ChatSystem file
 	 */
-	public ChatSystem(String path) {
-		setPath(path);
-		initSerializedMap(path);
-		setShowDebugOutput(true);
-		setColorCodesEnabled(true);
+	public ChatSystem(ArenaPlugin plugin, String path) {
+		setPlugin(plugin);
+		setPath(path + FILE_NAME);
+		setDevs(new ArrayList<UUID>());
+		setVips(new ArrayList<UUID>());
 	}
 	
 	/**
-	 * Adds a player to the system. Will overwrite the Player if they are already in the system.
-	 * @param uid the UUID of the player to add
-	 * @param role what their role should be
+	 * Adds a Player to the ChatSystem. Will overwrite a player's role if they already exist in the system.
+	 * @param uid who to add to the ChatSystem
+	 * @param role what their (new) role will be
 	 */
 	public void addPlayer(UUID uid, Role role) {
-		if (uid != null && role != null) {
-			players.put(uid, role);
-			
-			if (role == Role.VIP) {
-				vips.add(uid);
-			}
-			
-			else if (role == Role.DEV) {
+		switch (role) {
+			case DEV:
+			{
 				devs.add(uid);
+				break;
 			}
-		}
-	}
-	
-	/**
-	 * Closes the systems and saves all data.
-	 */
-	public void closeSystem() {
-		try {
-			File file = new File(path + FILE_NAME);
-			
-			//Check the file is there.
-			if (!file.exists()) {
-				//Make a new instance and return.
-				file.getParentFile().mkdir();
+			case PLAYER:
+			{
+				break;
+			}
+			case VIP:
+			{
+				vips.add(uid);
+				break;
 			}
 			
-			//Write the object
-			FileOutputStream fos = new FileOutputStream(file);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			
-			oos.writeObject(players);
-			
-			//Close the streams
-			oos.close();
-			fos.close();
+			default:
+			{
+				return;
+			}
 		}
 		
-		catch (Exception e) {
-			e.printStackTrace();
+		players.put(uid, role);
+	}
+	
+	/**
+	 * Closes the ChatSystem
+	 * @return true if successful 
+	 */
+	public boolean close() {
+		try {
+			saveFile();
+			return true;
+		}
+		
+		catch (IOException e) {
+			log(String.format("FAILED TO SAVE %s.", FILE_NAME));
+			return false;
 		}
 	}
 	
 	/**
-	 * Determines if the system contains a specified Player
-	 * @param uid the UUID of the player
-	 * @return true if they are in the system
+	 * Determines if the Player is in the ChatSystem.
+	 * @param uid who to check 
+	 * @return true if they are in the ChatSystem
 	 */
-	public boolean contains(UUID uid) { 
+	public boolean contains(UUID uid) {
 		return (players.containsKey(uid));
 	}
 	
 	/**
-	 * @return "Console"
+	 * Gets the ChatSystem's Tag
+	 * @return the tag, "Arena-ChatSystem"
 	 */
-	private static String getConsoleName() {
-		return ("Console");
+	public String getChatSystemTag() {
+		return ("<Arena-ChatSystem> ");
 	}
 	
-	private static String getChatSystemTag() {
-		return ("<Arena-Chat> ");
-	}
-	
-	/**
-	 * Gets the role of the player. May return null if the player isn't in the ChatSystem.
-	 * @param uid the unique id of the player
-	 * @return the role
-	 */
 	public Role getRole(UUID uid) {
-		return players.get(uid);
+		return (players.get(uid));
 	}
 	
 	/**
-	 * Determines if a Player is a dev
-	 * @param uid the UUID of the player
-	 * @return true if they're a dev
+	 * Attempts to initialize the ChatSystem.
+	 * @return true if successful
 	 */
-	public boolean isDev(UUID uid) {
-		return devs.contains(uid);
-	}
-	
-	/**
-	 * Determines if a Player is a VIP
-	 * @param uid the UUID of the player
-	 * @return true if they're a VIP
-	 */
-	public boolean isVip(UUID uid) {
-		return vips.contains(uid);
-	}
-	
-	/**
-	 * Messages all of the players on the server. The console shouldn't use this function.
-	 * @param sender who sent the message 
-	 * @param message what they said
-	 */
-	public boolean messageAll(UUID sender, String message) {
-		//Console shouldn't use this method
-		if (sender == null || !players.containsKey(sender)) {
-			return false;
+	public boolean initialize() {
+		File file = new File(path);
+		
+		try {
+			if (!file.exists()) {
+				//File doesn't exist, we'll create it.
+				log(String.format("%s was not found. Attempting to create the file.", FILE_NAME));
+				file.getParentFile().mkdirs();
+				
+				//Initialize players
+				players = new HashMap<UUID, Role>();
+				
+				//Write the object and exit.
+				saveFile();
+				
+				log(String.format("%s was successfully created.", FILE_NAME));
+				
+				return true;
+			}
+			
+			loadFile();
+			populateLists();
+			
+			log(String.format("Loaded %d unique IDs from %s. There are %d vips and %d devs.", players.size(), FILE_NAME, vips.size(), devs.size()));
+			return true;
 		}
 		
-		//Grab name and tag
-		String name = Bukkit.getOfflinePlayer(sender).getName();
-		Role role = (getRole(sender) == null ? Role.PLAYER : getRole(sender));
-		String tag = String.format("<%s> ", role.getFormattedName(name));
+		catch (Exception e) {
+			log("FAILED TO INITIALIZE CHATSYSTEM!");
+			e.printStackTrace();
+			return false;
+		}	
+	}
+	
+	/**
+	 * Loads the chsys.ser file to initialize players.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	@SuppressWarnings("unchecked")
+	private void loadFile() throws IOException, ClassNotFoundException {
+		FileInputStream fis = new FileInputStream(path);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		players = (HashMap<UUID, Role>) ois.readObject();
+		
+		fis.close();
+		ois.close();
+	}
+	
+	/**
+	 * Logs a message to the console
+	 * @param message what to say
+	 */
+	public void log(String message) {
+		plugin.getLogger().info(message);
+	}
+	
+	/**
+	 * Messages all the players on the Server
+	 * @param sender who sent the message (or null if the console)
+	 * @param message what they said
+	 */
+	public void messageAll(UUID sender, String message) {	
+		OfflinePlayer off = Bukkit.getOfflinePlayer(sender);
+		Role role = (sender == null) ? (Role.CONSOLE) : (getRole(sender));
+		String name = (sender == null) ? ("Console") : (off.getName());
+		String tag = role.getTag(name);
 		
 		//Message the players
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.sendMessage(tag + message);
 		}
-		
-		return true;
 	}
 	
+	
 	/**
-	 * Sends a message to the Dev channel
-	 * @param sender who is sending the message (use null if sending from console)
-	 * @param message what they are sending
-	 * @return true if the message was sent
+	 * Messages the devs (if any)
+	 * @param sender who sent the message (or null if console)
+	 * @param message what they said
 	 */
-	public boolean messageDevChannel(UUID sender, String message) {
-		//Can the sender message this channel?
-		if (sender != null && !isDev(sender)) {
-			return false;
-		}
+	public void messageDevs(UUID sender, String message) {
+		OfflinePlayer off = Bukkit.getOfflinePlayer(sender);
+		Role role = (sender == null) ? (Role.CONSOLE) : (getRole(sender));
+		String name = (sender == null) ? ("Console") : (off.getName());
+		String tag = role.getTag(name + ":dev");
 		
-		//Get name and tag.
-		OfflinePlayer off;
-		String name = (sender == null) ? getConsoleName() : (Bukkit.getOfflinePlayer(sender).getName());
-		Role role = (sender == null) ? (Role.CONSOLE) : (Role.DEV);
-		String tag = String.format("<%s:dev> ", role.getFormattedName(name));
-		
-		
-		//Message the players
+		//Message the devs
 		for (UUID uid : devs) {
 			off = Bukkit.getOfflinePlayer(uid);
 			
@@ -200,172 +221,142 @@ public class ChatSystem {
 				((Player) off).sendMessage(tag + message);
 			}
 		}
-		
-		return true;
 	}
 	
 	/**
-	 * Sends a message to the VIP (and dev) channel.
-	 * @param sender who is sending the message (use null if sending from console)
-	 * @param message what they are sending
-	 * @return true if the message was sent 
+	 * Messages the vips and devs (if any)
+	 * @param sender who sent the message (or null if console)
+	 * @param message what they said
 	 */
-	public boolean messageVIPChannel(UUID sender, String message) {
+	public void messageVips(UUID sender, String message) {
+		OfflinePlayer off = Bukkit.getOfflinePlayer(sender);
+		Role role = (sender == null) ? (Role.CONSOLE) : (getRole(sender));
+		String name = (sender == null) ? ("Console") : (off.getName());
+		String tag = role.getTag(name + ":vip");
+		
 		List<UUID> combined = new ArrayList<UUID>();
-		combined.addAll(vips);
 		combined.addAll(devs);
-
-		OfflinePlayer off;
-		Role role = null;
-		String name = "";
-		String tag = "";
-				
-		//Did the console send this message?
-		if (sender == null) {
-			role = Role.CONSOLE;
-			name = getConsoleName();
-		}
+		combined.addAll(vips);
 		
-		else if (combined.contains(sender)) {
-			role = (isVip(sender)) ? (Role.VIP) : (Role.DEV);
-			name = Bukkit.getOfflinePlayer(sender).getName();
-		} 
-		
-		else {
-			return false;
-		}
-		
-		//Grab the name and the tag
-		tag = String.format("<%s:vip> ", role.getFormattedName(name));
-		
-		//Message the players
+		//Message the devs
 		for (UUID uid : combined) {
 			off = Bukkit.getOfflinePlayer(uid);
 			
-			//Check the player is online
 			if (off != null && off.isOnline()) {
 				((Player) off).sendMessage(tag + message);
 			}
 		}
-		
-		return true;
 	}
 	
 	/**
-	 * Initializes the HashMap. If no file is found at the given location, then it creates
-	 * a new instance of the HashMap.
-	 * @param path
+	 * Populates the vip and dev lists.
 	 */
-	@SuppressWarnings("unchecked")
-	private void initSerializedMap(String path) {
-		File file = new File(path + "players.ser");
-		
-		//Check if the file exists
-		if (!file.exists()) {
-			//Make a new instance and return.
-			players = new HashMap<UUID, Role>();
-			devs = new ArrayList<UUID>();
-			vips = new ArrayList<UUID>();
-			return;
-		}
-		
-		//Otherwise we load the file and populate the lists.
-		try {
-			FileInputStream fis = new FileInputStream(file);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			
-			players = (HashMap<UUID, Role>) (ois.readObject());
-			
-			//Populate channels
-			for (UUID uid : players.keySet()) {
-				if (players.get(uid) == Role.VIP) {
-					vips.add(uid);
-				} 
-				
-				else if (players.get(uid) == Role.DEV) {
-					devs.add(uid);
-				}
+	private void populateLists() {
+		for (UUID uid : players.keySet()) {
+			if (players.get(uid) == Role.VIP) {
+				vips.add(uid);
 			}
 			
-			ois.close();
-			fis.close();
-		}
-		
-		catch (Exception e) {
-			e.printStackTrace();
+			else if (players.get(uid) == Role.DEV) {
+				devs.add(uid);
+			}
 		}
 	}
 	
 	/**
-	 * Removes a player from the system.
-	 * @param uid the UUID of the player
-	 * @return if successful
+	 * Attempts to remove a Player from the ChatSystem. Returns false if they weren't found.
+	 * @param uid who to remove
+	 * @return true if they were removed
 	 */
 	public boolean removePlayer(UUID uid) {
-		return (uid != null && players.remove(uid) != null);		
+		devs.remove(uid);
+		vips.remove(uid);
+		return (players.remove(uid) != null);
 	}
 	
 	/**
-	 * Sends a message to the player from the ChatSystem
-	 * @param player the target player
-	 * @param message the message
+	 * Saves the players HashMap to a file.
+	 * @throws IOException
 	 */
-	public static void toPlayer(Player player, String message) {
-		player.sendMessage(String.format("%s%s", getChatSystemTag(), message));
+	public void saveFile() throws IOException {
+		FileOutputStream fos = new FileOutputStream(path);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(players);
+		
+		fos.close();
+		oos.close();		
 	}
 	
 	/**
-	 * Sends a message to a CommandSender from the ChatSystem
-	 * @param sender the CommandSender
-	 * @param message what to say
+	 * Sends a message to the Player from the ChatSystem. The player does not need to be in the ChatSystem to send the message.
+	 * @param player who should receive this message
 	 */
-	public static void toCommandSender(CommandSender sender, String message) {
-		sender.sendMessage(String.format("%s%s", getChatSystemTag(), message));
+	public void toPlayer(Player player, String message) {
+		player.sendMessage(getChatSystemTag() + message);
 	}
-	
+
+	public List<UUID> getDevs() {
+		return devs;
+	}
+
+	public void setDevs(List<UUID> devs) {
+		this.devs = devs;
+	}
+
+	/**
+	 * The built-in ChatSystem roles.
+	 *
+	 */
 	public enum Role {
-		CONSOLE,
 		PLAYER,
 		VIP,
-		DEV;
+		DEV,
+		CONSOLE;
 		
 		/**
-		 * Returns the name in the color associated with this Role
-		 * @param name the name of the sender
-		 * @return the name in its proper color
+		 * Gets the tag associated with this Role
+		 * @param name who the tag is for
+		 * @return the decorated tag
 		 */
-		public String getFormattedName(String name) {
+		public String getTag(String name) {
 			switch (this) {
-				case VIP:
-					return (ChatColor.BLUE + name + ChatColor.RESET);
 				case CONSOLE:
-					return (ChatColor.DARK_PURPLE + name + ChatColor.RESET);
+				{
+					return (ChatColor.GOLD + "<" + ChatColor.DARK_PURPLE + name + ChatColor.GOLD + "> " + ChatColor.RESET);
+				}
 				case DEV:
-					return (ChatColor.LIGHT_PURPLE + name + ChatColor.RESET);
+				{
+					return (ChatColor.GOLD + "<" + ChatColor.LIGHT_PURPLE + name + ChatColor.GOLD + "> " + ChatColor.RESET);
+				}
+				case VIP:
+				{
+					return (ChatColor.GOLD + "<" + ChatColor.BLUE + name + ChatColor.GOLD + "> " + ChatColor.RESET);
+				}
 				default:
-					return name;
+					return ("<" + name + "> ");
 			}
 		}
 		
 		/**
-		 * Gets a Role by the String input.
-		 * @param name the name of the role
-		 * @return the role or null if not found
+		 * Gets a Role by a String input
+		 * @param role which role you need
+		 * @return the Role or null if not found
 		 */
-		public static Role getRoleByString(String name) {
-			if (name.equalsIgnoreCase("console")) {
+		public static Role getRoleByString(String role) {
+			if (role.equalsIgnoreCase("console")) {
 				return CONSOLE;
 			}
 			
-			else if (name.equalsIgnoreCase("player")) {
+			else if (role.equalsIgnoreCase("player")) {
 				return PLAYER;
 			}
 			
-			else if (name.equalsIgnoreCase("vip")) {
+			else if (role.equalsIgnoreCase("vip")) {
 				return VIP;
 			}
 			
-			else if (name.equalsIgnoreCase("dev")) {
+			else if (role.equalsIgnoreCase("dev")) {
 				return DEV;
 			}
 			
@@ -374,7 +365,7 @@ public class ChatSystem {
 			}
 		}
 	}
- 	
+
 	public String getPath() {
 		return path;
 	}
@@ -382,24 +373,24 @@ public class ChatSystem {
 	public void setPath(String path) {
 		this.path = path;
 	}
-
-	public String getFILE_NAME() {
-		return FILE_NAME;
+	
+	public ArenaPlugin getPlugin() {
+		return plugin;
 	}
 
-	public boolean showDebugOutput() {
-		return showDebugOutput;
+	public void setPlugin(ArenaPlugin plugin) {
+		this.plugin = plugin;
 	}
 
-	public void setShowDebugOutput(boolean showDebugOutput) {
-		this.showDebugOutput = showDebugOutput;
+	public List<UUID> getVips() {
+		return vips;
 	}
 
-	public boolean colorCodesEnabled() {
-		return colorCodesEnabled;
+	public void setVips(List<UUID> vips) {
+		this.vips = vips;
 	}
 
-	public void setColorCodesEnabled(boolean colorCodesEnabled) {
-		this.colorCodesEnabled = colorCodesEnabled;
-	}
+	public void toCommandSender(CommandSender sender, String message) {
+		sender.sendMessage(getChatSystemTag() + message);
+	}	
 }

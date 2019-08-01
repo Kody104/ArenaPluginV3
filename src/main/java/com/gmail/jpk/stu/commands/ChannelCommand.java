@@ -18,12 +18,10 @@ import com.gmail.jpk.stu.arena.GlobalW;
 public class ChannelCommand extends BasicCommand {
 
 	//The list of players locked into their channels
-	private Set<UUID> locked_players;
+	private static Set<UUID> locked_players = new HashSet<UUID>();
 	
 	public ChannelCommand(ArenaPlugin plugin) {
-		super(plugin);
-		
-		this.setLocked_players(new HashSet<UUID>());
+		super(plugin);		
 	}
 	
 	/**
@@ -53,62 +51,68 @@ public class ChannelCommand extends BasicCommand {
 			sender.sendMessage("The console may not use this command.");
 			return true;
 		}
-		
+
+		//Grab Player and UUID
 		Player player = (Player) sender;
 		UUID uid = player.getUniqueId();
+		
+		//Grab ChatSystem and Player ChatRole
 		ChatSystem system = GlobalW.getChatSystem();
 		Role role = system.getRole(uid);
 		
-		if (role == null) {
-			system.messageDevChannel(null, String.format("Warning: %s was not registered in the ChatSystem. Adding them as a Player.", player.getName()));
-			system.addPlayer(uid, Role.PLAYER);
-			role = Role.PLAYER;
-		}
+		//Grab what they said
+		String message = getMessage(args);
 		
-		//Handles /ch -lock
-		if (args[0].equalsIgnoreCase("-lock")) {
-			if (locked_players.contains(uid)) {
-				locked_players.remove(uid);
-				ChatSystem.toPlayer(player, ChatColor.YELLOW + "You are now speaking publicly.");
-				return true;
-			} 
-			
-			//No need for players to lock their channel.
-			if (role == Role.PLAYER) {
-				ChatSystem.toPlayer(player, "Players are unable to lock their channel.");
-				return true;
-			}
-			
-			locked_players.add(uid);
-			ChatSystem.toPlayer(player, ChatColor.GREEN + "You are now speaking privately to your default channel.");
+		//Verify the player has a role
+		if (role == null) {
+			system.toPlayer(player, "You aren't registered in the ChatSystem. You will be added as a player.");
+			system.addPlayer(uid, Role.PLAYER);
+			system.messageAll(uid, message);
 			return true;
 		}
 		
-		//Create the message this person has sent.
-		String message = getMessage(args);
-		
-		//Is this player speaking publicly?
-		if (!locked_players.contains(uid)) {
-			system.messageAll(uid, message);
-		} 
-		
-		else {
-			//VIP
-			if (system.isVip(uid)) {
-				system.messageVIPChannel(uid, message);
-				return true;
-			}
-			//DEV
-			else if (system.isDev(uid)) {
-				system.messageDevChannel(uid, message);
-			}
-			//Default
-			else {
-				system.messageAll(uid, message);
-			}
+		//Player can't use this command (no need to)
+		if (role == Role.PLAYER) {
+			system.toPlayer(player, "Players can't lock their channel.");
+			return true;
 		}
 		
-		return true;
+		//Does the player want to lock themselves into their channel?
+		if (args[0].equalsIgnoreCase("-lock")) {
+			//Are they already locked?
+			if (locked_players.contains(uid)) {
+				locked_players.remove(uid);
+				system.toPlayer(player, String.format("You are now speaking %s!", ChatColor.GOLD + "publicly" + ChatColor.RESET));
+				return true;
+			}
+ 			
+			//Add them to the locked list
+			locked_players.add(uid);
+			system.toPlayer(player, String.format("You are now speaking %s to your channel.", ChatColor.GOLD + "privately" + ChatColor.RESET));
+			return true;
+		}
+		
+			//Message the appropriate channel
+			switch (role) {
+				case DEV:
+				{
+					system.messageDevs(uid, message);
+					return true;
+				}
+				
+				case VIP:
+				{
+					system.messageVips(uid, message);
+					return true;
+				}
+				
+				default:
+				{
+					system.messageDevs(null, String.format("Unknown condition. %s (%s) is but unable to message their channel.", player.getName(), "" + role));
+					system.messageAll(uid, message);
+					return true;
+				}
+			}
 	}
 	
 	/**
@@ -119,18 +123,18 @@ public class ChannelCommand extends BasicCommand {
 	protected String getMessage(String[] args) {
 		String message = "";
 		
-		for (int i = 0; i < args.length; i++) {
-			message = args[i] + " ";
+		for (String string : args) {
+			message += (string + " ");
 		}
 		
 		return message.trim();
 	}
 
-	public Set<UUID> getLocked_players() {
+	public static Set<UUID> getLockedPlayers() {
 		return locked_players;
 	}
 
-	public void setLocked_players(Set<UUID> locked_players) {
-		this.locked_players = locked_players;
+	public static void setLockedPlayers(Set<UUID> locked_players) {
+		ChannelCommand.locked_players = locked_players;
 	}
 }

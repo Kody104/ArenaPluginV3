@@ -2,9 +2,12 @@ package com.gmail.jpk.stu.arena;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -24,22 +27,55 @@ public class YMLReader {
 		setConfig(YamlConfiguration.loadConfiguration(file));
 		save();
 	}
-
+	
 	/**
-	 * Attempts to save the custom YML File
-	 * @return true if successful
+	 * Gets a list of locations from the YML File this YMLReads
+	 * @param parent the name of the parent node
+	 * @return the list or null if an error occurs
 	 */
-	public boolean save() {
+	private List<Location> getLocationList(String parent) {
+		List<Location> list = new ArrayList<Location>();
+		List<String> data = new ArrayList<String>();
+		Set<String> keys = config.getConfigurationSection(parent).getKeys(false);
+		
+		World world = GlobalW.getInWorld();
+		
 		try {
-			config.save(file);
+		
+			for (String string : keys) {
+				data = this.getStringList(String.format("%s.%s", parent, string));
+								
+				double x = Double.valueOf(data.get(0));
+				double y = Double.valueOf(data.get(1));
+				double z = Double.valueOf(data.get(2));
+				
+				list.add(new Location(world, x, y, z));
+			}
+		
 		} 
 		
-		catch (IOException e) {
-			e.printStackTrace();
-			return false;
+		catch (Exception e) {
+			GlobalW.getPlugin().getLogger().warning(String.format("Failed to load location list: %s. Please check it is correct.", parent));			
+			return null;
 		}
 		
-		return true;
+		return list;
+	}
+	
+	/**
+	 * Gets the list of creature spawns listed in the YML. May return null.
+	 * @return The list of locations or null (if a critical error occurs)
+	 */
+	public List<Location> getCreatureSpawns() {
+		return getLocationList("creature-spawns");
+	}
+	
+	/**
+	 * Gets the list of player spawns listed in the YML. May return null.
+	 * @return The list of locations or null (if a critical error occurs)
+	 */
+	public List<Location> getPlayerSpawns() {
+		return getLocationList("player-spawns");
 	}
 	
 	/**
@@ -89,6 +125,10 @@ public class YMLReader {
 		return config.getString(path);
 	}
 	
+	public List<String> getStringList(String path) {
+		return config.getStringList(path);
+	}
+	
 	/**
 	 * Returns an object from the given path
 	 * @param path the path to the value
@@ -105,6 +145,23 @@ public class YMLReader {
 	 */
 	public void setValue(String path, Object value) {
 		config.set(path, value);	
+	}
+	
+	/**
+	 * Attempts to save the custom YML File
+	 * @return true if successful
+	 */
+	public boolean save() {
+		try {
+			config.save(file);
+		} 
+		
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 	
 	

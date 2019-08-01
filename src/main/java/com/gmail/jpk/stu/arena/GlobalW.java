@@ -50,14 +50,24 @@ public class GlobalW {
 	 * Loads the player spawn locations
 	 */
 	private static void loadPlayerSpawnLocations() {
-		playerSpawnLocations.add(location_data.getLocation("player-spawns.location-0"));
+		List<Location> locations = location_data.getCreatureSpawns();
+		
+		if (locations != null) {
+			plugin.getLogger().info(String.format("Loaded %d creature spawn locations.", locations.size()));
+			creatureSpawnLocations.addAll(location_data.getCreatureSpawns());
+		}
 	}
 
 	/**
 	 * Loads the enemy spawn locations
 	 */
 	private static void loadCreatureSpawnLocations() {
-		creatureSpawnLocations.add(location_data.getLocation("creature-spawns.location-0"));		
+		List<Location> locations = location_data.getCreatureSpawns();
+		
+		if (locations != null) {
+			plugin.getLogger().info(String.format("Loaded %d player spawn locations.", locations.size()));
+			playerSpawnLocations.addAll(location_data.getPlayerSpawns());
+		}
 	}
 
 	/**

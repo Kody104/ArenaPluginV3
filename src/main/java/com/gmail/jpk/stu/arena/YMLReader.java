@@ -18,10 +18,11 @@ public class YMLReader {
 		file = new File(path);
 		
 		if (!file.exists()) {
-			file.mkdirs();
+			file.getParentFile().mkdirs();
 		}
 		
-		config = YamlConfiguration.loadConfiguration(file);
+		setConfig(YamlConfiguration.loadConfiguration(file));
+		save();
 	}
 
 	/**

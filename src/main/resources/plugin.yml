@@ -1,6 +1,6 @@
 name: Arena
 main: com.gmail.jpk.stu.arena.ArenaPlugin
-version: 0.0.1
+version: 0.5.7
 authors: [Kody104, ASquanchyPenguin]
 
 commands:

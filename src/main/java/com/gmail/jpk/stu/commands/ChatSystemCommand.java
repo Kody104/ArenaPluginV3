@@ -16,8 +16,6 @@ import com.gmail.jpk.stu.arena.GlobalW;
  * <ul>
  * 	<li>chsys role PLAYER -> gets the chat-role of the player.</li>
  * 	<li>chsys remove PLAYER -> removes the player from the chat system.</li>
- * 	<li>chsys debug true|false -> toggles debug text for the dev channel.</li>
- * 	<li>chsys color true|false -> toggles if color codes are allowed in-line for VIPs and DEVs.</li>
  *  <li>chsys set PLAYER ROLE -> sets the player to a role.</li>
  * </ul> 
  *

@@ -1,18 +1,11 @@
 # Arena Notes and Ideas
-*This is an internal markdown file used for communication between us.*
+*This is an internal markdown file used for communication between us. Last Updated 1 Aug.*
 
-# Current Issues (as of 26 July)
-1. In YMLReader, getLocation() throws an IndexArrayOutBoundsException for the list.
-2. ~Phantoms can currently spawn as they please.~
-3. ChatSystem is too convoluted. A simplification is needed.
-4. ~Not all SpecialItems are cleared through arena -csi. A stronger approach may be required.~
-
-# Current Detailed Features in the Arena
+## Current Issues
+1. ~Not all SpecialItems are cleared through arena -csi. A stronger approach may be required.~
 
 ## Commands
 *key: command <required-args> (optional-args)*
-
-* all <message> : messages all players on the server
 
 * arena -cc  : clears all creatures from the arena.
 * arena -csi : clears all special items from the arena.
@@ -24,11 +17,12 @@
 
 * chsys role <player> : returns the role of the player. *likely to be removed in future chat update*
 * chsys remove <player> : removes a player from the chat system.
-* chsys debug <true|false> : toggles if various debug messages should be sent to the dev channel.
-* chsys color <true|false> : toggles if color codes are allow in-line. *untested as it may be removed*
 * chsys set <player> <role> : set a player's role. *likely to be replaced by set <player> <channel>*
+* ~chsys debug <true|false> : toggles if various debug messages should be sent to the dev channel. *inactive*~
+* ~chsys color <true|false> : toggles if color codes are allow in-line. *inactive*~
 
-* dev <message> : messages the dev channel. *deprecated* 
+* ch (-lock) : locks a player into their channel
+* ch [message] : sends a message to the player's channel 
 
 * gai <item> <player> : gives an ability item to an arena player.
 
@@ -37,8 +31,6 @@
 * join : allows a player to join the arena, if the arena hasn't already started.
 
 * leave: allows a player to leave the arena, if the arena isn't already in progress.
-
-* player <message>  : messages the player channel. *deprecated* 
 
 * quit : allows a player to quit their role, if the arena isn't already in progress and they haven't readied up.
 
@@ -49,8 +41,6 @@
 * role <role> : assigns an arena player their role.
 * role <player> : shows the role of the target player.
 * role about <role> : shows the description of a role.
-
-* vip <message> : messages the VIP channel. *deprecated* 
 
 ## Experience and Levels
 * Player levels range from [1, 18].
@@ -96,7 +86,7 @@
 * Creatures can drop an undetermined amount of scraps/bars/emeralds on an undetermined small chance.
 * Bosses are much more likely than regular creatures to drop gold.
 
-## Boos Ideas
+## Boss Ideas
 
 ### The Skeleton Riders
 
@@ -117,7 +107,7 @@ Notes:
 ### Petite Pete and Towering Tim
 
 How the Fight Goes:
-* Petite Peat (a baby zombie) spawns in the arena.
+* Petite Pete (a baby zombie) spawns in the arena.
 * After 10 seconds a dangerous sounds players to all players.
 * Towering Tim (a giant zombie) spawns in the arena.
 * The two zombies share a health bar.
@@ -131,9 +121,7 @@ How the Fight Goes:
 * A Slime and Magma Cube spawn.
 
 ## Custom Item Ideas
-* Emergency Teleport - Teleports a player to a random location in the arena (will blind them for a short time after).
-* Decoy Boy Troy - Spawns a cow that will draw aggro from nearby entities.
-* Glistening Melon - For ten seconds, killing an enemy will heal the user by 2% max health. (50 enemies to full health)
+* None
 
 ## Various Ideas
 

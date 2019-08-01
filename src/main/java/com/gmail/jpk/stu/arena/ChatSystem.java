@@ -52,6 +52,8 @@ public class ChatSystem {
 		setPath(path + FILE_NAME);
 		setDevs(new ArrayList<UUID>());
 		setVips(new ArrayList<UUID>());
+		
+		initialize();
 	}
 	
 	/**

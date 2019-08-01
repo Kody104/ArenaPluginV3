@@ -39,11 +39,9 @@ public class GlobalW {
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
 		setChatSystem(new ChatSystem(plugin, "plugins/arena/"));
-		chat_system.initialize();
-//		chat_system.initSerializedMap(plugin);
-		setLocationData("location-data.yml");
-//		loadCreatureSpawnLocations(); --> WIP
-//		loadPlayerSpawnLocations(); --> WIP
+		setLocationData(new YMLReader("plugins/arena/location-data.yml"));
+		loadCreatureSpawnLocations();
+		loadPlayerSpawnLocations(); 
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
 //		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}
@@ -244,8 +242,8 @@ public class GlobalW {
 		return location_data;
 	}
 
-	public static void setLocationData(String path) {
-		GlobalW.location_data = new YMLReader(path);
+	public static void setLocationData(YMLReader reader) {
+		GlobalW.location_data = reader;
 	}
 
 	public static List<Location> getEnemySpawnLocations() {

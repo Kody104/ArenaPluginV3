@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -146,6 +147,7 @@ public class ArenaPlayer extends ArenaEntity {
 				break;
 			}
 		}
+		mPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHp());
 	}
 	
 	@Override
@@ -177,6 +179,11 @@ public class ArenaPlayer extends ArenaEntity {
 			GlobalW.toPlayerError(mPlayer, "What is this damage type? " + damageType);
 			GlobalW.getPlugin().getLogger().info("[ERROR] What is this damage type? " + damageType);
 		}
+		//setCurHp(getCurHp() - damageAfter);
+		getmPlayer().damage(damageAfter); // Use this so the player shows damage.
+		//if(getCurHp() <= 0.0d) {
+			//getmPlayer().setHealth(0.0d);
+		//}
 		return damageAfter;
 	}
 	
@@ -277,10 +284,10 @@ public class ArenaPlayer extends ArenaEntity {
 		// Safety check
 		if(isHoldingAbilityItem()) {
 			// Get the lore to check
-			String inHandLore = mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(0);
+			String inHandLore = mPlayer.getInventory().getItemInMainHand().getItemMeta().getLore().get(1);
 			for(AbilityItem a : allAbilities) {
 				// Check the lore
-				if(a.getItemMeta().getLore().get(0).equals(inHandLore)) {
+				if(a.getItemMeta().getLore().get(1).equals(inHandLore)) {
 					return a;
 				}
 			}

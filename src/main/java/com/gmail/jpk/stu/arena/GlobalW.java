@@ -39,9 +39,9 @@ public class GlobalW {
 	public static void initialize(ArenaPlugin plugin) {
 		setPlugin(plugin);
 		setChatSystem(new ChatSystem(plugin, "plugins/arena/"));
-		setLocationData(new YMLReader("plugins/arena/location-data.yml"));
-		loadCreatureSpawnLocations();
-		loadPlayerSpawnLocations(); 
+		//setLocationData(new YMLReader("plugins/arena/location-data.yml"));
+		//loadCreatureSpawnLocations();
+		//loadPlayerSpawnLocations(); 
 		inWorld = plugin.getServer().getWorlds().get(0); // This is the overworld
 //		playerSpawnLocations.add(new Location(inWorld, -844.245d, 115.0d, -1296.964d)); // This is the forest arena. Index 0
 	}

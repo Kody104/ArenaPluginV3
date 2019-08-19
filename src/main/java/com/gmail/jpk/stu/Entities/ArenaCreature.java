@@ -4,6 +4,7 @@ import org.bukkit.entity.LivingEntity;
 
 import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.PassiveAbility;
+import com.gmail.jpk.stu.abilities.StatusEffect;
 import com.gmail.jpk.stu.arena.GlobalW;
 
 public class ArenaCreature extends ArenaEntity {
@@ -310,7 +311,13 @@ public class ArenaCreature extends ArenaEntity {
 	}
 
 	public int getHolyRes() {
-		return holyRes;
+		int toReturn = holyRes;
+		for(StatusEffect s : getAllStatusEffects()) {
+			if(s.getType() == StatusEffect.StatusEffectType.DEBUFF_HOLYRES) {
+				toReturn -= (int) s.getPow();
+			}
+		}
+		return (toReturn < 0 ? 0 : toReturn);
 	}
 
 	public void setHolyRes(int holyRes) {

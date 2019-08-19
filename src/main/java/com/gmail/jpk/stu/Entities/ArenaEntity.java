@@ -10,6 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.gmail.jpk.stu.abilities.DamageType;
 import com.gmail.jpk.stu.abilities.StatusEffect;
 import com.gmail.jpk.stu.arena.GlobalW;
+import com.gmail.jpk.stu.timers.BleedCountdownTimer;
 import com.gmail.jpk.stu.timers.StatusEffectTimer;
 
 public abstract class ArenaEntity {
@@ -92,7 +93,13 @@ public abstract class ArenaEntity {
 	}
 
 	public double getDef() {
-		return def;
+		double defBonus = 0.0d;
+		for(StatusEffect e : allStatusEffects) {
+			if(e.getType() == StatusEffect.StatusEffectType.BUFF_DEF) {
+				defBonus += e.getPow();
+			}
+		}
+		return def + defBonus;
 	}
 
 	public void setDef(double def) {
@@ -159,7 +166,7 @@ public abstract class ArenaEntity {
 					allStatusEffects.add(newStatus); // Add new status effect
 					new StatusEffectTimer(this, statusEffect).runTaskLater(GlobalW.getPlugin(), duration);
 					switch(statusEffect.getType()) {
-					case SOFT_SLOW:
+						case SOFT_SLOW:
 						{
 							livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 0));
 							break;
@@ -176,9 +183,14 @@ public abstract class ArenaEntity {
 			allStatusEffects.add(statusEffect);
 			new StatusEffectTimer(this, statusEffect).runTaskLater(GlobalW.getPlugin(), statusEffect.getDuration());
 			switch(statusEffect.getType()) {
-			case SOFT_SLOW:
+				case SOFT_SLOW:
 				{
 					livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, statusEffect.getDuration(), 0));
+					break;
+				}
+				case BLEED:
+				{
+					new BleedCountdownTimer(this, statusEffect).runTaskLater(GlobalW.getPlugin(), 0);
 					break;
 				}
 				default:
@@ -205,12 +217,26 @@ public abstract class ArenaEntity {
 	
 	/**
 	 * Check if entity has a specific status effect by the type.
-	 * @param type	The type of status effect you want to look up
-	 * @return	The status effect
+	 * @param statusEffect	The status effect to check for
+	 * @return	True or false
 	 */
 	public boolean hasStatusEffect(StatusEffect statusEffect) {
 		for(StatusEffect s : allStatusEffects) {
 			if(s.getType() == statusEffect.getType()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if entity has a specific status effect type.
+	 * @param statusEffectType	The type of status effect to check for
+	 * @return	True or false
+	 */
+	public boolean hasStatusEffectType(StatusEffect.StatusEffectType statusEffectType) {
+		for(StatusEffect s : allStatusEffects) {
+			if(s.getType() == statusEffectType) {
 				return true;
 			}
 		}

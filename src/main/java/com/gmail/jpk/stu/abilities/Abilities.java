@@ -8,14 +8,22 @@ import org.bukkit.ChatColor;
 
 public enum Abilities {
 	
-	HOOKSHOT(new Ability("Hookshot", "Drag and slow enemies for 3 seconds.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 5, 1), 
-			DamageType.PHYSICAL, 400, ChatColor.BLUE, 0, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, HiddenEffect.HOOK, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET, 
+	HOOKSHOT(new Ability("Hookshot", "Drag and slow enemies for 3 seconds.", new AbilityTarget(AbilityTarget.TargetType.AOE_ENEMIES, 12, 0), 
+			DamageType.PHYSICAL, 400, ChatColor.BLUE, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, HiddenEffect.HOOK, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET, 
 					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.SOFT_SLOW, 0.0d, 0, 60))),
 	ANNIHILATE(new Ability("Annihilate", "Deal bonus damage scaling with HP.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 0, 0),
-			DamageType.PHYSICAL, 240, ChatColor.BLUE, 35, 0.0d, 0.0d, 0.0d, 0.0d, 0.05d)),
-	NO_REMORSE(new Ability("No Remorse", "Gain defense for 5 seconds.", new AbilityTarget(AbilityTarget.TargetType.SELF, 0, 0),
-			DamageType.PHYSICAL, 400, ChatColor.BLUE, 0, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET,
-					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.BUFF_DEF, 15.0d, 0, 100)));
+			DamageType.PHYSICAL, 240, ChatColor.BLUE, 35.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.05d)),
+	NO_REMORSE(new Ability("No_Remorse", "Gain defense for 5 seconds.", new AbilityTarget(AbilityTarget.TargetType.SELF, 0, 0),
+			DamageType.PHYSICAL, 400, ChatColor.BLUE, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, new StatusEffect(StatusEffect.StatusEffectTarget.CASTER,
+					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.BUFF_DEF, 15.0d, 0, 100))),
+	ADRENALINE(new Ability("Adrenaline", "Gain immunity for 5 seconds. At a cost.", new AbilityTarget(AbilityTarget.TargetType.SELF, 0, 0), 
+			DamageType.PHYSICAL, 2000, ChatColor.GOLD, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, new StatusEffect(StatusEffect.StatusEffectTarget.CASTER,
+					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.SUBVERT_DAMAGE, 100.0d, 0, 60))),
+	SMITTEN(new Ability("Smitten", "Deal holy damage scaling with magic.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 5, 0),
+			DamageType.HOLY, 280, ChatColor.BLUE, 40.0d, 0.0d, 0.25d, 0.0d, 0.0d, 0.0d)),
+	JUDGEMENT(new Ability("Judgement", "Enemies take extra holy damage.", new AbilityTarget(AbilityTarget.TargetType.AOE_ENEMIES, 0, 8), 
+			DamageType.HOLY, 520, ChatColor.BLUE, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET,
+					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.DEBUFF_HOLYRES, 7.0d, 0, 100)));
 	
 	private final Ability ability;
 	

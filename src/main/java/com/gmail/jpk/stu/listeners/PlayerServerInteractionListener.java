@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -86,6 +87,8 @@ public class PlayerServerInteractionListener extends BasicListener {
 		ChatSystem system = GlobalW.getChatSystem();
 		ArenaPlugin plugin = GlobalW.getPlugin();
 		Logger log = plugin.getLogger();
+		
+		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0d);
 		
 		//Add the player to ChatSystem if they aren't in it.
 		if (!system.contains(uid)) {

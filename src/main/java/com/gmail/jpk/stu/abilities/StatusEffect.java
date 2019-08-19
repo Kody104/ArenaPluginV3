@@ -13,6 +13,8 @@ public class StatusEffect {
 	public enum StatusEffectType {
 		BUFF_DEF, // Buffs armor
 		SOFT_SLOW, // Adds slow potion effect tier 1
+		BLEED, // Bleed the target
+		DEBUFF_HOLYRES, // Debuff holy resistance
 		
 		SUBVERT_DAMAGE; // This is specially used for Brute Juggernaut
 	}

@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import com.gmail.jpk.stu.Entities.ArenaCreature;
 import com.gmail.jpk.stu.Entities.ArenaEntity;
 import com.gmail.jpk.stu.Entities.ArenaPlayer;
 import com.gmail.jpk.stu.abilities.Ability;
@@ -62,15 +61,16 @@ public class AbilityItem extends ItemStack {
 	}
 	
 	public void useAbility(ArenaEntity caster, ArenaEntity target) {
-		if(owner.isOnCooldown()) {
+		if(owner.isOnCooldown() || target == null) {
 			return;
 		}
 		if(owner.getHiddenEffect() != null) {
+			LivingEntity cast = caster.getLivingEntity();
 			LivingEntity le = target.getLivingEntity();
 			switch(owner.getHiddenEffect()) {
 				case HOOK:
 				{
-					Vector vec = le.getLocation().getDirection().multiply(-2.0d); // Invert the entity's direction
+					Vector vec = cast.getLocation().getDirection().multiply(-2.0d); // Invert the entity's direction
 					le.setVelocity(vec); // Give the inversion to the entity
 					break;
 				}

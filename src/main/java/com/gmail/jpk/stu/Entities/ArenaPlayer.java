@@ -147,7 +147,6 @@ public class ArenaPlayer extends ArenaEntity {
 				break;
 			}
 		}
-		mPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHp());
 	}
 	
 	@Override

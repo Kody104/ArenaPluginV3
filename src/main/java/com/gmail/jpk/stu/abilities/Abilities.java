@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 
 public enum Abilities {
 	
-	HOOKSHOT(new Ability("Hookshot", "Drag and slow enemies for 3 seconds.", new AbilityTarget(AbilityTarget.TargetType.AOE_ENEMIES, 12, 0), 
+	HOOKSHOT(new Ability("Hookshot", "Drag and slow enemies for 3 seconds.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 12, 0), 
 			DamageType.PHYSICAL, 400, ChatColor.BLUE, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, HiddenEffect.HOOK, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET, 
 					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.SOFT_SLOW, 0.0d, 0, 60))),
 	ANNIHILATE(new Ability("Annihilate", "Deal bonus damage scaling with HP.", new AbilityTarget(AbilityTarget.TargetType.SINGLE_ENEMY, 0, 0),
@@ -23,7 +23,9 @@ public enum Abilities {
 			DamageType.HOLY, 280, ChatColor.BLUE, 40.0d, 0.0d, 0.25d, 0.0d, 0.0d, 0.0d)),
 	JUDGEMENT(new Ability("Judgement", "Enemies take extra holy damage.", new AbilityTarget(AbilityTarget.TargetType.AOE_ENEMIES, 0, 8), 
 			DamageType.HOLY, 520, ChatColor.BLUE, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, new StatusEffect(StatusEffect.StatusEffectTarget.TARGET,
-					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.DEBUFF_HOLYRES, 7.0d, 0, 100)));
+					StatusEffect.StatusEffectTrigger.IMMEDIATE, StatusEffect.StatusEffectType.DEBUFF_HOLYRES, 7.0d, 0, 100))),
+	SAVIOR(new Ability("Savior", "Jump to location and taunt enemies.", new AbilityTarget(AbilityTarget.TargetType.SELF, 8, 0), 
+			DamageType.PHYSICAL, 480, ChatColor.BLUE, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, HiddenEffect.LEAP));
 	
 	private final Ability ability;
 	

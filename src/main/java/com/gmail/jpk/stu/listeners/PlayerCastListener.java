@@ -223,12 +223,14 @@ public class PlayerCastListener extends BasicListener {
 						// This is a self-buff
 						if(aTarget.getTargetType() == AbilityTarget.TargetType.SELF) {
 							item.useAbility(player, player);
+							item.setOnCooldown(true);
 						}
 						// This will affect allies around
 						else if(aTarget.getTargetType() == AbilityTarget.TargetType.AOE_SELF) {
 							Location loc = p.getLocation();
 							List<ArenaEntity> affected = getArenaPlayersInRangeToLocation(loc, aTarget.getAbilityRange()); // Gets the arena entities near location
 							item.useAbility(player, affected);
+							item.setOnCooldown(true);
 						}
 						// This will affect a single enemy
 						else if(aTarget.getTargetType() == AbilityTarget.TargetType.SINGLE_ENEMY) {
@@ -236,14 +238,22 @@ public class PlayerCastListener extends BasicListener {
 								Location loc = p.getTargetBlockExact(aTarget.getCastRange()).getLocation();
 								ArenaCreature creature = getClosestArenaCreatureToLocation(loc);
 								item.useAbility(player, creature);
+								item.setOnCooldown(true);
 							}
 						}
 						// This will affect an aoe of enemies within you selection
 						else if(aTarget.getTargetType() == AbilityTarget.TargetType.AOE_ENEMIES) {
-							if(p.getTargetBlockExact(aTarget.getCastRange()) != null) {
+							if(aTarget.getCastRange() == 0) {
+								Location loc = p.getLocation();
+								List<ArenaEntity> affected = getArenaCreaturesInRangeToLocation(loc, aTarget.getAbilityRange());
+								item.useAbility(player, affected);
+								item.setOnCooldown(true);
+							}
+							else if(p.getTargetBlockExact(aTarget.getCastRange()) != null) {
 								Location loc = p.getTargetBlockExact(aTarget.getCastRange()).getLocation();
 								List<ArenaEntity> affected = getArenaCreaturesInRangeToLocation(loc, aTarget.getAbilityRange());
 								item.useAbility(player, affected);
+								item.setOnCooldown(true);
 							}
 						}
 						// This will affect a single ally
@@ -252,6 +262,7 @@ public class PlayerCastListener extends BasicListener {
 								Location loc = p.getTargetBlockExact(aTarget.getCastRange()).getLocation();
 								ArenaPlayer p1 = getClosestArenaPlayerToLocation(loc);
 								item.useAbility(player, p1);
+								item.setOnCooldown(true);
 							}
 						}
 						// This will affect an aoe of allies within your selection
@@ -260,6 +271,7 @@ public class PlayerCastListener extends BasicListener {
 								Location loc = p.getTargetBlockExact(aTarget.getCastRange()).getLocation();
 								List<ArenaEntity> affected = getArenaPlayersInRangeToLocation(loc, aTarget.getAbilityRange());
 								item.useAbility(player, affected);
+								item.setOnCooldown(true);
 							}
 						}
 						// This will affect anyone
@@ -268,6 +280,7 @@ public class PlayerCastListener extends BasicListener {
 								Location loc = p.getTargetBlockExact(aTarget.getCastRange()).getLocation();
 								ArenaEntity entity = getClosestArenaEntityToLocation(loc);
 								item.useAbility(player, entity);
+								item.setOnCooldown(true);
 							}
 						}
 						// This will affect annyone within your selection
@@ -276,6 +289,7 @@ public class PlayerCastListener extends BasicListener {
 								Location loc = p.getTargetBlockExact(aTarget.getCastRange()).getLocation();
 								List<ArenaEntity> affected = getArenaEntitiesInRangeToLocation(loc, aTarget.getAbilityRange());
 								item.useAbility(player, affected);
+								item.setOnCooldown(true);
 							}
 						}
 					}
@@ -316,6 +330,7 @@ public class PlayerCastListener extends BasicListener {
 							if(targetType == AbilityTarget.TargetType.SINGLE_ENEMY || targetType == AbilityTarget.TargetType.AOE_ENEMIES ||
 									targetType == AbilityTarget.TargetType.SINGLE_ANY || targetType == AbilityTarget.TargetType.AOE_ANY ) {
 								item.useAbility(player, creature);
+								item.setOnCooldown(true);
 								e.setCancelled(true);
 							}
 						}

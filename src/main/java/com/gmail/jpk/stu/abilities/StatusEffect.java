@@ -15,6 +15,7 @@ public class StatusEffect {
 		SOFT_SLOW, // Adds slow potion effect tier 1
 		BLEED, // Bleed the target
 		DEBUFF_HOLYRES, // Debuff holy resistance
+		TAUNT, // Taunt enemies
 		
 		SUBVERT_DAMAGE; // This is specially used for Brute Juggernaut
 	}

@@ -74,6 +74,12 @@ public class AbilityItem extends ItemStack {
 					le.setVelocity(vec); // Give the inversion to the entity
 					break;
 				}
+				case LEAP:
+				{
+					Vector vec = cast.getLocation().getDirection().multiply(2.0d); // Multiply the caster's velocity
+					le.setVelocity(vec); // Give the velocity to the caster
+					break;
+				}
 			}
 		}
 		// Calculate the damage
@@ -125,8 +131,6 @@ public class AbilityItem extends ItemStack {
 				GlobalW.toPlayer(player, String.format("You have taken %.2f %s damage!", actualDmg, owner.getDamageType()));
 			}
 		}
-		
-		owner.setOnCooldown(true);
 		new AbilityCooldownTimer(caster, owner).runTaskLater(GlobalW.getPlugin(), owner.getCooldown());
 	}
 	
@@ -144,5 +148,9 @@ public class AbilityItem extends ItemStack {
 
 	public void setOwner(Ability owner) {
 		this.owner = owner;
+	}
+	
+	public void setOnCooldown(boolean onCooldown) {
+		owner.setOnCooldown(onCooldown);
 	}
 }
